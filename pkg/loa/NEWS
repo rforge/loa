@@ -1,0 +1,62 @@
+Changes in loa 0.1 [2011-12-14]
+=====================================
+
+*       First packaging 
+*       cexHandler, colHandler added
+
+
+Changes in loa 0.1.1 [2011-12-16]
+=====================================
+
+*       listUpdate added
+*       googleMaps function set added 
+        (these supersede googleMapsPlot set)
+
+
+Changes in loa 0.1.2 [2011-12-20]
+=====================================
+
+*       zHandler added
+*       update to common cond handling of 
+        different googleMap panels 
+*       NAMESPACE added
+
+
+Changes in loa 0.1.3 [2011-12-21]
+=====================================
+
+*       getXY, getLatLon added
+*       geoFrame, geoBearing, geoDistance, 
+        geoElevation added
+
+
+Changes in loa 0.1.4 [2012-01-04]
+=====================================
+
+*       geoDestination added
+*       update to googleMap and getLatLon
+        (map now passed in googleMap output)
+        (for access by functions like getLanLon)
+
+Changes in loa 0.1.5 [2012-01-12]
+=====================================
+
+*       named RgoogleMapWrapper makeMapArg
+        and added getMapArg to simplify user 
+        map work
+*       reordered args in getXY and getLatLon 
+        to simplify typical use
+
+Changes in loa 0.2.0 [2012-02-10]
+=====================================
+
+*       added trianglePlot function, and 
+        associated panel and data handler 
+        functions
+*       added localScalesHandler for local 
+        scale/axis management
+*       added panel.localScale for adding 
+        in-panel scales 
+
+
+for next added getPlotArgs      
