@@ -48,53 +48,67 @@ isGood4LOA(arg)
   DETAILS TO BE CONFIRMED? 
   } 
 
- \item{group.fun}{ [IN DEVELOPMENT] currently disabled. 
+ \item{group.fun}{ [IN DEVELOPMENT - PLEASE HANDLE WITH CARE]. 
+  \code{group.fun} provides fine control of the standard \code{lattice} 
+  plot argument \code{group}. It can be a vector or list containing the 
+  same number of elements as there as groups. These can be functions (or 
+  the names of functions as characters) setting individual functions for 
+  group or sets of parameters to be evaluated using the \code{panel} 
+  function. For example, the current \code{NULL} default generates a list 
+  of \code{col} and \code{pch} settings that produce a conventional grouped 
+  scatter plot output when the \code{group} argument is applied to the 
+  \code{panel} default \code{panel.xyplot}. See Details below. 
   }
 
   \item{source, local.resets, user.resets}{ When recovering plot arguments 
-   with \code{getArgs} or \code{getPlotArgs}, places to search for relevant parameters. 
-   If supplied these would typically be vectors or lists. If vectors, they are assumed to be 
-   \code{col} setting. If lists, they are assumed to be lists of named parameters for inclusion. 
-   There are two cases that need to be handed specially: (1) some \code{sources}, \code{local.resets} 
-   and/or \code{user.resets} may contain both axis-specific and general information, e.g. For 
-   a \code{scales} list, parameters to be applied just to the x axis in \code{scales$x} and parameters 
-   to be applied to all scales in \code{scales}. In such cases these need to be checked in order (see 
-   \code{elements} below.) (2) Some sources, e.g. axis \code{scales}, contain both text and line parameters, 
-   with e.g. line settings declared as \code{col.line}, etc., rather than \code{col}, etc., (which are intended 
-   for use with text.) When supplied these need to be handled correctly (see \code{is.scales.lines} below). 
-   \code{local.resets} and \code{user.resets} are intended as overrides for the code developer and user, respectively. 
-   These can be logicals as well as vectors or lists. If logicals they are ignored but can be retained to turn on/off 
-   the associated plot components (using \code{isGood4LOA}). The check/update order is \code{source}, then 
-   \code{source$element}, then \code{local.reset}, then \code{local.reset$element}, then \code{user.reset}, then 
-   \code{user.reset$element}. This means that the developer always has last say regarding the default 
-   appearance of a plot component and the user always has the very last say from the command line if the 
-   local.reset is included as a formal argument in that plot.
+   with \code{getArgs} or \code{getPlotArgs}, places to search for relevant 
+   parameters. If supplied these would typically be vectors or lists. If vectors, 
+   they are assumed to be \code{col} setting. If lists, they are assumed to be lists 
+   of named parameters for inclusion. There are two cases that need to be handed 
+   specially: (1) some \code{sources}, \code{local.resets} and/or \code{user.resets} 
+   may contain both axis-specific and general information, e.g. For a \code{scales} list, 
+   parameters to be applied just to the x axis in \code{scales$x} and parameters to be 
+   applied to all scales in \code{scales}. In such cases these need to be checked in 
+   order (see \code{elements} below.) (2) Some sources, e.g. axis \code{scales}, contain 
+   both text and line parameters, with e.g. line settings declared as \code{col.line}, 
+   etc., rather than \code{col}, etc., (which are intended for use with text.) When 
+   supplied these need to be handled correctly (see \code{is.scales.lines} below). 
+   \code{local.resets} and \code{user.resets} are intended as overrides for the code 
+   developer and user, respectively. These can be logicals as well as vectors or lists. 
+   If logicals they turn on/off the associated plot components (using \code{isGood4LOA}). 
+   The check/update order is \code{source}, then \code{source$element}, then 
+   \code{local.reset}, then \code{local.reset$element}, then \code{user.reset}, then 
+   \code{user.reset$element}. This means that the developer always has last say regarding 
+   the default appearance of a plot component and the user always has the very last say 
+   from the command line if the local.reset is included as a formal argument in that plot.
    }
 
-  \item{elements}{ When recovering arguments with \code{getArgs} or \code{getPlotArgs}, this identifies 
-   the elements in \code{source}, \code{local.resets} and \code{user.resets} that may contain case-specific 
-   information. As with \code{lattice} handling of \code{scales} axis-specific information in 
-   \code{source$element(s)} is assumed to take priority over general information in \code{source}. (Note: 
-   if \code{elements} are not declared only general/top level information in \code{source}, 
-   \code{local.resets} and \code{user.resets} is considered at present.) 
+  \item{elements}{ When recovering arguments with \code{getArgs} or \code{getPlotArgs}, this 
+   identifies the elements in \code{source}, \code{local.resets} and \code{user.resets} that 
+   may contain case-specific information. As with \code{lattice} handling of \code{scales} 
+   axis-specific information in \code{source$element(s)} is assumed to take priority over 
+   general information in \code{source}. (Note: if \code{elements} are not declared only 
+   general/top level information in \code{source}, \code{local.resets} and \code{user.resets} 
+   is considered at present.) 
    } 
 
-  \item{is.scales.lines}{ When recovering arguments with \code{getArgs} or \code{getPlotArgs}, should 
-   \code{source} be treated as a lattice \code{scales} list? If so, and \code{source} is checked for line 
-   parameters, line-specific terms such as \code{col.line}, etc., will be recovered as \code{col}, etc., 
-   while general terms (meant for text in \code{scales} lists) will be ignored. (Note: \code{getPlotArgs} 
-   guesses this based on \code{defaults.as} if not supplied.)
+  \item{is.scales.lines}{ When recovering arguments with \code{getArgs} or \code{getPlotArgs}, 
+   should \code{source} be treated as a lattice \code{scales} list? If so, and \code{source} 
+   is checked for line parameters, line-specific terms such as \code{col.line}, etc., will be 
+   recovered as \code{col}, etc., while general terms (meant for text in \code{scales} lists) 
+   will be ignored. (Note: \code{getPlotArgs} guesses this based on \code{defaults.as} if 
+   not supplied.)
    } 
 
-  \item{defaults,defaults.only,defaults.as}{ When recovering arguments with \code{getArgs}, \code{defaults} 
-   is an optional 'fall-back' in case nothing is recovered from \code{source}, \code{local.resets} and 
-   \code{user.resets}. \code{defaults.only} is a logical: if \code{TRUE} only parameters named in 
-   \code{defaults} are searched for, otherwise all parameters are recovered. With \code{getPlotArgs}, 
-   \code{defaults.as} selects an appropriate default. This should be a trellis parameter name, e.g. 
-   \code{'axis.line'}, \code{'axis.text'}, etc. The function uses this both to identify 
-   appropriate plot parameters to search for/select, e.g. \code{pch}, \code{col}, \code{cex}, 
-   etc for \code{'plot.symbol'} (if \code{defaults.only = TRUE}), and to identify default values for 
-   each of these.
+  \item{defaults, defaults.only, defaults.as}{ When recovering arguments with \code{getArgs}, 
+   \code{defaults} is an optional 'fall-back' in case nothing is recovered from \code{source}, 
+   \code{local.resets} and \code{user.resets}. \code{defaults.only} is a logical: if \code{TRUE} 
+   only parameters named in \code{defaults} are searched for, otherwise all parameters are 
+   recovered. With \code{getPlotArgs}, \code{defaults.as} selects an appropriate default. This 
+   should be a trellis parameter name, e.g. \code{'axis.line'}, \code{'axis.text'}, etc. The 
+   function uses this to identify appropriate plot parameters to search for/select, e.g. 
+   \code{pch}, \code{col}, \code{cex}, etc for \code{'plot.symbol'}, and to identify default 
+   values for each of these (if \code{defaults.only = TRUE}).
    }
 
   \item{arg}{ For \code{isGood4LOA} a plot argument that can used 
@@ -106,17 +120,14 @@ isGood4LOA(arg)
 
 \details{
   \code{panelPal} provides an alternative mechanism to 
-  \code{panel.superpose} and \code{panel.groups} for work with 
-  the \code{group} argument and the conditioning/handling of 
-  non-standard plot arguments.  
-
-  IT IS IN DEVELOPMENT AND SHOULD BE HANDLED WITH CARE.
-
-  For \code{panelPal} the \code{groups} should be a character 
-  vector containing the names of \code{panel...} functions to be 
-  applied to data. This allows the user to visualise different 
-  data with completely different functions and therefore in 
-  completely different ways.
+   \code{panel.superpose} and \code{panel.groups} for work with 
+   the \code{group} argument and the conditioning/handling of 
+   non-standard plot arguments. The \code{group.fun} argument 
+   allows users to more easily apply different group coding, vary 
+   coding options by group or even apply completely different 
+   \code{panel...} functions to each group. This means 
+   that different data groups can be more easily visualised in 
+   completely different ways within the same panel. 
 
   \code{getArgs} returns a list of parameters/values based on 
   \code{lattice}, developer and user settings. If multiple 
@@ -127,7 +138,7 @@ isGood4LOA(arg)
    \code{lattice} functions. It returns a list of plot parameters 
    for different plot components, e.g. symbols, lines, or text. 
 
-  \code{isGood4LOA} is a simple workhorse that returns checks is a 
+  \code{isGood4LOA} is a simple workhorse that checks if a 
   supplied \code{arg} should be used by \code{loa}. (See value and 
   note below.) 
 
@@ -172,9 +183,10 @@ isGood4LOA(arg)
 
 \note{
 
-  \code{getPlotArgs} is intended as a 'workhorse' for plot developers, to recover 
-  \code{lattice} settings, impose their own preferences on these, and in turn to 
-  provide users with similar options to quickly override developer settings.    
+  \code{getPlotArgs} is intended as a 'workhorse' for plot developers, 
+  to recover \code{lattice} settings, impose their own preferences on 
+  these, and in turn to provide users with similar options to quickly 
+  override developer settings.    
 
   \code{isGood4LOA} only exists because I, perhaps wrongly, 
   equate \code{arg = NULL} with \code{arg = FALSE} when that 
@@ -188,7 +200,7 @@ isGood4LOA(arg)
   The \code{getPlotArgs}/\code{isGood4LOA} combination is a first attempt 
   at providing plot developers with a simple tool to integrate plot argument 
   management by lattice, the plot developer and the plot user. It is intended 
-  to be applied in the form. 
+  to be applied in the form shown in the Examples below. 
 
   Axis, tick, grid and annotation handling in \code{\link{trianglePlot}} is 
   intended to illustrate this type of application.  
@@ -209,17 +221,17 @@ isGood4LOA(arg)
 #my.plot <- function(..., user.reset = TRUE, ...) 
 
 #in main code body
-#local.resets <- [what develop wants] 
+#local.resets <- [what developer wants] 
 #plot.arg <- getPlotArgs("[type]", source, local.reset, user.reset)
 
 #in panel call
 #(for panel off/on control)
-#if(isGood4LOA) panel...(..., plot.arg,...)
+#if(isGood4LOA(plot.arg)) panel...(..., plot.arg,...)
 
 #in panel... function
 #for panel component off/on control)
-#if(isGood4LOA) panel...(..., plot.arg,...)
-#if(isGood4LOA) l...(..., plot.arg,...)
+#if(isGood4LOA(plot.arg1)) panel...(..., plot.arg1,...)
+#if(isGood4LOA(plot.arg2)) l...(..., plot.arg2,...)
 #etc.
 
 }
