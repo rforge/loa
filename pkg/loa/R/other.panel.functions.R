@@ -62,7 +62,9 @@ panelPal <- function(x, y, subscripts, at, col.regions, ...,
 #note this action 
 
           groups <- temp$groups
-           temp <- temp[names(temp) != "groups"]
+          temp <- temp[names(temp) != "groups"]
+ 
+
 
            grp <- if(is.factor(groups)) levels(groups) else unique(groups)
   ##         temp.fun <- function(temp, i){
@@ -70,6 +72,21 @@ panelPal <- function(x, y, subscripts, at, col.regions, ...,
    ##                                    x[groups==i] else x)
    ##                        
    ##                    }
+
+
+
+#does the next bit need nicer coloring?
+#does the next bit an option from above
+           
+          if(is.null(group.fun)){
+              group.fun <- list()
+              for(i in grp){
+                  group.fun[[i]] <- list(col= i, pch = i)
+              }}
+
+#print(group.fun[1])
+
+
            for(i in grp){
 
 ##add catcher for missing 
@@ -85,11 +102,20 @@ panelPal <- function(x, y, subscripts, at, col.regions, ...,
 #           print(temp2$x)
 ####
 
-           do.call(group.fun[i], temp2)
+
+#does the next bit need error catching
+#only do else if function?
+
+#does the next bit need 
+
+           if(is.list(group.fun[[i]]))
+                do.call(panel, listUpdate(temp2, group.fun[[i]])) else 
+                do.call(group.fun[[i]], temp2)
            }
 
 
 }
+
 
 
 
