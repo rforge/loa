@@ -38,6 +38,7 @@ export(triXY2ABC)
 export(cexHandler)
 export(colHandler)
 export(zHandler)
+export(parHandler)
 
 
 #panel.handlers

@@ -6,6 +6,8 @@
 #colHandler
 #zHandler
 
+#[in-development]
+#parHandler
 
 #to think about
 
@@ -115,6 +117,9 @@ colHandler <- function(z = NULL, col = NULL,
          expand.outputs = TRUE, ref = NULL, 
          ...){
 
+    #check par.settings
+    if(is.null(col.regions) & !is.null(list(...)$par.settings))
+        col.regions <- list(...)$par.settings$regions$col
 
     #if col.regions supplied
     if(!is.null(col.regions) && length(col.regions) < 100){
@@ -275,6 +280,106 @@ zHandler <- function(z = NULL, expand.outputs = TRUE,
     if(length(z) < length(ref))
         rep(z, ceiling(length(ref)/length(z)))[1:length(ref)] else 
             z[1:length(ref)]
+}
+
+
+
+
+########################
+########################
+##parHandler
+########################
+########################
+
+parHandler <- function (scheme = NULL, ...) {
+
+#think about order
+#theme first means unnamed get assigned as this
+
+#could hide this in ...
+#then
+#if theme named
+#if output set par.settings
+#
+
+#could use theme and set.theme
+#then if garbage sent it will ignore
+
+    extra.args <- list(...)
+
+    ###################
+    #pre-defined themes
+    ###################
+
+    myschm <- NULL
+
+    if(is.character(scheme)){
+
+        if (scheme == "greyscale") {
+            symbol <- gray(1:8/8)
+            fill <- "grey"
+            region <- gray(11:1/11)
+            reference <- "black"
+            bg <- "transparent"
+            fg <- "black"
+            myschm <- list(plot.polygon = list(col = fill[1], border = fg[1]), 
+                         box.rectangle = list(col = symbol[1]), box.umbrella = list(col = symbol[1]), 
+                         dot.line = list(col = reference), dot.symbol = list(col = symbol[1]), 
+                         plot.line = list(col = symbol[1]), plot.symbol = list(col = symbol[1]), 
+                         regions = list(col = colorRampPalette(region)(100)), 
+                         reference.line = list(col = reference), superpose.line = list(col = symbol), 
+                         superpose.symbol = list(col = symbol), superpose.polygon = list(col = fill, 
+                         border = fg), background = list(col = bg), add.line = list(col = fg), 
+                         add.text = list(col = fg), box.dot = list(col = fg), 
+                         axis.line = list(col = fg), axis.text = list(col = fg), 
+                         strip.border = list(col = fg), strip.background = list(col = "white"), 
+                         strip.shingle = list(col = "grey"), box.3d = list(col = fg), 
+                         par.xlab.text = list(col = fg), par.ylab.text = list(col = fg), 
+                         par.zlab.text = list(col = fg), par.main.text = list(col = fg), 
+                         par.sub.text = list(col = fg))
+        }
+
+        if (scheme == "kr.web") {
+            symbol <- colHandler(1:8, col.regions="Blues")$col
+            fill <- "white"
+            region <- colHandler(1:11, col.regions="Blues")$col
+            reference <- "white"
+            bg <- "black"
+            fg <- "white"
+            myschm <- list(plot.polygon = list(col = fill[1], border = fg[1]), 
+                         box.rectangle = list(col = symbol[1]), box.umbrella = list(col = symbol[1]), 
+                         dot.line = list(col = reference), dot.symbol = list(col = symbol[1]), 
+                         plot.line = list(col = symbol[1]), plot.symbol = list(col = symbol[1]), 
+                         regions = list(col = colorRampPalette(region)(100)), 
+                         reference.line = list(col = reference), superpose.line = list(col = symbol), 
+                         superpose.symbol = list(col = symbol), superpose.polygon = list(col = fill, 
+                         border = fg), background = list(col = bg), add.line = list(col = fg), 
+                         add.text = list(col = fg), box.dot = list(col = fg), 
+                         axis.line = list(col = fg), axis.text = list(col = fg), 
+                         strip.border = list(col = fg), strip.background = list(col = "black"), 
+                         strip.shingle = list(col = "lightgrey"), box.3d = list(col = fg), 
+                         par.xlab.text = list(col = fg), par.ylab.text = list(col = fg), 
+                         par.zlab.text = list(col = fg), par.main.text = list(col = fg), 
+                         par.sub.text = list(col = fg))
+        }
+
+    }
+
+    if(is.list(scheme))
+        myschm <- scheme
+    
+    if(is.list(myschm)){
+        if (is.null(extra.args$par.settings)) 
+            extra.args$par.settings <- myschm
+        else extra.args$par.settings[!names(myschm) %in% names(extra.args$par.settings)] <- myschm[!names(myschm) %in% 
+            names(extra.args$par.settings)]
+    }
+
+#warning if myschm not list?
+
+#return par.setting or extra.args?
+
+    extra.args$par.settings
 }
 
 

@@ -58,5 +58,11 @@ Changes in loa 0.2.0 [2012-02-10]
 *       added panel.localScale for adding 
         in-panel scales 
 
+Changes in loa 0.2.1 [2012-05-05]
+=====================================
 
-for next added getPlotArgs      
+*       added getPlotArgs
+*       improved group argument handling 
+        for panelPal
+*       added parHandler      
+
