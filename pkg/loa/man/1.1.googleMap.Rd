@@ -63,7 +63,7 @@
    \code{\link{RgoogleMaps}} arguments supplied within the call. The 
    map is supplied via \code{makeMapArg} which modifies the 
    \code{\link{RgoogleMaps}} output before returning it to simplify 
-   local handling and (lattice) plotting.
+   local handling and (lattice) plotting. 
    }
 
   \item{map.panel, panel}{ (\code{googleMap} only) The panels to use 
@@ -90,7 +90,10 @@
    and \code{xlim} are only required by \code{makeMapArg}, which uses these 
    to set the requested map size. For the axis handlers (\code{yscale...} and 
    \code{xscale...}) the local alternative \code{lim} is used for both 
-   \code{ylim} and \code{xlim}. 
+   \code{ylim} and \code{xlim}. In \code{googleMap} and \code{quickMap}, if 
+   supplied, \code{xlim} and \code{ylim} are passed to \code{lattice} function 
+   \code{\link{xyplot}} via \code{\link{LatLon2XY.centered}} to handle local 
+   scaling.
    }
 
   \item{aspect}{ The aspect ratio of the plot. If not supplied (recommended), this 
@@ -213,7 +216,7 @@
    and \code{\link{XY2LatLon}} to locally scale both axis and data.  
 
   IMPORTANT: Users wishing to add data to these plots, e.g. using 
-   \code{upadate} or \code{layers} in \code{latticeExtra}, 
+   \code{update} or \code{layers} in \code{latticeExtra}, 
    should first rescale the data. See Example below. 
      
 }

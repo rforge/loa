@@ -65,4 +65,7 @@ Changes in loa 0.2.1 [2012-05-05]
 *       improved group argument handling 
         for panelPal
 *       added parHandler      
+*       update to googleMap function 
+        getMapArg: better xlim, ylim handling; 
+        fixed recolor.amp/nativeRaster conflict
 

@@ -11,6 +11,13 @@
 #yscale.components.googleMaps
 #axis.components.googleMaps
 
+
+##re GoogleMapsPlot
+##GoogleMapsPlot(d, "lat", "lon", maptype="roadmap", 
+##               path="&style=feature:water%7Chue:0xffffff|&style=feature:poi%7Cvisibility:off|&style=feature:all%7Celement:labels%7Cvisibility:off", 
+##               map.cols=c("bisque", "white"))
+
+
 #NEEDS urgent work
 
 #googleMap code needs tidy
@@ -94,6 +101,7 @@ googleMap <- function(x, data = NULL, map = NULL,
 
     #extra.args
     extra.args <- list(...)
+    extra.args$recolor.map <- recolor.map
  
     #get lat lon for formula
     d1 <- try(latticeParseFormula(x, data, dimension = 3, 
@@ -113,6 +121,11 @@ googleMap <- function(x, data = NULL, map = NULL,
 
     #note: these are taken from z ~ x * y 
     #      so get flipped
+
+#################
+#this next bit could be simplified
+#################
+
     temp <- list(xlim = d1$right.y, ylim = d1$right.x,
                  aspect = NULL, pch = 20)
     extra.args <- listUpdate(temp, extra.args)
@@ -142,11 +155,7 @@ googleMap <- function(x, data = NULL, map = NULL,
     extra.args <- listUpdate(extra.args, 
                              do.call(colHandler, extra.args))
 
-
-
-
 ###############
-
     
     ###############
     #get map
@@ -354,6 +363,21 @@ makeMapArg <- function(ylim, xlim,
     #local function
     localMapManager <- function(map){
 
+#################
+#destfile name fix needed?
+#################
+
+        #######################
+        #native raster handler
+        #######################
+
+        if("nativeRaster" %in% class(map$myTile) & require(png)){
+            #do to png native output
+            writePNG(map$myTile, "XtempX.png")
+            map$myTile <- readPNG("XtempX.png", native = FALSE)
+            attr(map$myTile, "type") <- "rgb"
+        }
+
         #set up
         ra <- dim(map$myTile)
     
@@ -406,6 +430,16 @@ makeMapArg <- function(ylim, xlim,
             }
         } 
 
+        if(length(ra) == 2){
+
+            if(is.character(attr(map$myTile, "type")) && attr(map$myTile, "type") == "grey"){
+                map$myTile <- grey(map$myTile[,])
+                dim(map$myTile) <- ra[1:2]
+                attr(map$myTile, "type") <- "openair"
+                return(map)
+            }
+        }
+
         warning(paste("googleMaps encountered unexpected 'RgoogleMaps' output",
                       "\n\t[You may encounter problems or some options may not be supported]", 
                       "\n\t[If so, suggest updating RgoogleMaps]",
@@ -423,53 +457,85 @@ makeMapArg <- function(ylim, xlim,
                      names(formals(GetMap))))
 
     #get suitable ranges
+    temp2 <- try(qbbox(lat = ylim, lon = xlim), silent = TRUE)
+    if(is(temp2)[1] == "try-error")
+        stop(paste("\tCould not apply supplied lat, lon combination",
+                   "\n\t[check call settings and data source]", sep = ""),
+             call.=FALSE)
 
-    #temp til RgoogleMaps Fixed
+    #set size
+    my.y <- diff(range(temp2$latR, na.rm=TRUE))
+    my.x <- diff(range(temp2$lonR, na.rm=TRUE))
 
-    #temp2 <- try(qbbox(lat = temp.y, lon = temp.x), silent = TRUE)
-    #if(is(temp2)[1] == "try-error")
-    #    stop("could not apply supplied lat, lon combination", call.=FALSE)
+    #size was c(640, 640)
+    my.size <- if(my.y > my.x)
+                   c(ceiling((my.x/my.y) * 640), 640) else 
+                       c(640, ceiling((my.y/my.x) * 640))
 
-    #override some other RgoogleMaps defaults
-    #map <- list(lon = temp2$lonR, lat = temp2$latR, destfile = "XtempX.png", 
-    #            maptype = "terrain")
-
-    #fix
-    #get square range
-    temp.2 <- c(min(ylim, na.rm = TRUE) + (diff(range(ylim, na.rm=TRUE))/2),
-                min(xlim, na.rm = TRUE) + (diff(range(xlim, na.rm=TRUE))/2))
-    zoom <- min(MaxZoom(range(ylim, na.rm=TRUE), 
-                        range(xlim, na.rm=TRUE)), 
-                na.rm=TRUE)
-    if(is.infinite(zoom))
-        zoom <- 15
-    map <- list(center = temp.2, zoom = zoom, destfile = "XtempX.png", 
-                maptype = "terrain")
-
-    #set best size for map
-    #NOTE: superseded by extra.args if user forced
-    #size <- diff(temp2$lonR)/diff(temp2$latR)
-    #size <- sqrt(size^2)
-    #size <- c(size, 1/size)
-    #size <- ceiling((size/max(size)) * 640)
-
-    #force size until fixed
-    size <- c(640, 640)
-
-    map$size <- size 
+    #override some RgoogleMaps defaults
+    map <- list(lon = temp2$lonR, lat = temp2$latR, destfile = "XtempX.png",
+                 maptype = "terrain", size = my.size)
+    if(length(temp2$latR)==1 & is.null(map$zoom)) map$zoom <- 15
 
     ##update my defaults with relevant ones in call
     map <- listUpdate(map, extra.args, use.b = temp)
 
     #use MapBackground and list of allowed args
-    #map <- try(do.call(MapBackground, map), silent = TRUE)
-    map <- try(do.call(GetMap, map), silent = TRUE)
+    map <- try(do.call(GetMap.bbox, map), silent = TRUE)
 
     if(is(map)[1] == "try-error")
-        stop("problem with supplied lat, lon or RgoogleMap args.", call. = FALSE)
+        stop(paste("\tCould not apply supplied lat, lon and RgoogleMap args",
+                   "\n\t[check call settings and data source]", sep = ""),
+             call.=FALSE)
+
+
+
+#    #temp til RgoogleMaps Fixed
+#
+#    temp2 <- try(qbbox(lat = ylim, lon = xlim), silent = TRUE)
+#    if(is(temp2)[1] == "try-error")
+#        stop("could not apply supplied lat, lon combination", call.=FALSE)
+
+#    #override some other RgoogleMaps defaults
+#    #map <- list(lon = temp2$lonR, lat = temp2$latR, destfile = "XtempX.png", 
+#    #            maptype = "terrain")
+
+#    #fix
+#    #get square range
+#    temp.2 <- c(min(ylim, na.rm = TRUE) + (diff(range(ylim, na.rm=TRUE))/2),
+#                min(xlim, na.rm = TRUE) + (diff(range(xlim, na.rm=TRUE))/2))
+#    zoom <- min(MaxZoom(range(ylim, na.rm=TRUE), 
+#                        range(xlim, na.rm=TRUE)), 
+#                na.rm=TRUE)
+#    if(is.infinite(zoom))
+#        zoom <- 15
+#    map <- list(center = temp.2, zoom = zoom, destfile = "XtempX.png", 
+#                maptype = "terrain")
+
+#    #set best size for map
+#    #NOTE: superseded by extra.args if user forced
+#    size <- diff(temp2$lonR)/diff(temp2$latR)
+#    size <- sqrt(size^2)
+#    size <- c(size, 1/size)
+#    size <- ceiling((size/max(size)) * 640)
+
+#    #force size until fixed
+#    #size <- c(640, 640)
+
+#    map$size <- size 
+
+#    ##update my defaults with relevant ones in call
+#    map <- listUpdate(map, extra.args, use.b = temp)
+
+#    #use MapBackground and list of allowed args
+#    #map <- try(do.call(MapBackground, map), silent = TRUE)
+#    map <- try(do.call(GetMap, map), silent = TRUE)
+
+#    if(is(map)[1] == "try-error")
+#        stop("problem with supplied lat, lon or RgoogleMap args.", call. = FALSE)
         
-    #save size for later
-    map$size <- size
+#    #save size for later
+#    map$size <- size
 
     #get ranges for panel
     #use RgoogleMaps function
