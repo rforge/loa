@@ -6,7 +6,7 @@ Date: 2012-05-05
 Author: Karl Ropkins
 Maintainer: Karl Ropkins <k.ropkins@its.leeds.ac.uk>
 Description: Various functions
-Depends: R (>= 2.10.0),  grid, lattice, RgoogleMaps, RColorBrewer
+Depends: R (>= 2.10.0),  grid, lattice, png, RgoogleMaps, RColorBrewer
 License: GPL (>= 2)
 LazyLoad: yes
 LazyData: yes
