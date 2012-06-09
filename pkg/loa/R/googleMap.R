@@ -342,12 +342,6 @@ makeMapArg <- function(ylim, xlim,
     #
 
     ##################
-    #to do
-    ###################
-    #fix recolor.map
-    #
-
-    ##################
     #to think about
     ##################
     #move local function localMapManager in code body
@@ -475,7 +469,11 @@ makeMapArg <- function(ylim, xlim,
     #override some RgoogleMaps defaults
     map <- list(lon = temp2$lonR, lat = temp2$latR, destfile = "XtempX.png",
                  maptype = "terrain", size = my.size)
-    if(length(temp2$latR)==1 & is.null(map$zoom)) map$zoom <- 15
+
+    if(my.x==0 & is.null(map$zoom)){
+        map$zoom <- 15
+        map$size <- c(640,640)
+    }
 
     ##update my defaults with relevant ones in call
     map <- listUpdate(map, extra.args, use.b = temp)
