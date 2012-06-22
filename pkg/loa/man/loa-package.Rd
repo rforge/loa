@@ -7,7 +7,7 @@
 }
 \description{
   The loa package contains various plots, options and 
-  add-ins for use the \code{\link{lattice}} package.  
+  add-ins for use with the \code{\link{lattice}} package.  
   
 }
 \details{
