@@ -14,15 +14,16 @@
 
 #googleMap
 
+export(GoogleMap)
 export(googleMap) 
 export(quickMap) 
 export(makeMapArg)
 export(getMapArg)
-export(panel.googleMapsRaster) 
-export(panel.googleMaps)
-export(xscale.components.googleMaps)
-export(yscale.components.googleMaps)
-export(axis.components.googleMaps)
+export(panel.GoogleMapsRaster) 
+export(panel.GoogleMaps)
+export(xscale.components.GoogleMaps)
+export(yscale.components.GoogleMaps)
+export(axis.components.GoogleMaps)
 
 #trianglePlot
 

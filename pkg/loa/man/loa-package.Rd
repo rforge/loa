@@ -29,7 +29,7 @@ conditioning make it a hugely effective tool when working with data.
 The \code{loa} package contains a number of plot functions developed to make 
 use of this framework. These are summarized in section 1 of this manual, and include:
 
-1.1. \code{\link{googleMap}} and associated geoplotting functions.
+1.1. \code{\link{GoogleMap}} and associated geoplotting functions.
 
 1.2. \code{\link{trianglePlot}} and associated functions.
 
@@ -82,12 +82,19 @@ Maintainer: Karl Ropkins <k.ropkins@its.leeds.ac.uk>
   Sarkar, Deepayan (2008) Lattice: Multivariate Data
   Visualization with R. Springer, New York. ISBN
   978-0-387-75968-5
+
+  Trellis Plotting:
+  Becker, R. A., Cleveland, W. S., Shyu, M. J. (1996). The Visual Design and 
+  Control of Trellis Display, Journal of Computational and Graphical Statistics, 
+  5(2), 123-155.
+  Cleveland, W.S. (1993) Visualizing Data, Hobart Press, Summit, New Jersey.
+  
 }
 
 \keyword{ package }
 
 \seealso{
-  \code{\link{googleMap}}
+  \code{\link{GoogleMap}}, \code{\link{trianglePlot}}
 }
 
 %\examples{

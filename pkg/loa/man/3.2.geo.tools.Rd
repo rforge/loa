@@ -153,7 +153,7 @@ geoDestination(lat, lon = NULL, bearing = NULL,
 }
 
 \seealso{
-   \code{\link{googleMap}} and \code{\link{getLatLon}}. 
+   \code{\link{GoogleMap}} and \code{\link{getLatLon}}. 
 }
 
 \examples{

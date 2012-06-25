@@ -1,3 +1,10 @@
+Changes in loa 0.2.2 [2012-06-25]
+=====================================
+
+*       renamed googleMap GoogleMap
+        and added googlemap wrapper
+
+
 Changes in loa 0.2.1 [2012-05-05]
 =====================================
 

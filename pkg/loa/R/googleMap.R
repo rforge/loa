@@ -1,15 +1,15 @@
 #in development code
 #[8 -TBC] functions 
 
-#googleMap - main function
+#GoogleMap - main function
 #quickMap - simplified version as code demo
 #makeMapArg - map maker and modifier for above
-#getMapArg - recover map from previous googleMap plot
-#panel.googleMapsRaster - panels
-#panel.googleMaps
-#xscale.components.googleMaps - axis handlers
-#yscale.components.googleMaps
-#axis.components.googleMaps
+#getMapArg - recover map from previous GoogleMap plot
+#panel.GoogleMapsRaster - panels
+#panel.GoogleMaps
+#xscale.components.GoogleMaps - axis handlers
+#yscale.components.GoogleMaps
+#axis.components.GoogleMaps
 
 
 ##re GoogleMapsPlot
@@ -20,13 +20,13 @@
 
 #NEEDS urgent work
 
-#googleMap code needs tidy
+#GoogleMap code needs tidy
 
 #IMPORTANT
 #This needs archiving and tidying...
 
 
-#googleMap - z, colorkey, etc not sort
+#GoogleMap - z, colorkey, etc not sort
 #makeMapArg - recolor.map 
 #           - think I have done this better elsewhere
 #           - also need to see if this could be done quicker 
@@ -37,16 +37,19 @@
 
 ###########################
 ###########################
-#googleMap
+#GoogleMap
 ###########################
 ###########################
 
-googleMap <- function(x, data = NULL, map = NULL,
-    map.panel = panel.googleMapsRaster, 
+
+googleMap <- function(...) GoogleMap(...)
+
+GoogleMap <- function(x, data = NULL, map = NULL,
+    map.panel = panel.GoogleMapsRaster, 
     panel = panel.xyplot, 
     recolor.map = FALSE, ...){
 
-    #noaa.sunrise googleMapsPlot revision
+    #noaa.sunrise GoogleMapsPlot revision
     #karl 2011-12-14
 
     ##############
@@ -177,7 +180,7 @@ googleMap <- function(x, data = NULL, map = NULL,
     ##############################
 
     #scale axis for map projection
-    map.axis.comps <- axis.components.googleMaps(map)
+    map.axis.comps <- axis.components.GoogleMaps(map)
     map.axis <- function(components, ...) 
                    axis.default(components = map.axis.comps, ...)
 
@@ -296,7 +299,7 @@ quickMap <- function(lat, lon, show.data = FALSE, ...){
     map <- makeMapArg(lat, lon, ...)
 
     #scale axis for map projection
-    map.axis.comps <- axis.components.googleMaps(map)
+    map.axis.comps <- axis.components.GoogleMaps(map)
     map.axis <- function(components, ...) 
                    axis.default(components = map.axis.comps, ...)
 
@@ -311,7 +314,7 @@ quickMap <- function(lat, lon, show.data = FALSE, ...){
            aspect = map$aspect, 
            axis = map.axis,
            panel = function(...){
-               panel.googleMapsRaster(map)
+               panel.GoogleMapsRaster(map)
                if(show.data)
                    panel.xyplot(...)
            }, ...)
@@ -382,7 +385,7 @@ makeMapArg <- function(ylim, xlim,
         #if RgoogleMaps version between 1.1.5 and 1.1.9.13 
         #currently don't know structure
         if(tempfun("1.1.9.13") < 0){
-            warning(paste("googleMaps may not be able to support this version of 'RgoogleMaps'",
+            warning(paste("GoogleMaps may not be able to support this version of 'RgoogleMaps'",
                           "\n\t[You may encounter problems]", 
                           "\n\t[If so, suggest updating RgoogleMaps]",
                     sep=""), call.=FALSE)
@@ -434,7 +437,7 @@ makeMapArg <- function(ylim, xlim,
             }
         }
 
-        warning(paste("googleMaps encountered unexpected 'RgoogleMaps' output",
+        warning(paste("GoogleMaps encountered unexpected 'RgoogleMaps' output",
                       "\n\t[You may encounter problems or some options may not be supported]", 
                       "\n\t[If so, suggest updating RgoogleMaps]",
                 sep=""), call.=FALSE)
@@ -596,7 +599,7 @@ makeMapArg <- function(ylim, xlim,
 #################################
 
 getMapArg <- function(object = trellis.last.object()){
-    #recovers map from previous googleMap plot
+    #recovers map from previous GoogleMap plot
     object$panel.args.common$map
 }
 
@@ -617,14 +620,14 @@ getMapArg <- function(object = trellis.last.object()){
 
 #################################
 #################################
-##panel.googleMapsRaster
+##panel.GoogleMapsRaster
 #################################
 #################################
 #raster map panel
 #
 
 
-panel.googleMapsRaster <- function(map){
+panel.GoogleMapsRaster <- function(map){
     grid.raster(map$myTile,
          x = unit(map$xlim[1], "native"), y = unit(map$ylim[1], "native"),
          width = unit(map$xlim[2] - map$xlim[1], "native"),
@@ -643,7 +646,7 @@ panel.googleMapsRaster <- function(map){
 #non-raster map panel
 #
 
-panel.googleMaps <- function(map){
+panel.GoogleMaps <- function(map){
 
     #there has to be a better way
 
@@ -697,11 +700,11 @@ panel.googleMaps <- function(map){
 
 ###############################
 ###############################
-##xscale.components.googleMaps
+##xscale.components.GoogleMaps
 ###############################
 ###############################
 
-xscale.components.googleMaps <- function(lim, ..., map = map){
+xscale.components.GoogleMaps <- function(lim, ..., map = map){
         ans <- xscale.components.default(c(map$BBOX$ll[2], map$BBOX$ur[2]), ...)
         ans$num.limit <- map$xlim
         temp <- LatLon2XY.centered(map, map$BBOX$ll[1],
@@ -721,11 +724,11 @@ xscale.components.googleMaps <- function(lim, ..., map = map){
 
 ###############################
 ###############################
-##yscale.components.googleMaps
+##yscale.components.GoogleMaps
 ###############################
 ###############################
 
-yscale.components.googleMaps <- function(lim, ..., map = map){
+yscale.components.GoogleMaps <- function(lim, ..., map = map){
         ans <- yscale.components.default(c(map$BBOX$ll[1], map$BBOX$ur[1]), ...)
         ans$num.limit <- map$ylim
 
@@ -748,11 +751,11 @@ yscale.components.googleMaps <- function(lim, ..., map = map){
 
 ###############################
 ###############################
-##axis.components.googleMaps
+##axis.components.GoogleMaps
 ###############################
 ###############################
 
-axis.components.googleMaps <- function(map, xlim = NULL, ylim = NULL, ...){
+axis.components.GoogleMaps <- function(map, xlim = NULL, ylim = NULL, ...){
 
 #the dots currently go no further!
 
@@ -763,8 +766,8 @@ axis.components.googleMaps <- function(map, xlim = NULL, ylim = NULL, ...){
     if(is.null(ylim))
         ylim <- map$ylim   
     #get and combine
-    ans <- xscale.components.googleMaps(xlim, map = map)
-    ans <- listUpdate(ans, yscale.components.googleMaps(ylim, map = map)) 
+    ans <- xscale.components.GoogleMaps(xlim, map = map)
+    ans <- listUpdate(ans, yscale.components.GoogleMaps(ylim, map = map)) 
     ans
 }
 

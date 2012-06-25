@@ -37,7 +37,7 @@ getLatLon(..., map = NULL, object = trellis.last.object(),
 
   \item{map, object}{ For \code{getLatLon} only. The plot layer as 
    generated \code{makeMapArg} and the plot object genereated by 
-   \code{googleMap}. The \code{map} is strictly required as a reference when 
+   \code{GoogleMap}. The \code{map} is strictly required as a reference when 
    converting plot points to associated latitude, longitude values, and 
    can be supplied directly as \code{map}, or recovered from the plot, 
    which can be supplied as \code{object}. If neither are supplied (as in 
@@ -81,7 +81,7 @@ getLatLon(..., map = NULL, object = trellis.last.object(),
    locally scaled axes. See Note below.
 
   \code{getLatLon} is wrapper for \code{getXY} for use 
-   with \code{googleMap} outputs and other similarly 
+   with \code{GoogleMap} outputs and other similarly 
    georeferenced plots. See Note below. 
      
 }
@@ -142,7 +142,7 @@ getLatLon(..., map = NULL, object = trellis.last.object(),
    \code{\link{lattice}}: \code{\link{grid.locator}}; 
    \code{\link{trellis.focus}} and \code{\link{lpoints}} 
 
-   \code{\link{googleMap}}: \code{\link{LatLon2XY}}, etc.  
+   \code{\link{GoogleMap}}: \code{\link{LatLon2XY}}, etc.  
 }
 
 \examples{
