@@ -217,7 +217,7 @@ GoogleMap <- function(x, data = NULL, map = NULL,
 
     extra.args <- listUpdate(extra.args, 
                       listExpand(extra.args, ignore=c("xlim", "ylim", "at", "col.regions", 
-                                                      "aspect", "ref"), 
+                                                      "aspect", "ref", "layout"), 
                           ref = extra.args$ref)
                   )
 

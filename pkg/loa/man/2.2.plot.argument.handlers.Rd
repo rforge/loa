@@ -19,7 +19,7 @@ cexHandler(z = NULL, cex = NULL,
            ref = NULL, ...)
 
 colHandler(z = NULL, col = NULL, 
-           region = NULL, colorkey = NULL, 
+           region = NULL, colorkey = NULL, legend = NULL,
            pretty = FALSE, at = NULL, cuts = 20,
            col.regions = NULL, alpha.regions = NULL,
            expand.outputs = TRUE, ref = NULL, 
@@ -67,9 +67,9 @@ zHandler(z = NULL, expand.outputs = TRUE,
   equivalent to \code{cex.range = c(2, 10)}. 
   } 
 
- \item{region, colorkey, pretty, at, cuts, col.regions, alpha.regions}{ The colorscale 
-  settings to be used when generating a colorkey. The most useful of these are 
-  probably \code{col.regions} which can be used to reset the color scale, 
+ \item{region, colorkey, legend, pretty, at, cuts, col.regions, alpha.regions}{ The 
+  colorscale settings to be used when generating a colorkey. The most useful of 
+  these are probably \code{col.regions} which can be used to reset the color scale, 
   \code{alpha.regions} which sets the col.region alpha transparency (0 for 
   invisible to 1 for solid) and \code{colorkey} which can be a logical (forcing 
   the colorkey on or off) or a list of components that can be used to fine-tune the 

@@ -111,7 +111,7 @@ cexHandler <- function(z = NULL, cex = NULL,
 
 
 colHandler <- function(z = NULL, col = NULL, 
-         region = NULL, colorkey = NULL, 
+         region = NULL, colorkey = NULL, legend = NULL,
          pretty = FALSE, at = NULL, cuts = 20,
          col.regions = NULL, alpha.regions = NULL,
          expand.outputs = TRUE, ref = NULL, 
@@ -246,6 +246,10 @@ colHandler <- function(z = NULL, col = NULL,
            names(colorkey)[[1]] <- colorkey$right$args$key$space
     }
 
+    #legend update if not preset
+    if(is.null(legend))
+          legend <- colorkey
+
     #expand z,col if requests and 
     #ref to scale by...
     col <- zHandler(col, expand.outputs, ref)
@@ -253,7 +257,7 @@ colHandler <- function(z = NULL, col = NULL,
 
     #return relevant settings
     list(z = z, col = col, 
-         legend = colorkey, at = at, 
+         legend = legend, at = at, 
          col.regions = col.regions, 
          alpha.regions = alpha.regions)
 

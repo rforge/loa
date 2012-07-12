@@ -309,7 +309,7 @@ trianglePlot <- function(x, data = NULL, panel = panel.xyplot, ref.grids = TRUE,
                       listExpand(extra.args, ignore=c("alim", "blim", "clim", "xlim", "ylim",
                                                       "alab", "blab", "clab", "panel.scales",
                                                       "at", "col.regions", "aspect", "ref", 
-                                                      "a.grid", "b.grid", "c.grid",
+                                                      "layout", "a.grid", "b.grid", "c.grid",
                                                       "grids", "axes", "ticks", "annotation"), 
                           ref = extra.args$ref)
                   )
@@ -320,7 +320,7 @@ trianglePlot <- function(x, data = NULL, panel = panel.xyplot, ref.grids = TRUE,
     temp <- list(x=x, data=data, pch=20, aspect = 1, 
                  panel = function(..., subscripts){
                                   panel = panelPal(..., ignore=c("alim", "blim", "clim", "panel.scales", 
-                                                   "grids", "axes", "ticks", "annotation",
+                                                   "grids", "axes", "ticks", "annotation", "layout", 
                                                    "a.grid", "b.grid", "c.grid"), subscripts = subscripts, 
                                                     panel = function(..., user.panel = panel) 
                                                                 panel.triangleFrame(..., user.panel = user.panel))
