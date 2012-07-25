@@ -47,6 +47,7 @@ export(panelPal)
 export(getArgs)
 export(getPlotArgs)
 export(isGood4LOA)
+export(panel.kernelDensity)
 
 #scales.handlers
 export(localScalesHandler)
