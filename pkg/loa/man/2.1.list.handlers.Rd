@@ -36,8 +36,8 @@ listExpand(a, ref = NULL, use = NULL,
   \item{use, use.a, use.b}{ Vectors, all defaults \code{NULL}. If supplied, 
    a vector of the names of list enteries to be used. Other enteries are 
    then discarded. \code{use} is applied to all supplied lists, while 
-   \code{subset.a}, \code{subset.b}, etc. can be used to manage lists 
-   individually if multiple lists are supplied.  
+   \code{use.a}, \code{use.b}, etc. can be used to subset \code{a} and 
+   \code{b} lists individually.  
   } 
   \item{ignore, ignore.a, ignore.b}{ Vectors, default \code{NULL}. As with 
    \code{use}, etc, but for enteries to be ignored/not passed on for 

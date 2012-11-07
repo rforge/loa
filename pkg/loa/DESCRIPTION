@@ -1,8 +1,8 @@
 Package: loa
 Type: Package
 Title: loa: various plots, options and add-ins for use with lattice 
-Version: 0.2.3
-Date: 2012-07-10
+Version: 0.2.4
+Date: 2012-11-07
 Author: Karl Ropkins
 Maintainer: Karl Ropkins <k.ropkins@its.leeds.ac.uk>
 Description: Various functions

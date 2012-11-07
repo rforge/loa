@@ -1,3 +1,14 @@
+Changes in loa 0.2.4 [2012-11-07]
+=====================================
+
+*       added loaPlot function
+*       added panelPal2 (as in development 
+        alternative to current panelPal)   
+*       added formulaHandler
+*       improved cexHandler and colHandler 
+*       improved panel.kernelDensity
+
+
 Changes in loa 0.2.3 [2012-07-10]
 =====================================
 

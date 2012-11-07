@@ -11,6 +11,10 @@
 ##import(lattice)
 ##import(RColorBrewer)
 
+#loaPlot
+
+export(loaPlot)
+export(formulaHandler) 
 
 #googleMap
 
@@ -44,6 +48,7 @@ export(parHandler)
 
 #panel.handlers
 export(panelPal)
+export(panelPal2)
 export(getArgs)
 export(getPlotArgs)
 export(isGood4LOA)

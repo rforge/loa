@@ -11,7 +11,9 @@
 \usage{
 
 panel.kernelDensity(x, y, z = NULL, ..., n = 20, 
-         kernel.fun = NULL, panel.range = TRUE) 
+         kernel.fun = NULL, panel.range = TRUE, 
+         process = TRUE, plot = TRUE, loa.settings = FALSE)
+
 }
 
 \arguments{
@@ -32,22 +34,33 @@ panel.kernelDensity(x, y, z = NULL, ..., n = 20,
   \code{FALSE}) indicating if the kernel density estimation data range 
    should be forced to the full panel range. See Below   
   }
+ \item{process, plot, loa.settings}{ For \code{panel...} functions that 
+   intended to be handled using \code{\link{panelPal2}}. \code{process} 
+   and \code{plot}, logicals, indicating if the process and plot sections 
+   of the panel function should be run. \code{loa.settings}, a logical 
+   indicating if the safe mode setting should be returned. See below and 
+   \code{\link{panelPal2}} Help documents for further details. 
+  }
 
 
 } 
 
 
 \details{
-  Special \code{panel...} functions generate provide alternative 
-   data handling for \code{lattice} functions like \code{xyplot}. 
-   They are intended to be used in the conventional form, e.g.:
+  Special \code{panel...} functions are intended for use with 
+  \code{\link{panelPal2}}. They provide alternative data handling 
+   for \code{lattice} functions like \code{xyplot}. They are intended 
+   to be used in the conventional form, e.g.:
 
    \code{xyplot(..., panel = panel.kernelDensity)}
 
    \code{xyplot(..., panel = function(...) panel.kernelDensity(..., n = 50))}
    
    \code{#etc}
-  
+
+   The combination provides a mechanism for the routine preprocessing of 
+   panel data and the routine alignment panel and legend settings in cases 
+   where values are reworked within the panel function call.
 
   \code{panel.kernelDensity} generates kernel density estimations 
    based on the supplied \code{x} and \code{y} data ranges.
@@ -87,12 +100,12 @@ panel.kernelDensity(x, y, z = NULL, ..., n = 20,
    If no \code{kernel.fun} is supplied in the \code{panel} call, the 
    \code{MASS} function \code{kde2d} is used to estimate kernel density.  
 
-   \code{}
-
-
 }
 
 \seealso{
+
+   \code{\link{panelPal2}}
+
    \code{\link{lattice}}, \code{\link{xyplot}}, \code{\link{panel.contourplot}},
 }
 

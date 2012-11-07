@@ -2,8 +2,9 @@
 \alias{2.2.plot.argument.handlers}
 \alias{cexHandler}
 \alias{colHandler}
-\alias{zHandler}
 \alias{parHandler}
+\alias{zHandler}
+
 
 \title{
   Common plot argument handlers
@@ -16,14 +17,14 @@
 
 cexHandler(z = NULL, cex = NULL, 
            cex.range = NULL, expand.outputs = TRUE, 
-           ref = NULL, ...)
+           ref = NULL, ..., zlim = NULL)
 
 colHandler(z = NULL, col = NULL, 
            region = NULL, colorkey = NULL, legend = NULL,
            pretty = FALSE, at = NULL, cuts = 20,
            col.regions = NULL, alpha.regions = NULL,
            expand.outputs = TRUE, ref = NULL, 
-           ...)
+           ..., zlim = NULL, output="col")
 
 parHandler(scheme = NULL, ...)
 
@@ -57,8 +58,8 @@ zHandler(z = NULL, expand.outputs = TRUE,
 
  \item{cex, col}{ For associated handlers, the parameter value(s) to be managed (i.e., 
   \code{cex} for \code{cexHandler} and \code{col} for \code{colHanlder}). NOTE: In both 
-  cases if these are not \code{NULL} these supersede any suuplied \code{z} or 
-  \code{handler...} modification.  
+  cases if these are not \code{NULL} these supersede any supplied \code{z} or 
+  \code{...Handler} modification.  
   } 
 
  \item{cex.range}{ If supplied, the range for \code{z} to be rescaled to when using this 
@@ -84,7 +85,12 @@ zHandler(z = NULL, expand.outputs = TRUE,
    require \code{subscript} handling, in which case \code{ref} could be the x 
    or y data series, or any other vector of the same length. NOTE: if 
    \code{ref} is not supplied \code{expand.outputs} is ignored. 
-  } 
+  }
+
+  \item{zlim}{The range over which the scale is to be applied if not \code{range(z)}.} 
+
+  \item{output}{For \code{colHandler}. The function output. Either the \code{col} vector 
+   alone (\code{output='col'}) or the full list of color parameters.} 
 
   \item{scheme}{ The color scheme to apply. This can be a list of parameters to apply 
    or a character vector for a pre-defined scheme. Current pre-defined schemes include 
@@ -121,7 +127,8 @@ zHandler(z = NULL, expand.outputs = TRUE,
    the \code{cex} argument in many common plotting functions 
    (e.g. \code{\link{plot}}, \code{\link{xyplot}}).
 
-  \code{colHandler} returns a list containing elements (\code{z}, 
+  \code{colHandler} depending on \code{output} setting returns 
+   either the \code{col} vector or a list containing elements (\code{z}, 
    \code{col}, \code{legend}, \code{at}, \code{col.regions} and 
    \code{alpha.regions}), which can be used to create a \code{col} 
    series scaled by \code{z} and an associated colorkey 
@@ -140,15 +147,16 @@ zHandler(z = NULL, expand.outputs = TRUE,
 \references{
   These function makes extensive use of code developed by others.  
 
+  lattice:
+  Sarkar, Deepayan (2008) Lattice: Multivariate Data
+  Visualization with R. Springer, New York. ISBN
+  978-0-387-75968-5
+
   RColorBrewer:
   Erich Neuwirth <erich.neuwirth@univie.ac.at> (2011). RColorBrewer:
   ColorBrewer palettes. R package version 1.0-5.
   http://CRAN.R-project.org/package=RColorBrewer
 
-  lattice:
-  Sarkar, Deepayan (2008) Lattice: Multivariate Data
-  Visualization with R. Springer, New York. ISBN
-  978-0-387-75968-5
 }
 
 \author{
@@ -227,7 +235,6 @@ myplot2 <- function(x, y, z = NULL, ...){
 #with colorkey based on z/c
 myplot2(a, b, c) 
 
-#
 #with col.regions reset
 myplot2(a, b, c, col.regions = "Blues") 
 

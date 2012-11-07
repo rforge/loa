@@ -17,6 +17,9 @@ panelPal(x, y, subscripts, at, col.regions, ...,
          panel = panel.xyplot, ignore = NULL, 
          group.fun = NULL)
 
+panelPal2(ans, panel = NULL, preprocess = FALSE, 
+         safe.mode = TRUE, reset.xylims = FALSE)
+
 #misc
 getArgs(source = TRUE, local.resets = TRUE, 
          user.resets = TRUE, is.scales.lines = FALSE, 
@@ -58,6 +61,15 @@ isGood4LOA(arg)
   of \code{col} and \code{pch} settings that produce a conventional grouped 
   scatter plot output when the \code{group} argument is applied to the 
   \code{panel} default \code{panel.xyplot}. See Details below. 
+  }
+
+ \item{ans, preprocess, safe.mode, reset.xylims}{ [OPTIONS FOR IN DEVELOPMENT 
+  PANELPAL ALTERNATIVE - PLEASE HANDLE WITH CARE]. \code{ans} - The 
+  standard \code{trellis} object to be modified. \code{proprocess} - Logical, 
+  should the supplied \code{panel} function be preprocessed? \code{safe.mode} - 
+  Logical, should the plot be generated using safe.mode? \code{reset.xylims} - 
+  Logical, should the plot dimensions be reset if changed, e.g. by preprocessing?  
+  See Details below. 
   }
 
   \item{source, local.resets, user.resets}{ When recovering plot arguments 
@@ -129,6 +141,11 @@ isGood4LOA(arg)
    that different data groups can be more easily visualised in 
    completely different ways within the same panel. 
 
+  \code{panelPal2} is an in-development alternative to the current 
+   \code{panelPal}. If used with appropriately structured 
+   \code{panel...} functions, this allows in-panel code to be 
+   preprocessed so panels and legend settings can be aligned. 
+
   \code{getArgs} returns a list of parameters/values based on 
   \code{lattice}, developer and user settings. If multiple 
    elements are identified as containing case-specific information, 
@@ -147,6 +164,10 @@ isGood4LOA(arg)
 \value{
   \code{panelPal} is intended for use with \code{xyplot}, as a 
    wrapper for standard \code{panel...} functions.
+
+  \code{panelPal2} is an alternative to \code{panelPal}, that 
+   can be used to modify a previously generated \code{trellis} 
+   plot output.
 
   \code{getArgs} and \code{getPlotArgs} return lists of located 
    parameters/values. For example, the call
@@ -175,6 +196,10 @@ isGood4LOA(arg)
   Sarkar, Deepayan (2008) Lattice: Multivariate Data
   Visualization with R. Springer, New York. ISBN
   978-0-387-75968-5
+
+  (\code{panelPal2} applies an extension of the hexbin plot method 
+  briefly discussed in Chapter 14 of Sarkar.)
+
 }
 
 \author{

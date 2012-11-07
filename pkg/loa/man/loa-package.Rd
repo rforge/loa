@@ -29,9 +29,11 @@ conditioning make it a hugely effective tool when working with data.
 The \code{loa} package contains a number of plot functions developed to make 
 use of this framework. These are summarized in section 1 of this manual, and include:
 
-1.1. \code{\link{GoogleMap}} and associated geoplotting functions.
+1.1. \code{\link{loaPlot}} for various XYZ plots.
 
-1.2. \code{\link{trianglePlot}} and associated functions.
+1.2. \code{\link{GoogleMap}} and associated geoplotting functions.
+
+1.3. \code{\link{trianglePlot}} and associated functions.
 
 While such 'stand alone' plot functions are of obvious value, the code framework is 
 of possibly wider interest because it provides a template for the rapid third-party 
@@ -51,7 +53,7 @@ together and summarized in section 2:
 2.2. Common plot argument handlers: \code{\link{cexHandler}}, \code{\link{colHandler}}, 
 \code{\link{zHandler}}, etc.
 
-2.3. Plot scale(s) handlers: \code{\link{localScalesHandler}}, etc.
+2.3. Plot lim(s) and scale(s) handlers: \code{\link{limsHandler}}, \code{\link{localScalesHandler}}, etc.
 
 2.4. Other panel functions: \code{\link{panelPal}}, \code{\link{getArgs}}, etc.
 
@@ -75,7 +77,7 @@ Karl Ropkins
 Maintainer: Karl Ropkins <k.ropkins@its.leeds.ac.uk>
 }
 \references{
-  Functions in \code{loa}make extensive use of code developed by others. 
+  Functions in \code{loa} make extensive use of code developed by others. 
   In particular, I gratefully acknowledge the huge contributions of: 
 
   lattice:

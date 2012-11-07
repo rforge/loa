@@ -2,6 +2,7 @@
 #[TBC - NUMBER] functions 
 
 #panelPal
+#panelPal2
 #getArgs
 #getPlotArgs
 #isGood4LOA
@@ -115,6 +116,168 @@ panelPal <- function(x, y, subscripts, at, col.regions, ...,
 
 
 }
+
+
+##############################
+##############################
+##panelPal2
+##############################
+##############################
+
+
+panelPal2 <- function(ans, panel = NULL, preprocess = FALSE, safe.mode = TRUE,
+         reset.xylims = FALSE){
+
+#panelPal v2
+#kr
+
+#to do
+#######################
+#update xy limits after process
+#######################
+#group handling
+#######################
+#
+
+#to think about
+#######################
+#drop ref from common after transfer?
+#######################
+#col/cex handling when either are 
+#safe.mode managed  
+#######################
+#
+
+    #move all required and expanded information to panel.args[[1]]
+    #drop ignores
+    #make expanded list
+
+    if(!"xlim" %in% names(ans$panel.args.common))
+        ans$panel.args.common$xlim <- ans$x.limits
+    if(!"ylim" %in% names(ans$panel.args.common))
+        ans$panel.args.common$ylim <- ans$y.limits
+
+    ignore <- c("xlim", "ylim", "zlim", "xlab", "ylab", "zlab", "main",
+                "at", "ref", "col.regions")
+    if(safe.mode){
+        if("loa.settings" %in% names(formals(panel))){
+            temp <- panel(loa.settings=TRUE)
+            ignore <- unique(c(ignore, temp$plot.args, temp$panel.args))
+        }
+    }
+    
+    transfers <- sapply(names(ans$panel.args.common), 
+                            function(x) length(ans$panel.args.common[[x]])>1)
+    transfers <- names(ans$panel.args.common)[transfers]
+    transfers <- ans$panel.args.common[transfers[!transfers %in% ignore]]
+    transfers <- listExpand(transfers, ref = ans$panel.args.common$ref)
+
+    #if something to work with
+    #transfer subscripted versions to panels
+    #wipe these from common
+    if(length(transfers)>0){
+        temp <- lapply(ans$panel.args, function(y)
+                       listUpdate(y, lapply(transfers, function(x) x[y$subscripts])))
+        ans$panel.args <- temp
+        ans$panel.args.common <- ans$panel.args.common[!names(ans$panel.args.common) %in% names(ans$panel.args[[1]])]
+    }
+
+#does adding panel here 
+#speed anything up?
+
+    #proper panel
+    if(!is.null(panel))
+        ans$panel <- panel
+
+    #if processing process
+    if(preprocess){
+        if("process" %in% names(formals(ans$panel)) && formals(ans$panel)$process){
+            out <- lapply(1:length(ans$panel.args), function(x){
+                              temp <- listUpdate(ans$panel.args.common, ans$panel.args[[x]])
+                              temp <- listUpdate(temp, list(process=TRUE, plot=FALSE))
+#####################
+#here groups is in temp if it is sent
+#so it could be handled as previous?
+#see
+#print(names(temp))
+
+                              temp <- do.call(ans$panel, temp)
+##################
+#group handling goes in here?
+##################
+
+                              listUpdate(ans$panel.args[[x]], temp) 
+                          })
+            ans$panel.args <- out
+            formals(ans$panel)$process <- FALSE
+            formals(ans$panel)$plot <- TRUE    
+
+        #update panel.args
+        #run panel
+        }
+    }
+
+#TO DO
+#########################
+#update xylims if requested
+#########################
+
+    ##########################
+    #update lims for modified 
+    #panel.args[[n]] elements
+    ##########################
+
+    #get names of elements in panel.args[[1]] that are numeric
+    ranges <- sapply(names(ans$panel.args[[1]]), 
+                        function(x) is.numeric(ans$panel.args[[1]][[x]]))
+    ranges <- names(ans$panel.args[[1]])[ranges]
+
+    #remove common names 
+    ranges <- ranges[!ranges %in% c("x", "y", "subscripts")]
+
+    #remove elements for which lims are set in panel.args.common
+    temp <- gsub("lim$", "", grep("lim$", names(ans$panel.args.common), value=T))
+    ranges <- ranges[!ranges %in% temp]
+
+    #recalculate lims for these
+    temp.fun <- function(x){
+                    range(lapply(ans$panel.args, function(y){
+                              range(y[[x]], na.rm=TRUE, finite=TRUE)
+                          }), na.rm=TRUE, finite=TRUE)
+                }
+    if(length(ranges)>0){
+        temp <- lapply(ranges, temp.fun)
+        names(temp) <- paste(ranges, "lim", sep="")
+        ans$panel.args.common <- listUpdate(ans$panel.args.common, temp)
+    }
+
+    ###################
+    #update cex and col
+    ###################
+#tidy this
+
+    temp <- listUpdate(ans$panel.args.common, list(z=ans$panel.args.common$zlim, output="all"))
+    temp <- do.call(colHandler, temp)
+    temp <- temp[!names(temp) %in% c("col", "z")]
+#    ans$panel.args.common <- listUpdate(ans$panel.args.common, temp)
+    ans <- do.call(function(...) update(ans, ...), temp)
+
+    temp <- lapply(ans$panel.args, function(x){
+                       temp <- listUpdate(ans$panel.args.common, x)
+                       temp$col <- do.call(colHandler, temp)
+                       temp$cex <- do.call(cexHandler, temp)
+                       temp[!names(temp) %in% names(ans$panel.args.common)]
+                   })
+    ans$panel.args <- temp
+
+    ###############################
+    #return modified trellis object
+    ###############################
+
+    return(ans)
+
+}
+
 
 
 
@@ -260,3 +423,42 @@ isGood4LOA <- function(arg){
     TRUE
 
 }
+
+
+
+
+
+
+##############################
+##############################
+##loaHandler
+##############################
+##############################
+
+
+
+loaHandler <- function(loa.settings = NULL, ...){
+
+    #set up
+    extra.args <- list(...)
+
+    #generate list of loa.settings
+    if(is.null(loa.settings) || !is.list(loa.settings))
+        loa.settings <- list()
+
+    temp <- grep("^loa[.]", names(extra.args))
+    if(length(temp)>0){
+        extra.args <- extra.args[temp]
+        names(extra.args) <- gsub("^loa[.]", "", names(extra.args))
+        loa.settings <- listUpdate(loa.settings, extra.args)  
+    }
+
+    #output
+    loa.settings
+
+}
+
+
+
+
+

@@ -51,7 +51,7 @@
 
 cexHandler <- function(z = NULL, cex = NULL, 
          cex.range = NULL, expand.outputs = TRUE, 
-         ref = NULL, ...){
+         ref = NULL, ..., zlim = NULL){
 
     #if cex there use it
     if(!is.null(cex))  
@@ -59,9 +59,9 @@ cexHandler <- function(z = NULL, cex = NULL,
 
     if(is.null(cex.range))
         cex.range <- TRUE
-
+    
     cex <- z
-
+        
     #cex.range setup
     if(is.logical(cex.range) && cex.range)
         cex.range <- c(2, 10)
@@ -74,11 +74,23 @@ cexHandler <- function(z = NULL, cex = NULL,
     #cex default 
     cex.ref <- min(cex.range, na.rm=TRUE) + (0.2 * (max(cex.range, na.rm=TRUE)- min(cex.range, na.rm=TRUE)))
 
-    if(is.null(cex)){
+
+
+    if(is.null(cex) || length(na.omit(cex))<1){
         cex <- if(is.numeric(cex.range)) cex.ref else 1
     } else {
         cex <- as.numeric(cex)
-        temp <- range(cex, na.rm = TRUE, finite = TRUE)
+
+        if(!is.null(zlim)){
+              temp <- range(as.numeric(zlim), na.rm = TRUE, finite = TRUE)
+              cex[cex < min(zlim, na.rm=TRUE) | cex > max(zlim, na.rm=TRUE)] <- NA
+        } else {
+              temp <- range(cex, na.rm = TRUE, finite = TRUE)
+        }
+
+        #temp <- range(cex, na.rm = TRUE, finite = TRUE)
+
+
         my.range <- if(length(na.omit(temp)) < 2)
                         FALSE else temp
         if(is.numeric(cex.range)){
@@ -111,11 +123,12 @@ cexHandler <- function(z = NULL, cex = NULL,
 
 
 colHandler <- function(z = NULL, col = NULL, 
-         region = NULL, colorkey = NULL, legend = NULL,
+         region = NULL, colorkey = FALSE, legend = NULL,
          pretty = FALSE, at = NULL, cuts = 20,
          col.regions = NULL, alpha.regions = NULL,
          expand.outputs = TRUE, ref = NULL, 
-         ...){
+         ..., zlim = NULL, output="col"){
+
 
     #check par.settings
     if(is.null(col.regions) & !is.null(list(...)$par.settings))
@@ -131,8 +144,13 @@ colHandler <- function(z = NULL, col = NULL,
    #if both z and col present
    #ignore z when coloring data
    if(!is.null(z) & !is.null(col)){
-       warning("z and col both given, z ignored when coloring data.", call. = FALSE)
+
+#silence this warning
+#properly
+#       warning("z and col both given, z ignored when coloring data.", call. = FALSE)
    }
+
+   if(length(z)<1) z <- NULL
 
    #if neither z nor col available
    #create defaults
@@ -148,9 +166,17 @@ colHandler <- function(z = NULL, col = NULL,
    #else col handle
    if(is.null(col)){
         #just z given
-        if(!is.numeric(z))
+        if(!is.numeric(z)){
             z <- as.factor(z)
-        zrng <- lattice:::extend.limits(range(as.numeric(z), finite = TRUE))
+            zlim <- z
+        } else {
+            if(!is.null(zlim)){
+                z[z < min(zlim, na.rm=TRUE) | z > max(zlim, na.rm=TRUE)] <- NA
+            } else {
+                zlim <- range(z, finite=TRUE)
+            }
+        }
+        zrng <- lattice:::extend.limits(range(as.numeric(zlim), finite = TRUE))
         if(is.null(at)) 
             at <- if(pretty) 
                       pretty(zrng, cuts) else 
@@ -255,7 +281,10 @@ colHandler <- function(z = NULL, col = NULL,
     col <- zHandler(col, expand.outputs, ref)
     z <- zHandler(z, expand.outputs, ref)
 
+#print(col)
+
     #return relevant settings
+    if(output=="col") return(col)
     list(z = z, col = col, 
          legend = legend, at = at, 
          col.regions = col.regions, 
@@ -296,6 +325,13 @@ zHandler <- function(z = NULL, expand.outputs = TRUE,
 ########################
 
 parHandler <- function (scheme = NULL, ...) {
+
+
+#######################
+#urgent
+#######################
+#rethink the inputs
+#
 
 #think about order
 #theme first means unnamed get assigned as this
