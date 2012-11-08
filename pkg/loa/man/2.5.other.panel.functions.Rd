@@ -3,6 +3,7 @@
 \alias{getArgs}
 \alias{getPlotArgs}
 \alias{isGood4LOA}
+\alias{parHandler}
 
 \title{
   Other panel functions argument handlers
