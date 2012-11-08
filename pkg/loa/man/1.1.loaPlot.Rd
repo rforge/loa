@@ -1,7 +1,6 @@
 \name{1.1.loaPlot}
 \alias{1.1.loaPlot}
 \alias{loaPlot}
-\alias{formulaHandler}
 
 
 \title{
@@ -15,9 +14,6 @@
   loaPlot(x, data = NULL, panel = panel.xyplot, 
         ..., safe.mode = TRUE, preprocess = TRUE, 
         reset.xylims = TRUE)
-
-  formulaHandler(x, data = NULL, ..., 
-        check.xy.dimensions = TRUE)
 
 }
 
@@ -66,10 +62,6 @@
    passed to \code{\link{panelPal2}} to manage plot reworking. See associated Help documents 
    for further information.
    } 
-
-   \item{check.xy.dimensions}{For \code{formulaHandler} only, logical. Should the formula 
-   structure be tested before attempting to generate the plot?  
-   }
 
 }
 

@@ -35,6 +35,8 @@ use of this framework. These are summarized in section 1 of this manual, and inc
 
 1.3. \code{\link{trianglePlot}} and associated functions.
 
+1.4. Specialist panels, e.g. \code{\link{panel.kernelDensity}}.
+
 While such 'stand alone' plot functions are of obvious value, the code framework is 
 of possibly wider interest because it provides a template for the rapid third-party 
 development of novel visualization functions and a highly flexible 'test bed' for 
@@ -48,14 +50,18 @@ functions that handle data, axes, panels, etc. Secondly, the workhorse functions
 functions used through-out the package to simplify many routine operations have been grouped 
 together and summarized in section 2:
 
-2.1. List handlers: \code{\link{listHandler}}, etc.
+2.1. Formula handlers: \code{\link{formulaHandler}}, etc.
 
 2.2. Common plot argument handlers: \code{\link{cexHandler}}, \code{\link{colHandler}}, 
 \code{\link{zHandler}}, etc.
 
 2.3. Plot lim(s) and scale(s) handlers: \code{\link{limsHandler}}, \code{\link{localScalesHandler}}, etc.
 
-2.4. Other panel functions: \code{\link{panelPal}}, \code{\link{getArgs}}, etc.
+2.4. \code{\link{panelPal}}
+
+2.5. Other panel functions: \code{\link{getArgs}}, etc.
+
+2.6. List handlers: \code{\link{listHandler}}, etc.
 
 And, finally, functions used for working with data post-plotting, are summarized in section 3: 
 
@@ -96,7 +102,7 @@ Maintainer: Karl Ropkins <k.ropkins@its.leeds.ac.uk>
 \keyword{ package }
 
 \seealso{
-  \code{\link{GoogleMap}}, \code{\link{trianglePlot}}
+  \code{\link{loaPlot}}, \code{\link{GoogleMap}}, \code{\link{trianglePlot}}
 }
 
 %\examples{

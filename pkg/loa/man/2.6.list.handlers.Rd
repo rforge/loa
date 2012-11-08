@@ -1,5 +1,5 @@
-\name{2.1.list.handlers}
-\alias{2.1.list.handlers}
+\name{2.6.list.handlers}
+\alias{2.6.list.handlers}
 \alias{listHandler}
 \alias{listUpdate}
 \alias{listExpand}
@@ -111,6 +111,9 @@ listUpdate(list1, list2)
 ##example2
 ##use in plot function
 
+a <- 1:10
+b <- rnorm(10,5,2)
+
 #function
 myplot <- function(x, ...){
 
@@ -132,8 +135,6 @@ myplot <- function(x, ...){
     do.call(xyplot, plotlist)
 }
 
-a <- 1:10
-b <- rnorm(10,5,2)
 
 myplot(a~b)
 myplot(a~b, col = "blue", xlim=c(1:20)) 
@@ -158,7 +159,7 @@ badplot(a~b, xlim=c(0,10)) #OK
 
 #BUT would fail on
 #badplot(a~b, col= "blue") 
-#because col hardcoded into call
+#because col hardcoded into badplot function
 #AND duplicated in call and '...'
 #so user cannot update
 

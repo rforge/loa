@@ -2,7 +2,6 @@
 \alias{2.2.plot.argument.handlers}
 \alias{cexHandler}
 \alias{colHandler}
-\alias{parHandler}
 \alias{zHandler}
 
 
@@ -25,8 +24,6 @@ colHandler(z = NULL, col = NULL,
            col.regions = NULL, alpha.regions = NULL,
            expand.outputs = TRUE, ref = NULL, 
            ..., zlim = NULL, output="col")
-
-parHandler(scheme = NULL, ...)
 
 zHandler(z = NULL, expand.outputs = TRUE, 
            ref = NULL, ...)
@@ -92,11 +89,6 @@ zHandler(z = NULL, expand.outputs = TRUE,
   \item{output}{For \code{colHandler}. The function output. Either the \code{col} vector 
    alone (\code{output='col'}) or the full list of color parameters.} 
 
-  \item{scheme}{ The color scheme to apply. This can be a list of parameters to apply 
-   or a character vector for a pre-defined scheme. Current pre-defined schemes include 
-   \code{'greyscale'} (for black and white figures).
-  } 
-
   \item{...}{ Additional arguments, currently all ignored.
   } 
 
@@ -115,8 +107,6 @@ zHandler(z = NULL, expand.outputs = TRUE,
   \code{colHandler} manages colors. It works like the colorkey in 
   \code{\link{levelplot}} in \code{\link{lattice}}, to generate a 
   colorscale based on a supplied input (\code{z}).   
-
-  \code{parHandler} manages the default appearance of plots. 
 
   \code{zHandler} expands (by wrapping) or foreshortens vectors. 
 
@@ -138,9 +128,6 @@ zHandler(z = NULL, expand.outputs = TRUE,
   \code{colHandler} returns a vector of an appropriate 
    length, depending on \code{expand.outputs} and \code{ref} 
    settings.
-
-  \code{parHandler} returns a list a list suitable for use as 
-  \code{par.settings} with most \code{\link{lattice}} plots.
    
 }
 
@@ -164,14 +151,11 @@ zHandler(z = NULL, expand.outputs = TRUE,
 }
 
 \note{
-
   \code{cexHandler} recently revised.
 
 }
 
 \seealso{
-   \code{\link{getPlotArgs}}, regarding the recovery of common plot arguments.
-
    Related functions elsewhere: \code{\link{lattice}} function \code{\link{xyplot}} 
    for the plot framework.
 }

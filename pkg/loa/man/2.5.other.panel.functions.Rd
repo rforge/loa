@@ -1,7 +1,5 @@
-\name{2.4.panel.functions}
-\alias{2.4.panel.functions}
-\alias{panelPal}
-\alias{panelPal2}
+\name{2.5.other.panel.functions}
+\alias{2.5.other.panel.functions}
 \alias{getArgs}
 \alias{getPlotArgs}
 \alias{isGood4LOA}
@@ -14,64 +12,23 @@
 }
 \usage{
 
-panelPal(x, y, subscripts, at, col.regions, ..., 
-         panel = panel.xyplot, ignore = NULL, 
-         group.fun = NULL)
-
-panelPal2(ans, panel = NULL, preprocess = FALSE, 
-         safe.mode = TRUE, reset.xylims = FALSE)
-
-#misc
 getArgs(source = TRUE, local.resets = TRUE, 
          user.resets = TRUE, is.scales.lines = FALSE, 
          elements = NULL, ..., defaults = list(), 
          defaults.only = FALSE)
+
 getPlotArgs(defaults.as = "axis.line", source = TRUE, 
          local.resets = TRUE, user.resets = TRUE, 
          elements = NULL, ..., is.scales.lines = NULL, 
          defaults.only = TRUE)
+
 isGood4LOA(arg)
+
+parHandler(scheme = NULL, ...)
 
 }
 
 \arguments{
-
-  \item{x,y,subscripts,at,col.regions}{ \code{lattice} 
-   function \code{xyplot} arguments passed down to individual 
-   panels. 
-   }
-
-  \item{...}{ Additional arguments, typically passed on.
-  } 
-
- \item{panel}{ A panel function that the above are all passed 
-  on to, e.g. \code{panel.xyplot}.  
-  } 
-\item{ignore}{ Any additional arguments that \code{panelPal} 
-  should ignore and pass on to \code{panel} unchecked/unmodified. 
-  DETAILS TO BE CONFIRMED? 
-  } 
-
- \item{group.fun}{ [IN DEVELOPMENT - PLEASE HANDLE WITH CARE]. 
-  \code{group.fun} provides fine control of the standard \code{lattice} 
-  plot argument \code{group}. It can be a vector or list containing the 
-  same number of elements as there as groups. These can be functions (or 
-  the names of functions as characters) setting individual functions for 
-  group or sets of parameters to be evaluated using the \code{panel} 
-  function. For example, the current \code{NULL} default generates a list 
-  of \code{col} and \code{pch} settings that produce a conventional grouped 
-  scatter plot output when the \code{group} argument is applied to the 
-  \code{panel} default \code{panel.xyplot}. See Details below. 
-  }
-
- \item{ans, preprocess, safe.mode, reset.xylims}{ [OPTIONS FOR IN DEVELOPMENT 
-  PANELPAL ALTERNATIVE - PLEASE HANDLE WITH CARE]. \code{ans} - The 
-  standard \code{trellis} object to be modified. \code{proprocess} - Logical, 
-  should the supplied \code{panel} function be preprocessed? \code{safe.mode} - 
-  Logical, should the plot be generated using safe.mode? \code{reset.xylims} - 
-  Logical, should the plot dimensions be reset if changed, e.g. by preprocessing?  
-  See Details below. 
-  }
 
   \item{source, local.resets, user.resets}{ When recovering plot arguments 
    with \code{getArgs} or \code{getPlotArgs}, places to search for relevant 
@@ -96,6 +53,14 @@ isGood4LOA(arg)
    from the command line if the local.reset is included as a formal argument in that plot.
    }
 
+  \item{is.scales.lines}{ When recovering arguments with \code{getArgs} or \code{getPlotArgs}, 
+   should \code{source} be treated as a lattice \code{scales} list? If so, and \code{source} 
+   is checked for line parameters, line-specific terms such as \code{col.line}, etc., will be 
+   recovered as \code{col}, etc., while general terms (meant for text in \code{scales} lists) 
+   will be ignored. (Note: \code{getPlotArgs} guesses this based on \code{defaults.as} if 
+   not supplied.)
+   } 
+
   \item{elements}{ When recovering arguments with \code{getArgs} or \code{getPlotArgs}, this 
    identifies the elements in \code{source}, \code{local.resets} and \code{user.resets} that 
    may contain case-specific information. As with \code{lattice} handling of \code{scales} 
@@ -105,12 +70,7 @@ isGood4LOA(arg)
    is considered at present.) 
    } 
 
-  \item{is.scales.lines}{ When recovering arguments with \code{getArgs} or \code{getPlotArgs}, 
-   should \code{source} be treated as a lattice \code{scales} list? If so, and \code{source} 
-   is checked for line parameters, line-specific terms such as \code{col.line}, etc., will be 
-   recovered as \code{col}, etc., while general terms (meant for text in \code{scales} lists) 
-   will be ignored. (Note: \code{getPlotArgs} guesses this based on \code{defaults.as} if 
-   not supplied.)
+  \item{...}{ Other arguments, often ignored.
    } 
 
   \item{defaults, defaults.only, defaults.as}{ When recovering arguments with \code{getArgs}, 
@@ -128,48 +88,35 @@ isGood4LOA(arg)
    to turn a plot panel or panel component on or off. 
    }  
 
+  \item{scheme}{ The color scheme to apply. This can be a list of parameters to apply 
+   or a character vector for a pre-defined scheme. Current pre-defined schemes include 
+   \code{'greyscale'} (for black and white figures).
+  } 
+
 } 
 
 
 \details{
-  \code{panelPal} provides an alternative mechanism to 
-   \code{panel.superpose} and \code{panel.groups} for work with 
-   the \code{group} argument and the conditioning/handling of 
-   non-standard plot arguments. The \code{group.fun} argument 
-   allows users to more easily apply different group coding, vary 
-   coding options by group or even apply completely different 
-   \code{panel...} functions to each group. This means 
-   that different data groups can be more easily visualised in 
-   completely different ways within the same panel. 
-
-  \code{panelPal2} is an in-development alternative to the current 
-   \code{panelPal}. If used with appropriately structured 
-   \code{panel...} functions, this allows in-panel code to be 
-   preprocessed so panels and legend settings can be aligned. 
-
   \code{getArgs} returns a list of parameters/values based on 
   \code{lattice}, developer and user settings. If multiple 
    elements are identified as containing case-specific information, 
    the list will contain one list of plot parameters for each named 
-   element. \code{getPlotArgs} is a variation of \code{getArgs} 
+   element. 
+
+   \code{getPlotArgs} is a variation of \code{getArgs} 
    intended for use with \code{panel...} and \code{l...} type 
    \code{lattice} functions. It returns a list of plot parameters 
    for different plot components, e.g. symbols, lines, or text. 
 
-  \code{isGood4LOA} is a simple workhorse that checks if a 
-  supplied \code{arg} should be used by \code{loa}. (See value and 
-  note below.) 
+   \code{isGood4LOA} is a simple workhorse that checks if a 
+   supplied \code{arg} should be used by \code{loa}. (See value and 
+   note below.)
+
+   \code{parHandler} manages the default appearance of plots.  
 
 }
 
 \value{
-  \code{panelPal} is intended for use with \code{xyplot}, as a 
-   wrapper for standard \code{panel...} functions.
-
-  \code{panelPal2} is an alternative to \code{panelPal}, that 
-   can be used to modify a previously generated \code{trellis} 
-   plot output.
-
   \code{getArgs} and \code{getPlotArgs} return lists of located 
    parameters/values. For example, the call
  
@@ -184,9 +131,12 @@ isGood4LOA(arg)
   (See note below.)
 
   \code{isGood4LOA} returns a logical (\code{TRUE} or \code{FALSE}), 
-   depending on the type of a supplied argument. This returns 
-   \code{FALSE} for \code{NULL}, for all \code{FALSE} logicals, and 
-   any arg that has previously been tagged as 'not wanted'. 
+  depending on the type of a supplied argument. This returns 
+  \code{FALSE} for \code{NULL}, for all \code{FALSE} logicals, and 
+  any arg that has previously been tagged as 'not wanted'.
+
+  \code{parHandler} returns a list a list suitable for use as 
+  \code{par.settings} with most \code{\link{lattice}} plots. 
    
 }
 
@@ -198,9 +148,6 @@ isGood4LOA(arg)
   Visualization with R. Springer, New York. ISBN
   978-0-387-75968-5
 
-  (\code{panelPal2} applies an extension of the hexbin plot method 
-  briefly discussed in Chapter 14 of Sarkar.)
-
 }
 
 \author{
@@ -208,7 +155,6 @@ isGood4LOA(arg)
 }
 
 \note{
-
   \code{getPlotArgs} is intended as a 'workhorse' for plot developers, 
   to recover \code{lattice} settings, impose their own preferences on 
   these, and in turn to provide users with similar options to quickly 

@@ -1,5 +1,5 @@
-\name{2.4.1.specialist.panels}
-\alias{2.4.specialist.panels}
+\name{1.4.specialist.panels}
+\alias{1.4specialist.panels}
 \alias{panel.kernelDensity}
 
 \title{
