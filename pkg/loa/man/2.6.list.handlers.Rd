@@ -109,40 +109,16 @@ listUpdate(list1, list2)
 
 
 ##example2
-##use in plot function
+##use in plot functions
+##to simplify formals
+
+#some data
 
 a <- 1:10
 b <- rnorm(10,5,2)
 
-#function
-myplot <- function(x, ...){
+#a bad plot function
 
-    #defaults I set for myplot form of xyplot
-    mylist <- list(x = x, pch = 20, col = "red",
-                   panel = function(...){
-                           panel.grid(-1, -1)
-                           panel.xyplot(...)
-                           panel.abline(0,1)
-                   })
-                   
-    #what user did/didn't update/add
-    extra.args <- list(...)
-   
-    #update mylist
-    plotlist <- listUpdate(mylist, extra.args)
-
-    #plot
-    do.call(xyplot, plotlist)
-}
-
-
-myplot(a~b)
-myplot(a~b, col = "blue", xlim=c(1:20)) 
-
-##NOTE
-
-#if myplot had been coded more simply
-#e.g.
 badplot <- function(x, ...){
 
     #setting defaults in xyplot call itself
@@ -161,7 +137,47 @@ badplot(a~b, xlim=c(0,10)) #OK
 #badplot(a~b, col= "blue") 
 #because col hardcoded into badplot function
 #AND duplicated in call and '...'
-#so user cannot update
+#so user cannot update col 
+
+
+#a standard correction
+
+stdplot <- function(x, pch = 20, col = "red", ...){
+
+    #setting defaults in xyplot call itself
+    xyplot(x = x, pch = 20, col = "red",
+                   panel = function(x=x, pch=pch, col=col, ...){
+                           panel.grid(-1, -1)
+                           panel.xyplot(x=x, pch=pch, col=col, ...)
+                           panel.abline(0,1)
+                   }, ...)
+}
+
+stdplot(a~b)
+stdplot(a~b, col = "blue", xlim=c(1:20))
+ 
+
+#an alternative correction using lists and 
+#listUpdate that removes the need for formal 
+#definition of all modified plot arguments 
+
+myplot <- function(x, ...){
+
+    #defaults I set for myplot form of xyplot
+    mylist <- list(x = x, pch = 20, col = "red",
+                   panel = function(...){
+                           panel.grid(-1, -1)
+                           panel.xyplot(...)
+                           panel.abline(0,1)
+                   })
+    #plot
+    do.call(xyplot, listUpdate(mylist, list(...)))
+}
+
+
+myplot(a~b)
+myplot(a~b, col = "blue", xlim=c(1:20)) 
+
 
 }
 
