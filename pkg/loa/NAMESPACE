@@ -14,7 +14,6 @@
 #loaPlot
 
 export(loaPlot)
-export(formulaHandler) 
 
 #googleMap
 
@@ -38,28 +37,37 @@ export(panel.triangleGrids)
 export(triABC2XY)
 export(triXY2ABC)
 
+#special panels
+export(panel.kernelDensity)
+
+#formulas
+export(formulaHandler)
 
 #plot.argument.handlers
 export(cexHandler)
 export(colHandler)
 export(zHandler)
-export(parHandler)
-
-
-#panel.handlers
-export(panelPal)
-export(panelPal2)
-export(getArgs)
-export(getPlotArgs)
-export(isGood4LOA)
-
-#special panels
-export(panel.kernelDensity)
 
 #scales.handlers
 export(limsHandler)
 export(localScalesHandler)
 export(panel.localScale)
+
+#panel.pal
+export(panelPal)
+export(panelPal2)
+
+#other.panel.pandlers
+export(getArgs)
+export(getPlotArgs)
+export(isGood4LOA)
+export(parHandler)
+
+#list.handlers
+export(listHandler)
+export(listUpdate)
+export(listExpand)
+
 
 #plot.interactives
 
@@ -73,9 +81,5 @@ export(geoDistance)
 export(geoElevation)
 export(geoDestination)
 
-#workhorses
-export(listHandler)
-export(listUpdate)
-export(listExpand)
 
 
