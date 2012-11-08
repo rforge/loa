@@ -20,7 +20,7 @@ cexHandler(z = NULL, cex = NULL,
            ref = NULL, ..., zlim = NULL)
 
 colHandler(z = NULL, col = NULL, 
-           region = NULL, colorkey = NULL, legend = NULL,
+           region = NULL, colorkey = FALSE, legend = NULL,
            pretty = FALSE, at = NULL, cuts = 20,
            col.regions = NULL, alpha.regions = NULL,
            expand.outputs = TRUE, ref = NULL, 

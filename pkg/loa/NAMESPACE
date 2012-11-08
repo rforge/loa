@@ -52,9 +52,12 @@ export(panelPal2)
 export(getArgs)
 export(getPlotArgs)
 export(isGood4LOA)
+
+#special panels
 export(panel.kernelDensity)
 
 #scales.handlers
+export(limsHandler)
 export(localScalesHandler)
 export(panel.localScale)
 

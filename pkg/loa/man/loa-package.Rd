@@ -64,7 +64,7 @@ And, finally, functions used for working with data post-plotting, are summarized
 3.2. Various functions for latitude/longitude manipulation: \code{\link{geoFrame}}, etc.
 
 This package is very much intended to be an evolutionary exercise. I use it on a routine 
-basis to develop plots for use elsewhere and compare data visualastion methods. However, 
+basis to develop plots for use elsewhere and compare data visualization methods. However, 
 that working pattern can generate some very 'developer-centric' code. So, I would 
 be very pleased to hear from others - what they did and did not like about the 
 package; what they would have liked to have been different; and, perhaps most interesting 

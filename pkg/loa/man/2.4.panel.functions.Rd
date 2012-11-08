@@ -1,6 +1,7 @@
 \name{2.4.panel.functions}
 \alias{2.4.panel.functions}
 \alias{panelPal}
+\alias{panelPal2}
 \alias{getArgs}
 \alias{getPlotArgs}
 \alias{isGood4LOA}

@@ -1,6 +1,7 @@
 \name{1.1.loaPlot}
 \alias{1.1.loaPlot}
 \alias{loaPlot}
+\alias{formulaHandler}
 
 
 \title{
@@ -54,7 +55,7 @@
    If \code{z} is supplied, and \code{cex} and \code{col} are not set by the user in the 
    plot command, these plot properties are managed by \code{\link{cexHandler}} and 
    \code{\link{colHandler}}, respectively. \code{\link{cexHandler}} and 
-   \code{\link{colHandler}} arguments can be also be passed direct as part of the 
+   \code{\link{colHandler}} arguments can be also be passed directly as part of the 
    \code{loaPlot} command to fine-tune these, e.g. \code{cex.range} to change the \code{cex} 
    range that \code{z} values are scaled to and \code{col.region} to change the color range 
    that is applied to \code{z} when coloring points. See associated Help documents for further 
