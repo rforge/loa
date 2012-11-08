@@ -14,8 +14,8 @@
 \tabular{ll}{
 Package: \tab loa\cr
 Type: \tab Package\cr
-Version: \tab 0.1\cr
-Date: \tab 2011-11-12\cr
+Version: \tab 0.2.4\cr
+Date: \tab 2012-11-07\cr
 License: \tab GPL (>= 2)\cr
 LazyLoad: \tab yes\cr
 }
