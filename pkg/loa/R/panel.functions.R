@@ -14,6 +14,12 @@
 #NOTE: much borrowed from lattice 
 
 #to do
+##############################
+#fix parHandler error
+#colHandler return col vector by default
+#set output="col" 
+#might be mutliples
+##############################
 #callWithThis document or drop
 #very minor
 
@@ -73,9 +79,9 @@ panelPal <- function(x, y, subscripts, at, col.regions, ...,
            grp <- if(is.factor(groups)) levels(groups) else unique(groups)
   ##         temp.fun <- function(temp, i){
   ##                         temp2 <- lapply(temp, function(x) x <- if (length(x) > 1) 
-   ##                                    x[groups==i] else x)
-   ##                        
-   ##                    }
+  ##                                    x[groups==i] else x)
+  ##                        
+  ##                    }
 
 
 
@@ -129,14 +135,16 @@ panelPal <- function(x, y, subscripts, at, col.regions, ...,
 
 
 panelPal2 <- function(ans, panel = NULL, preprocess = FALSE, safe.mode = TRUE,
-         reset.xylims = FALSE){
+         reset.xylims = FALSE, group.fun = NULL){
 
 #panelPal v2
 #kr
 
 #to do
 #######################
-#update xy limits after process
+#other caption terms 
+#need to be ignored
+#when extrapolating
 #######################
 #group handling
 #######################
@@ -155,13 +163,27 @@ panelPal2 <- function(ans, panel = NULL, preprocess = FALSE, safe.mode = TRUE,
     #drop ignores
     #make expanded list
 
-    if(!"xlim" %in% names(ans$panel.args.common))
+    panel.checks <- c()
+
+    if(!"xlim" %in% names(ans$panel.args.common)){
         ans$panel.args.common$xlim <- ans$x.limits
-    if(!"ylim" %in% names(ans$panel.args.common))
+        panel.checks <- c(panel.checks, "xlim")
+    }
+    if(!"ylim" %in% names(ans$panel.args.common)){
         ans$panel.args.common$ylim <- ans$y.limits
+        panel.checks <- c(panel.checks, "ylim")
+    }
+
+###################
+#groups
+#in development
+###################
+
+    group.checks <- ans$panel.args.common$group
+    group.checks <- if(is.factor(group.checks)) levels(group.checks) else unique(group.checks)
 
     ignore <- c("xlim", "ylim", "zlim", "xlab", "ylab", "zlab", "main",
-                "at", "ref", "col.regions")
+                "at", "col.regions", "cex.range")
     if(safe.mode){
         if("loa.settings" %in% names(formals(panel))){
             temp <- panel(loa.settings=TRUE)
@@ -185,12 +207,53 @@ panelPal2 <- function(ans, panel = NULL, preprocess = FALSE, safe.mode = TRUE,
         ans$panel.args.common <- ans$panel.args.common[!names(ans$panel.args.common) %in% names(ans$panel.args[[1]])]
     }
 
+
 #does adding panel here 
 #speed anything up?
+
+    #replacing
 
     #proper panel
     if(!is.null(panel))
         ans$panel <- panel
+
+    #Developing
+    #############################
+    #group handling
+    #############################
+    #put a panel wrapper in here
+    #if group is in the panel.args
+
+#    if(!is.null(group.checks)){
+#        
+#        #make good group.fun
+#        #if not there
+#        if(is.null(group.fun)){
+#            group.fun <- list()
+#            for(i in group.checks){
+#                group.fun[[i]] <- list(col= i, pch = i)
+#            }}
+#
+#        panel.groupHandler <- function(..., groups, group.fun, group.index, panel){
+#        
+#            for(i in group.index) 
+#                if(is.list(group.fun[[i]])){
+#                    group.fun[[i]] <- do.call(panel, listUpdate(group.fun[[i]], list(...))
+#                    grp <- groups[groups == i]
+#                    if(length(grp)>0){
+#                    
+#                    }
+#
+#                }                
+#
+#            }        
+#
+#        
+#        
+#
+#    } else if(!is.null(panel)) ans$panel <- panel
+
+
 
     #if processing process
     if(preprocess){
@@ -212,23 +275,50 @@ panelPal2 <- function(ans, panel = NULL, preprocess = FALSE, safe.mode = TRUE,
                               listUpdate(ans$panel.args[[x]], temp) 
                           })
             ans$panel.args <- out
+
+
+            #TESTING
+            ###################
+            #knock out any updated commons
+            ###################
+            ans$panel.args.common <- ans$panel.args.common[!names(ans$panel.args.common) %in% names(out[[1]])]
+            ###################
+
             formals(ans$panel)$process <- FALSE
             formals(ans$panel)$plot <- TRUE    
+    
+            #TESTING
+            #########################
+            #update xylims if requested
+            #########################
+            if(reset.xylims){
+                if("xlim" %in% panel.checks){
+                    temp <- range(lapply(ans$panel.args, 
+                                     function(x) range(x$x, na.rm=TRUE, finite=TRUE))
+                            , na.rm=TRUE, finite=TRUE)
+                    temp <- limsHandler(x=temp)$xlim
+                    ans$panel.args.common$xlim <- temp
+                    ans$x.limits <- temp
+                }
+                if("ylim" %in% panel.checks){
+                    temp <- range(lapply(ans$panel.args, 
+                                     function(x) range(x$y, na.rm=TRUE, finite=TRUE))
+                            , na.rm=TRUE, finite=TRUE)
+                    temp <- limsHandler(y=temp)$ylim
+                    ans$panel.args.common$ylim <- temp
+                    ans$y.limits <- temp
+                }
+
+            }
 
         #update panel.args
         #run panel
         }
     }
 
-#TO DO
-#########################
-#update xylims if requested
-#########################
-
-    ##########################
-    #update lims for modified 
-    #panel.args[[n]] elements
-    ##########################
+    #####################
+    #get ranges for panel.arg elements
+    #####################
 
     #get names of elements in panel.args[[1]] that are numeric
     ranges <- sapply(names(ans$panel.args[[1]]), 
@@ -258,6 +348,7 @@ panelPal2 <- function(ans, panel = NULL, preprocess = FALSE, safe.mode = TRUE,
     #update cex and col
     ###################
 #tidy this
+#this is the colorkey bit
 
     temp <- listUpdate(ans$panel.args.common, list(z=ans$panel.args.common$zlim, output="all"))
     temp <- do.call(colHandler, temp)
@@ -265,13 +356,20 @@ panelPal2 <- function(ans, panel = NULL, preprocess = FALSE, safe.mode = TRUE,
 #    ans$panel.args.common <- listUpdate(ans$panel.args.common, temp)
     ans <- do.call(function(...) update(ans, ...), temp)
 
-    temp <- lapply(ans$panel.args, function(x){
-                       temp <- listUpdate(ans$panel.args.common, x)
-                       temp$col <- do.call(colHandler, temp)
-                       temp$cex <- do.call(cexHandler, temp)
-                       temp[!names(temp) %in% names(ans$panel.args.common)]
-                   })
-    ans$panel.args <- temp
+#######################
+#transfering next bit to 
+#panel.loaPlot
+######################
+#testing this
+#######################
+
+#    temp <- lapply(ans$panel.args, function(x){
+#                       temp <- listUpdate(ans$panel.args.common, x)
+#                       temp$col <- do.call(colHandler, temp)
+#                       temp$cex <- do.call(cexHandler, temp)
+#                       temp[!names(temp) %in% names(ans$panel.args.common)]
+#                   })
+#    ans$panel.args <- temp
 
     ###############################
     #return modified trellis object
@@ -493,9 +591,9 @@ parHandler <- function (scheme = NULL, ...) {
         }
 
         if (scheme == "kr.web") {
-            symbol <- colHandler(1:8, col.regions="Blues")$col
+            symbol <- colHandler(1:8, col.regions="Blues", output = "col")
             fill <- "white"
-            region <- colHandler(1:11, col.regions="Blues")$col
+            region <- colHandler(1:11, col.regions="Blues", output = "col")
             reference <- "white"
             bg <- "black"
             fg <- "white"

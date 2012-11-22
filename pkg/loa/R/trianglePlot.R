@@ -300,7 +300,7 @@ trianglePlot <- function(x, data = NULL, panel = panel.xyplot, ref.grids = TRUE,
     extra.args$cex <- do.call(cexHandler, extra.args)
 
     extra.args <- listUpdate(extra.args, 
-                             do.call(colHandler, extra.args))
+                             do.call(colHandler, listUpdate(extra.args, list(output = "all"))))
 
     #############
     #scale up vectors

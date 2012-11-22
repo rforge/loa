@@ -34,8 +34,7 @@
         recolor.map = FALSE, ...)
   getMapArg(object = trellis.last.object())
 
-
-  #panel handlers
+  #map panel handlers
   panel.GoogleMapsRaster(map)
   panel.GoogleMaps(map)
 

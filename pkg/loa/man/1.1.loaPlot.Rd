@@ -1,6 +1,7 @@
 \name{1.1.loaPlot}
 \alias{1.1.loaPlot}
 \alias{loaPlot}
+\alias{panel.loaPlot}
 
 
 \title{
@@ -11,9 +12,13 @@
 }
 \usage{
 
-  loaPlot(x, data = NULL, panel = panel.xyplot, 
+  loaPlot(x, data = NULL, panel = panel.loaPlot, 
         ..., safe.mode = TRUE, preprocess = TRUE, 
         reset.xylims = TRUE)
+
+  #standard panels
+  panel.loaPlot(...)
+
 
 }
 
@@ -35,14 +40,13 @@
 
   \item{panel}{ \code{panel} is the function to be used when generating 
    the content of the individual panels within the \code{\link{lattice}} 
-   plot. By default, this is the standard \code{lattice} scatter plot panel 
-   \code{\link{panel.xyplot}}. 
+   plot. By default, this is the \code{loa} panel function \code{panel.loaPlot}. 
    }
 
   \item{...}{ Additional arguments are passed on to related functions. 
 
    For \code{loaPlot} these are \code{\link{cexHandler}}, 
-   \code{\link{cexHandler}} and \code{\link{xyplot}}.
+   \code{\link{cexHandler}} and the function set by \code{panel}.
    
    This mechanism provides access to most common plot parameters, e.g. \code{col}, 
    \code{pch}, and \code{cex} for plot symbol color, type and size, respectively.

@@ -1,3 +1,14 @@
+Changes in loa 0.2.5 [2012-11-22]
+=====================================
+
+*       added panel.loaPlot function
+*       modifed panelPal2 (to work with 
+        panel.loaPlot)
+*       updated GoogleMap and tianglePlot 
+        (to work with improved col and 
+        cex Handlers)    
+
+
 Changes in loa 0.2.4 [2012-11-07]
 =====================================
 

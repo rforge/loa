@@ -3,6 +3,7 @@
 
 
 #loaPlot - main function
+#panel.loaPlot
 #formulaHandler - handles the x formula
 
 #urgent
@@ -18,7 +19,7 @@
 ###########################
 
 
-loaPlot <- function (x, data = NULL, panel = panel.xyplot, 
+loaPlot <- function (x, data = NULL, panel = panel.loaPlot, 
     ..., safe.mode = TRUE, preprocess = TRUE, reset.xylims = TRUE) 
 {
 
@@ -27,7 +28,7 @@ loaPlot <- function (x, data = NULL, panel = panel.xyplot,
     ###################################
 
     ocall <- sys.call(sys.parent())
-    ocall[[1]] <- quote(test)
+    ocall[[1]] <- quote(loaPlot)
     ccall <- match.call()
     extra.args <- list(...)
 
@@ -70,7 +71,7 @@ loaPlot <- function (x, data = NULL, panel = panel.xyplot,
 
     ans <- panelPal2(ans, panel=panel, preprocess = preprocess,
                      safe.mode = safe.mode, reset.xylims = reset.xylims)
-
+                                            
 #############################
 #use GoogleMap output method?
 #check output reports?
@@ -78,7 +79,38 @@ loaPlot <- function (x, data = NULL, panel = panel.xyplot,
 
     ans$call <- ocall
     ans
+
 }
+
+
+############################
+############################
+##panel.loaPlot
+############################
+############################
+
+
+panel.loaPlot <- function(...){
+
+#################
+#panel to link 
+#cex and col to 
+#colorkey and z
+#################
+
+#think about
+##################
+#update from list(output="col") for colHandler?
+#to make more robust
+
+    extra.args <- list(...)
+    extra.args$col <- do.call(colHandler, extra.args)
+    extra.args$cex <- do.call(cexHandler, extra.args)
+    do.call(panel.xyplot, extra.args)
+
+}
+
+
 
 
 

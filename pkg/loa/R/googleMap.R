@@ -156,7 +156,7 @@ GoogleMap <- function(x, data = NULL, map = NULL,
 
     extra.args$cex <- do.call(cexHandler, extra.args)
     extra.args <- listUpdate(extra.args, 
-                             do.call(colHandler, extra.args))
+                             do.call(colHandler, listUpdate(extra.args, list(output="all"))))
 
 ###############
     
