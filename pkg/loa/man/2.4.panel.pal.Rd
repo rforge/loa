@@ -16,7 +16,8 @@ panelPal(x, y, subscripts, at, col.regions, ...,
          group.fun = NULL)
 
 panelPal2(ans, panel = NULL, preprocess = FALSE, 
-         safe.mode = TRUE, reset.xylims = FALSE)
+         safe.mode = TRUE, reset.xylims = FALSE, 
+         group.fun = NULL)
 
 }
 
