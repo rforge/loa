@@ -1,5 +1,5 @@
-\name{2.6.list.handlers}
-\alias{2.6.list.handlers}
+\name{2.8.list.handlers}
+\alias{2.8.list.handlers}
 \alias{listHandler}
 \alias{listUpdate}
 \alias{listExpand}

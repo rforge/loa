@@ -15,6 +15,8 @@
 
 export(loaPlot)
 export(panel.loaPlot)
+export(panel.loaPlot2)
+
 
 #googleMap
 
@@ -49,20 +51,34 @@ export(cexHandler)
 export(colHandler)
 export(zHandler)
 
+#conditioning
+export(groupsPanelHandler)
+export(zcasesPanelHandler)
+export(groupsAndZcasesPanelHandler)
+export(condsPanelHandler)
+export(groupsHandler)
+export(zcasesHandler)
+export(groupsAndZcasesHandler)
+
 #scales.handlers
 export(limsHandler)
 export(localScalesHandler)
 export(panel.localScale)
 
 #panel.pal
+export(panelPal.old)
 export(panelPal)
-export(panelPal2)
+export(loaHandler)
 
 #other.panel.pandlers
 export(getArgs)
 export(getPlotArgs)
 export(isGood4LOA)
 export(parHandler)
+
+#keys
+export(keyHandler)
+export(draw.loaPlotZKey)
 
 #list.handlers
 export(listHandler)

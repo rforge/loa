@@ -1,5 +1,5 @@
-\name{2.3.lims.and.scales.handlers}
-\alias{2.3.lims.and.scales.handlers}
+\name{2.4.lims.and.scales.handlers}
+\alias{2.4.lims.and.scales.handlers}
 \alias{limsHandler}
 \alias{localScalesHandler}
 \alias{panel.localScale}

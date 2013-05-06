@@ -1,3 +1,21 @@
+Changes in loa 0.2.6 [2013-05-06]
+=====================================
+
+*       panelPal updated 
+        (Previous panelPal2 now main version;
+        Previous panelPal now panelPal.old)
+*       panel.loaPlot updated 
+        (now allows separate group and zcase 
+        conditioning)
+*       panel.loaPlot added 
+*       group and zcase conditioning rationalised 
+        (now using new functions groupsPanelHandler, 
+        zcasesPanelHandler and groupsAndZcasesPanelHandler)
+*       color key management updated
+        (added keyHandler, and dedicated key functions, 
+        draw.loaPlotZKey)
+ 
+
 Changes in loa 0.2.5 [2012-11-22]
 =====================================
 

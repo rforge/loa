@@ -1,5 +1,5 @@
-\name{2.5.other.panel.functions}
-\alias{2.5.other.panel.functions}
+\name{2.6.other.panel.functions}
+\alias{2.6.other.panel.functions}
 \alias{getArgs}
 \alias{getPlotArgs}
 \alias{isGood4LOA}
@@ -13,6 +13,11 @@
 }
 \usage{
 
+parHandler(scheme = NULL, ...)
+
+
+#related
+
 getArgs(source = TRUE, local.resets = TRUE, 
          user.resets = TRUE, is.scales.lines = FALSE, 
          elements = NULL, ..., defaults = list(), 
@@ -25,11 +30,18 @@ getPlotArgs(defaults.as = "axis.line", source = TRUE,
 
 isGood4LOA(arg)
 
-parHandler(scheme = NULL, ...)
+
+
+
 
 }
 
 \arguments{
+
+  \item{scheme}{ The color scheme to apply. This can be a list of parameters to apply 
+   or a character vector for a pre-defined scheme. Current pre-defined schemes include 
+   \code{'greyscale'} (for black and white figures).
+  } 
 
   \item{source, local.resets, user.resets}{ When recovering plot arguments 
    with \code{getArgs} or \code{getPlotArgs}, places to search for relevant 
@@ -88,11 +100,6 @@ parHandler(scheme = NULL, ...)
   \item{arg}{ For \code{isGood4LOA} a plot argument that can used 
    to turn a plot panel or panel component on or off. 
    }  
-
-  \item{scheme}{ The color scheme to apply. This can be a list of parameters to apply 
-   or a character vector for a pre-defined scheme. Current pre-defined schemes include 
-   \code{'greyscale'} (for black and white figures).
-  } 
 
 } 
 

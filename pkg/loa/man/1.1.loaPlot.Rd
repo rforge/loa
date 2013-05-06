@@ -2,6 +2,9 @@
 \alias{1.1.loaPlot}
 \alias{loaPlot}
 \alias{panel.loaPlot}
+\alias{panel.loaPlot2}
+
+
 
 
 \title{
@@ -13,12 +16,15 @@
 \usage{
 
   loaPlot(x, data = NULL, panel = panel.loaPlot, 
-        ..., safe.mode = TRUE, preprocess = TRUE, 
-        reset.xylims = TRUE)
+        ..., local.scales = FALSE, reset.xylims = TRUE, 
+        load.lists = NULL, by.group = NULL, by.zcase = NULL, 
+        preprocess = TRUE)
 
   #standard panels
-  panel.loaPlot(...)
 
+  panel.loaPlot(..., loa.settings = FALSE)
+
+  panel.loaPlot2(..., loa.settings = FALSE)
 
 }
 
@@ -45,7 +51,7 @@
 
   \item{...}{ Additional arguments are passed on to related functions. 
 
-   For \code{loaPlot} these are \code{\link{cexHandler}}, 
+   For \code{loaPlot} these are \code{\link{colHandler}}, 
    \code{\link{cexHandler}} and the function set by \code{panel}.
    
    This mechanism provides access to most common plot parameters, e.g. \code{col}, 
@@ -62,9 +68,35 @@
    information.
    }
 
-   \item{safe.mode, preprocess, reset.xylims}{For \code{loaPlot} only, all logicals, and all 
-   passed to \code{\link{panelPal2}} to manage plot reworking. See associated Help documents 
-   for further information.
+   \item{local.scales}{For \code{loaPlot} only, logical. If \code{TRUE}, this removes the 
+   standard \code{lattice} axis from the plot. It is intended to be used with \code{panel} 
+   functions which generate their own axis have no axis.
+   [EXAMPLES TO DOCUMENT]
+   }
+
+   \item{reset.xylims}{For \code{loaPlot} only, logical. If the panel outputs are 
+   preprocessed, should the x and y limits be reset (if not given in plot called by \code{xlim} 
+   or \code{ylim}).
+   }
+
+   \item{load.lists}{For \code{loaPlot} only. Under development alternative to list based 
+   arguments. [TO BE DOCUMENTED]. 
+   }
+
+   \item{by.group, by.zcase, by.cond}{For \code{loaPlot} only. Under development arguments for routine 
+   by group and by zcase handling of plot inputs. [TO BE DOCUMENTED].
+   }
+ 
+   \item{preprocess}{For \code{loaPlot} only, logical, passed to \code{\link{panelPal}}. If 
+   \code{TRUE}, and used with a correctly configured \code{panel} function, this processes 
+   the plot input before generating the plot. This means color scales in the different plot 
+   panels and the key are automatically aligned and the associated trellis object output 
+   contains the \code{panel} function outputs rather than the inputs. See \code{\link{panelPal}} 
+   Help documents for further information.
+   }
+
+   \item{loa.settings}{For \code{panel...} functions only, logical, passed to \code{\link{panelPal}} 
+   to manage plot reworking. See associated Help documents for further information.
    } 
 
 }
@@ -112,9 +144,9 @@
 
 \seealso{
 
-   \code{\link{panelPal2}}
+   \code{\link{panelPal}}
 
-   For information of related functions in other packages, see
+   For information on related functions in other packages, see
 
    \code{\link{lattice}}: \code{\link{xyplot}}; \code{\link{panel.xyplot}}; and 
    \code{\link{panel.levelplot}}.

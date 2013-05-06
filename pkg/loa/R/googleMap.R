@@ -261,7 +261,7 @@ GoogleMap <- function(x, data = NULL, map = NULL,
 ##                             })
        panel = function(..., subscripts){
                    map.panel(map)
-                   panel = panelPal(..., subscripts=subscripts, panel=panel)
+                   panel = panelPal.old(..., subscripts=subscripts, panel=panel)
                }
 
        )

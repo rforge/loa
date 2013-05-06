@@ -4,6 +4,7 @@
 
 #cexHandler
 #colHandler
+#pchHandler
 #zHandler
 
 #[in-development]
@@ -143,12 +144,12 @@ colHandler <- function(z = NULL, col = NULL,
 
    #if both z and col present
    #ignore z when coloring data
-   if(!is.null(z) & !is.null(col)){
+#   if(!is.null(z) & !is.null(col)){
 
 #silence this warning
 #properly
 #       warning("z and col both given, z ignored when coloring data.", call. = FALSE)
-   }
+#   }
 
    if(length(z)<1) z <- NULL
 
@@ -291,6 +292,60 @@ colHandler <- function(z = NULL, col = NULL,
          alpha.regions = alpha.regions)
 
 }
+
+
+
+
+####################
+####################
+##pchHandler
+####################
+####################
+
+
+pchHandler <- function(z = NULL, pch = NULL, 
+         pch.order = NULL, expand.outputs = TRUE, 
+         ref = NULL, ..., zlim = NULL){
+
+    ##pch handler v0.1
+
+#TO DO
+#######################
+#zlim handling to add
+#######################
+#check factor use elsewhere
+#NAs in data may be issue
+#######################
+#
+
+    #if pch there use it
+    if(!is.null(pch))  
+        return(zHandler(pch, expand.outputs, ref))
+
+    if(is.null(pch.order))
+        pch.order <- c(19, 18:15, 21:25, 1:14)
+    
+    pch <- if(is.null(z))
+               pch.order[1] else {
+                   temp <- factor(z, exclude=NULL)
+                   levels(temp) <- rep(1:length(pch.order), length.out = length(levels(temp)))
+                   pch.order[as.numeric(as.character(temp))]
+               }
+
+    zHandler(pch, expand.outputs, ref)
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

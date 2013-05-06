@@ -1,7 +1,8 @@
-\name{2.4.panel.pal}
-\alias{2.4.panel.pal}
+\name{2.5.panel.pal}
+\alias{2.5.panel.pal}
+\alias{panelPal.old}
 \alias{panelPal}
-\alias{panelPal2}
+\alias{loaHandler}
 
 \title{
   panelPal
@@ -11,13 +12,16 @@
 }
 \usage{
 
-panelPal(x, y, subscripts, at, col.regions, ..., 
+panelPal.old(x, y, subscripts, at, col.regions, ..., 
          panel = panel.xyplot, ignore = NULL, 
          group.fun = NULL)
 
-panelPal2(ans, panel = NULL, preprocess = FALSE, 
-         safe.mode = TRUE, reset.xylims = FALSE, 
-         group.fun = NULL)
+panelPal(ans, panel = NULL, preprocess = FALSE, 
+         reset.xylims = FALSE, legend = NULL,
+         by.group = NULL, by.zcase = NULL, ...)
+
+loaHandler(panel = NULL,...)
+
 
 }
 
@@ -51,12 +55,14 @@ panelPal2(ans, panel = NULL, preprocess = FALSE,
   \code{panel} default \code{panel.xyplot}. See Details below. 
   }
 
- \item{ans, preprocess, safe.mode, reset.xylims}{ [OPTIONS FOR IN DEVELOPMENT 
-  PANELPAL ALTERNATIVE - PLEASE HANDLE WITH CARE]. \code{ans} - The 
+ \item{ans, preprocess, reset.xylims, legend, by.group, by.zcase}{ [OPTIONS FOR 
+  IN DEVELOPMENT PANELPAL ALTERNATIVE - PLEASE HANDLE WITH CARE]. \code{ans} - The 
   standard \code{trellis} object to be modified. \code{proprocess} - Logical, 
-  should the supplied \code{panel} function be preprocessed? \code{safe.mode} - 
-  Logical, should the plot be generated using safe.mode? \code{reset.xylims} - 
-  Logical, should the plot dimensions be reset if changed, e.g. by preprocessing?  
+  should the supplied \code{panel} function be preprocessed? \code{reset.xylims} - 
+  Logical, should the plot dimensions be reset if changed, e.g. by preprocessing? 
+  \code{legend} - the legend as with standard \code{lattice} plots, \code{by.group} - 
+  a vector of plot argument names to be linked to any group conditioning, \code{by.zcase} - 
+  a vector of plot argument names to be linked to any z case conditioning     
   See Details below. 
   }
 
@@ -64,30 +70,39 @@ panelPal2(ans, panel = NULL, preprocess = FALSE,
 
 
 \details{
-  \code{panelPal} provides an alternative mechanism to 
-   \code{panel.superpose} and \code{panel.groups} for work with 
-   the \code{group} argument and the conditioning/handling of 
-   non-standard plot arguments. The \code{group.fun} argument 
-   allows users to more easily apply different group coding, vary 
+  \code{panelPal.old} is the orginal version of this function. It provides an 
+   alternative mechanism to \code{panel.superpose}  and \code{panel.groups} for 
+   work with the \code{group} argument and the conditioning/handling of 
+   non-standard plot arguments. The \code{group.fun} argument allows users to 
+   more easily apply different group coding, vary 
    coding options by group or even apply completely different 
    \code{panel...} functions to each group. This means 
    that different data groups can be more easily visualised in 
    completely different ways within the same panel. 
 
-  \code{panelPal2} is an in-development alternative to the current 
-   \code{panelPal}. If used with appropriately structured 
-   \code{panel...} functions, this allows in-panel code to be 
-   preprocessed so panels and legend settings can be aligned. 
+  \code{panelPal} is the most recent version of this function.
+   If used with appropriately structured \code{panel...} functions, this allows 
+   in-panel code to be preprocessed so panels and legend settings can be aligned.
+
+  \code{loaHandler} is a workhorse that assesses information in 'loa' friendly 
+  \code{panel...} functions. As well as checking this, \code{loaHandler} also 
+  checks the supplied panel for any default plot settings. This allows users to 
+  manage the appearance of a plot from the panel or automatically associated 
+  color keys.  
 
 }
 
 \value{
-  \code{panelPal} is intended for use with \code{xyplot}, as a 
+  \code{panelPal.old} is intended for use with \code{xyplot}, as a 
    wrapper for standard \code{panel...} functions.
 
-  \code{panelPal2} is an alternative to \code{panelPal}, that 
+  \code{panelPal} is an alternative to \code{panelPal}, that 
    can be used to modify a previously generated \code{trellis} 
    plot output.
+
+  \code{loaHandler} returns either a logical (\code{FALSE} if not loa 'friendly'; 
+  \code{TRUE} if loa 'friendly') or a list of default arguments to be used when 
+  plotting. 
 
 }
 

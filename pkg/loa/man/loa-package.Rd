@@ -55,13 +55,17 @@ together and summarized in section 2:
 2.2. Common plot argument handlers: \code{\link{cexHandler}}, \code{\link{colHandler}}, 
 \code{\link{zHandler}}, etc.
 
-2.3. Plot lim(s) and scale(s) handlers: \code{\link{limsHandler}}, \code{\link{localScalesHandler}}, etc.
+2.3. Plot conditioning handlers: \code{\link{condsPanelHandler}}, etc.
 
-2.4. \code{\link{panelPal}}
+2.4. Plot lim(s) and scale(s) handlers: \code{\link{limsHandler}}, \code{\link{localScalesHandler}}, etc.
 
-2.5. Other panel functions: \code{\link{getArgs}}, etc.
+2.5. \code{\link{panelPal}}
 
-2.6. List handlers: \code{\link{listHandler}}, etc.
+2.6. Other panel functions: \code{\link{getArgs}}, etc.
+
+2.7. Key handlers: \code{\link{keyHandler}}, etc.
+
+2.8. List handlers: \code{\link{listHandler}}, etc.
 
 And, finally, functions used for working with data post-plotting, are summarized in section 3: 
 

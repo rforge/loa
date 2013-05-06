@@ -319,7 +319,7 @@ trianglePlot <- function(x, data = NULL, panel = panel.xyplot, ref.grids = TRUE,
     #############
     temp <- list(x=x, data=data, pch=20, aspect = 1, 
                  panel = function(..., subscripts){
-                                  panel = panelPal(..., ignore=c("alim", "blim", "clim", "panel.scales", 
+                                  panel = panelPal.old(..., ignore=c("alim", "blim", "clim", "panel.scales", 
                                                    "grids", "axes", "ticks", "annotation", "layout", 
                                                    "a.grid", "b.grid", "c.grid"), subscripts = subscripts, 
                                                     panel = function(..., user.panel = panel) 
