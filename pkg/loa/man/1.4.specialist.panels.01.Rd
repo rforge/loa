@@ -1,6 +1,7 @@
 \name{1.4.specialist.panels}
 \alias{1.4specialist.panels}
 \alias{panel.kernelDensity}
+\alias{panel.binPlot}
 
 \title{
   Special panel functions 01
@@ -13,6 +14,13 @@
 panel.kernelDensity(x, y, z = NULL, ..., n = 20, 
          kernel.fun = NULL, panel.range = TRUE, 
          process = TRUE, plot = TRUE, loa.settings = FALSE)
+
+panel.binPlot <- function(x = NULL, y = NULL, z = NULL, 
+         breaks=20, x.breaks = breaks, y.breaks = breaks,
+         x1=NULL, x2=NULL, y1=NULL, y2=NULL,
+         statistic = mean, ...,
+         plot = TRUE, process = TRUE, loa.settings = FALSE 
+         )
 
 }
 
@@ -28,19 +36,42 @@ panel.kernelDensity(x, y, z = NULL, ..., n = 20,
  \item{n}{ For \code{panel.kernelDensity}, the number of x and y 
   cases to estimate when estimating density.  
   } 
+
  \item{kernel.fun}{ A function that can estimate kernel densities. 
   } 
+
  \item{panel.range}{ For \code{panel.kernelDensity}, a logical (default 
   \code{FALSE}) indicating if the kernel density estimation data range 
    should be forced to the full panel range. See Below   
   }
+
  \item{process, plot, loa.settings}{ For \code{panel...} functions that 
-   intended to be handled using \code{\link{panelPal2}}. \code{process} 
+   intended to be handled using \code{\link{panelPal}}. \code{process} 
    and \code{plot}, logicals, indicating if the process and plot sections 
    of the panel function should be run. \code{loa.settings}, a logical 
    indicating if the safe mode setting should be returned. See below and 
-   \code{\link{panelPal2}} Help documents for further details. 
+   \code{\link{panelPal}} Help documents for further details. 
   }
+
+ \item{breaks, x.breaks, y.breaks}{ For \code{panel.binPlot}, how many  
+  break points to introduce when binning data. \code{breaks} can be used 
+  to use the same number of breaks on both axes, while \code{x.breaks} and 
+  \code{y.breaks} can be used to set these separately. 
+ }
+
+ \item{x1, x2, y1, y2}{ For \code{panel.binPlot}, vectors giving the 
+  bin cell dimensions used when binning \code{x} and \code{y} elements. 
+  Typically ignored and calculated within the plot call.
+ }
+
+ \item{statistic}{ For \code{panel.binPlot}, the function to use when 
+  calculating \code{z} values for each set of binned. By default, this is 
+  \code{mean}. So, if a \code{z} element is supplied in the plot call, the 
+  data is binned according to \code{x} and \code{y} values, and the mean of 
+  \code{z} values within each bin reported/plotted. If \code{z} is not 
+  supplied, \code{statistic} is reset to \code{length} to generate a frequncy 
+  plot and a warning generated.  
+ }
 
 
 } 
@@ -48,7 +79,7 @@ panel.kernelDensity(x, y, z = NULL, ..., n = 20,
 
 \details{
   Special \code{panel...} functions are intended for use with 
-  \code{\link{panelPal2}}. They provide alternative data handling 
+  \code{\link{panelPal}}. They provide alternative data handling 
    for \code{lattice} functions like \code{xyplot}. They are intended 
    to be used in the conventional form, e.g.:
 
@@ -104,7 +135,7 @@ panel.kernelDensity(x, y, z = NULL, ..., n = 20,
 
 \seealso{
 
-   \code{\link{panelPal2}}
+   \code{\link{panelPal}}
 
    \code{\link{lattice}}, \code{\link{xyplot}}, \code{\link{panel.contourplot}},
 }

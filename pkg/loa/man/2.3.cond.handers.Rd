@@ -70,7 +70,7 @@
    grouping. 
    }
 
-  \item{zcases, by.zcases}{ As \code{conds} and \code{by.cond} but for 
+  \item{zcases, by.zcase}{ As \code{conds} and \code{by.cond} but for 
    zcase condition. 
    }
 

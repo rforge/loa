@@ -114,8 +114,8 @@ loaHandler(panel = NULL,...)
   Visualization with R. Springer, New York. ISBN
   978-0-387-75968-5
 
-  (\code{panelPal2} applies an extension of the hexbin plot method 
-  briefly discussed in Chapter 14 of Sarkar.)
+  (\code{panelPal} applies an extension of the hexbin plot method 
+  briefly discussed in Chapter 14 of Sarkar. DETAILS?)
 
 }
 

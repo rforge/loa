@@ -1,3 +1,13 @@
+Changes in loa 0.2.7 [2013-05-07]
+=====================================
+
+*       listUpdate minor update 
+        (NULL case error fixed)
+*       draw.loaColorKey added
+*       panel.binPlot added
+*
+
+
 Changes in loa 0.2.6 [2013-05-06]
 =====================================
 

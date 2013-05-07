@@ -42,6 +42,7 @@ export(triXY2ABC)
 
 #special panels
 export(panel.kernelDensity)
+export(panel.binPlot)
 
 #formulas
 export(formulaHandler)
@@ -79,6 +80,7 @@ export(parHandler)
 #keys
 export(keyHandler)
 export(draw.loaPlotZKey)
+export(draw.loaColorKey)
 
 #list.handlers
 export(listHandler)

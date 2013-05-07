@@ -2,6 +2,7 @@
 \alias{2.7.key.handlers}
 \alias{keyHandler}
 \alias{draw.loaPlotZKey}
+\alias{draw.loaColorKey}
 
 \title{
   Key handling
@@ -17,6 +18,8 @@ keyHandler(key = NULL, ..., output = "key")
 #keys
 
 draw.loaPlotZKey(key = NULL, draw = FALSE, vp = NULL, ...)
+
+draw.loaColorKey(key = NULL, draw = FALSE, vp = NULL, ...)
 
 }
 

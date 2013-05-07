@@ -82,15 +82,14 @@ zHandler(z = NULL, expand.outputs = TRUE,
   invisible to 1 for solid) and \code{colorkey} which can be a logical (forcing 
   the colorkey on or off) or a list of components that can be used to fine-tune the 
   appearance of the colorkey. 
+  NOTE: The generation of colorscales is handled by \code{\link{RColorBrewer}}.
+  }
 
   \item{pch.order}{ A vector of symbol ids (typically the numbers 1 to 24) to used 
   when plotting points if, e.g. using a scatter plot. By default, all points are 
   plotted using the first of these pch ids unless any conditioning (e.g. grouping or 
   zcase handling) is declared and linked to \code{pch}, in which symbols are assigned 
   in series from \code{pch.order}. 
-  }
-
-  NOTE: The generation of colorscales is handled by \code{\link{RColorBrewer}}.
   }
 
   \item{expand.outputs, ref}{\code{expand.outputs} is a Logical (default \code{TRUE}): 
@@ -101,10 +100,12 @@ zHandler(z = NULL, expand.outputs = TRUE,
    \code{ref} is not supplied \code{expand.outputs} is ignored. 
   }
 
-  \item{zlim}{The range over which the scale is to be applied if not \code{range(z)}.} 
+  \item{zlim}{The range over which the scale is to be applied if not \code{range(z)}.
+  } 
 
-  \item{output}{For \code{colHandler}. The function output. Either the \code{col} vector 
-   alone (\code{output='col'}) or the full list of color parameters.} 
+  \item{output}{ For \code{colHandler}. The function output. Either the \code{col} vector 
+   alone (\code{output='col'}) or the full list of color parameters.
+  } 
 
   \item{...}{ Additional arguments, currently all ignored.
   } 

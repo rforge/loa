@@ -66,6 +66,13 @@ listUpdate <- function(a, b, use = NULL, ignore = NULL,
     a <- listHandler(a, use.a, ignore.a, drop.dots)
     b <- listHandler(b, use.b, ignore.b, drop.dots)
 
+#################
+#testing
+#################
+
+    if(is.null(a) & is.list(b)) return(b)
+    if(is.list(a) & is.null(b)) return(a)
+
     if(length(names(b) > 0))
         a <- modifyList(a, b)
     a

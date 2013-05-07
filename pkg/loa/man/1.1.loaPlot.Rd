@@ -83,7 +83,7 @@
    arguments. [TO BE DOCUMENTED]. 
    }
 
-   \item{by.group, by.zcase, by.cond}{For \code{loaPlot} only. Under development arguments for routine 
+   \item{by.group, by.zcase}{For \code{loaPlot} only. Under development arguments for routine 
    by group and by zcase handling of plot inputs. [TO BE DOCUMENTED].
    }
  
