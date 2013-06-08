@@ -30,6 +30,7 @@ panel.kernelDensity <- function (x, y, z = NULL, ...,
 
     extra.args <- list(...)
 
+
     if(!is.function(kernel.fun)){
         kernel.fun <- function(...) {
                           extra.args <- list(...)
@@ -49,7 +50,9 @@ panel.kernelDensity <- function (x, y, z = NULL, ...,
     ###################
     if(loa.settings)
         return(list(process.args = process.args, 
-                    plot.args = plot.args))
+                    plot.args = plot.args,
+                    group.args = c("col"),
+                    default.settings = list(key.fun = "draw.loaColorKey")))
 
     ###################
     #process section
@@ -87,14 +90,17 @@ panel.kernelDensity <- function (x, y, z = NULL, ...,
         if (!"contour" %in% names(extra.args)) 
             extra.args$contour <- TRUE
         if (!"region" %in% names(extra.args)) 
-            extra.args$region <- FALSE
+            extra.args$region <- TRUE
+        if (!"col" %in% names(extra.args)) 
+            extra.args$col <- trellis.par.get("dot.symbol")$col
 
-        do.call(panel.levelplot, extra.args)
+        if("groups" %in% names(extra.args) || "zcases" %in% names(extra.args))
+            do.call(groupsAndZcasesPanelHandler, listUpdate(extra.args, list(panel = panel.levelplot, plot=plot, process=process))) else
+                do.call(panel.levelplot, extra.args)
 
      }
 
 }
-
 
 
 

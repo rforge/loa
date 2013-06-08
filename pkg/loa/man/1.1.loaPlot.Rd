@@ -5,16 +5,19 @@
 \alias{panel.loaPlot2}
 
 
-
-
 \title{
   loaPlot, XYZ plots for lattice
 }
-\description{
-  XYZ plotting options including bubbleplots.
-}
-\usage{
 
+\description{
+  loaPlot is a standard XYZ plotting function, where X and Y denote the axes of 
+  a conventional XY plot and Z denotes a third terms which is visualized at 
+  associated XY coordinates. By default, loaPlot links Z to plot point size and 
+  color to generate a bubbleplot style output, or using modified plot calls 
+  to provide a wider range of other plots.   
+}
+
+\usage{
   loaPlot(x, data = NULL, panel = panel.loaPlot, 
         ..., local.scales = FALSE, reset.xylims = TRUE, 
         load.lists = NULL, by.group = NULL, by.zcase = NULL, 
@@ -23,7 +26,6 @@
   #standard panels
 
   panel.loaPlot(..., loa.settings = FALSE)
-
   panel.loaPlot2(..., loa.settings = FALSE)
 
 }
@@ -32,12 +34,13 @@
 
   \item{x}{ A formula with the general structure 
    \code{z ~ x * y | cond} applied like in the \code{\link{lattice}} 
-   function \code{\link{levelplot}}. \code{X} and \code{y} are the 
+   function \code{\link{levelplot}}. \code{x} and \code{y} are the 
    horizontal and vertical axes, \code{z} is any additional information 
    to be used in point, symbol, surface or glyph generation, and 
-   \code{cond} any additional conditioning to be applied. (\code{X} and 
+   \code{cond} is any additional conditioning to be applied. \code{x} and 
    \code{y} are required elements; \code{z} and \code{cond} are typically 
-   optional.)
+   optional./cr
+   (Note: this element of the plot is handled by \code{\link{formulaHandler}}).
    }
 
   \item{data}{ If supplied, the assumed source of the elements of formula 
@@ -56,8 +59,7 @@
    
    This mechanism provides access to most common plot parameters, e.g. \code{col}, 
    \code{pch}, and \code{cex} for plot symbol color, type and size, respectively.
-
-   Note: By default, both data point colour and size are \code{z}-scaled for \code{loaPlot}. 
+   By default, both data point color and size are \code{z}-scaled for \code{loaPlot}. 
    If \code{z} is supplied, and \code{cex} and \code{col} are not set by the user in the 
    plot command, these plot properties are managed by \code{\link{cexHandler}} and 
    \code{\link{colHandler}}, respectively. \code{\link{cexHandler}} and 
@@ -70,21 +72,26 @@
 
    \item{local.scales}{For \code{loaPlot} only, logical. If \code{TRUE}, this removes the 
    standard \code{lattice} axis from the plot. It is intended to be used with \code{panel} 
-   functions which generate their own axis have no axis.
-   [EXAMPLES TO DOCUMENT]
+   functions which generate their own axes or have no axes.
    }
 
-   \item{reset.xylims}{For \code{loaPlot} only, logical. If the panel outputs are 
-   preprocessed, should the x and y limits be reset (if not given in plot called by \code{xlim} 
-   or \code{ylim}).
+   \item{reset.xylims}{For \code{loaPlot} only, logical or character vector. If a logical, if 
+   the panel outputs are preprocessed (using \code{panelPal}), should the x and y limits be 
+   reset? If a character vector, one or more terms controlling post-processing plot range 
+   management: \code{refit.xylims}, equivalent to \code{reset.xylims = TRUE}; and \code{max.xylims}, 
+   to reset both x and y ranges to maximum.\cr
+   (Note: If \code{xlim} or \code{ylim} are supplied in the plot call, these will typically 
+   override all \code{reset.xylims} settings.) 
    }
 
-   \item{load.lists}{For \code{loaPlot} only. Under development alternative to list based 
-   arguments. [TO BE DOCUMENTED]. 
+   \item{load.lists}{For \code{loaPlot} only, character vector. In-development alternative to 
+   list based arguments. This option identifies plot call arguments that \code{loaPlot} should 
+   manage using \code{\link{listLoad}}. See associated HELP documentation for further details.   
    }
 
-   \item{by.group, by.zcase}{For \code{loaPlot} only. Under development arguments for routine 
-   by group and by zcase handling of plot inputs. [TO BE DOCUMENTED].
+   \item{by.group, by.zcase}{For \code{loaPlot} only. Arguments for routine 
+   by group and by zcase handling of plot inputs.\cr 
+   IMPORTANT: These are current under review.
    }
  
    \item{preprocess}{For \code{loaPlot} only, logical, passed to \code{\link{panelPal}}. If 
@@ -102,11 +109,17 @@
 }
 
 \details{
-  NOTE: \code{loaPlot} is currently in development and may be subject to changes.
 
   \code{loaPlot} provides lattice-style conditioning/handling for a range of 
-   commonly used XYZ plotting options.
- 
+   commonly used XYZ plotting options. It is perhaps easiest pictured as a 
+   'mid point' alternative somewhere between the standard \code{\link{lattice}} 
+   plot functions \code{\link{xyplot}} and \code{\link{levelplot}}.
+
+   The default form of the plot uses an extension of the subscripting methods 
+   described by Deepayan Sarkar in Chapter 5 of Lattice (see sections on 
+   scatterplots and extensions). The default output is a bubble plot (see example 1 
+   below). 
+    
 }
 
 \value{
@@ -118,7 +131,8 @@
 
 \note{
 
-  This function is in development and may be subject to changes.
+  \code{panel.loaPlot2} is an alternative versions of \code{panel.loaPlot} that is 
+  currently under revision. Please use with care.
      
 }
 
@@ -130,7 +144,7 @@
   Sarkar, Deepayan (2008) Lattice: Multivariate Data
   Visualization with R. Springer, New York. ISBN
   978-0-387-75968-5
-
+  
   RColorBrewer:
   Erich Neuwirth <erich.neuwirth@univie.ac.at> (2011). RColorBrewer:
   ColorBrewer palettes. R package version 1.0-5.
@@ -144,19 +158,113 @@
 
 \seealso{
 
-   \code{\link{panelPal}}
+   \code{\link{panelPal}} 
 
    For information on related functions in other packages, see
 
-   \code{\link{lattice}}: \code{\link{xyplot}}; \code{\link{panel.xyplot}}; and 
-   \code{\link{panel.levelplot}}.
+   \code{\link{lattice}}: \code{\link{xyplot}}; and \code{\link{levelplot}}.
 
 }
 
 \examples{
-#TO BE CONFIRMED
+
+## Example 1
+## Basic usage
 
 
+loaPlot(Ozone~Solar.R*Temp|Wind>8, 
+        data=airquality, 
+        col.regions="Blues", 
+        cex.range=c(0.75,3))
+
+# Notes:
+# Formula structure z ~ x * y |cond like levelplot.
+# Data (and groups) assignment like in standard lattice plots.
+# By default z is linked to col and cex. 
+# Unless overridden by user inputs or group or zcase setting. 
+# Plot passed via ...Handler functions to provide shortcut plot 
+# reworking, e.g. here colHandler handles color scales 
+# using col.region to generate a color range. 
+# (Here, arguments like "Blues" and c("green", "red") are 
+# allowed handled using functions in the RColorBrewer package.)
+
+# Formula stuctures:
+# ~ x * y                like xyplot y ~ x
+# ~ x * y | cond         like xyplot y ~ x | cond
+# z ~ x * y              like xyplot y ~ x, col=f(z), cex=f(z)
+# z ~ x * y | cond       like xyplot y ~ x | cond, col=f(z), cex=f(z)
+# z ~ x * y, groups = g  like xyplot y ~ x, groups=g, cex=f(z)
+# z1 + z2 ~ x * y        (zcases)
+# etc
+
+
+## Example 2 
+## Basic modifications
+
+loaPlot(Ozone~Solar.R*Temp, groups=airquality$Wind>8, 
+        data=airquality, cex.range=c(0.75,3)) 
+
+# When groups are applied, by default group id is linked to col.
+# The follow example illustrates three options:
+
+loaPlot(Ozone~Solar.R*Temp, groups=airquality$Wind>8, 
+        data=airquality, cex.range=c(0.75,3), 
+        group.args=c("pch"), pch=c(1,4), col="blue", pch=c(1,4))
+
+# notes:
+# Here, group.args is used to change the default group arguments.
+# (So, pch rather than col is used to identify groups.)
+# pch is then assigned by group rather than by x (and y) or z case. 
+# (See panelPal Help further further details of assignments in loa.)
+# col supplied by the user supercedes the default z linkage.
+# (So, here cex remains z scales but col is fixed as blue.)
+
+
+## Example 3 
+## Key handling
+
+loaPlot(Ozone~Solar.R*Temp, data=airquality, 
+        cex.range=c(0.75,3), col.regions=c("green", "red"))
+
+# Key settings are by the key argument (as in lattice) 
+# or key... arguments via keyHandler and listLoad, so e.g.:
+
+loaPlot(Ozone~Solar.R*Temp, data=airquality, 
+        cex.range=c(0.75,3), col.regions=c("green", "red"), 
+        key.fun = draw.loaColorKey)
+
+# Notes:
+# By default the loaPlot uses draw.loaPlotZKey to generate 
+# its color key unless an alternative is supplied via key.fun.
+# (Here, the draw.colorKey wrapper draw.loaColorKey is used to 
+# generate a color bar similar to that in levelplot.)
+
+
+
+## Example 4
+## panels
+
+loaPlot(Ozone~Solar.R*Temp|Wind>8, data=airquality, 
+        col.regions="Reds")
+
+# The combined use loaPlot, panelPal and appropriately configured 
+# panel functions provides automatical handling of a range of plot 
+# elements, e.g.:
+
+loaPlot(Ozone~Solar.R*Temp|Wind>8, data=airquality, 
+        col.regions="Reds", panel=panel.binPlot)
+
+# Notes:
+# Here, the choice of default key is set by the panel... function;
+# the panel by default bins data by location and for each bin cell
+# calculates the Average Ozone concentration just like a standard 
+# lattice panel would, but it also tracks these values (calculated 
+# within the panel) and scales panel-to-panel and panel-to-key 
+# so users do not have to do that retrospectively; and, finally, 
+# it retains in-panel calculations so users can recover them.
+# (See panelPal for methods and panel.binPlot for further details 
+# of this particular panel function.)
+ 
 }
 
 \keyword{ methods }

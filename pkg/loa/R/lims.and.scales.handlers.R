@@ -143,15 +143,31 @@ localScalesHandler <- function(scales = NULL, ..., allowed.scales =c("x", "y"),
 #############
 
     if(remove.box){
-        #par.setting for no box
-        temp <- list(axis.line = list(col = "transparent"))
-        output$par.settings <- if(is.null(extra.args$par.settings))
-                                   temp else listUpdate(temp, extra.args$par.settings)
+       #get par.settings$axis.line
+       temp <- do.call(getPlotArgs, listUpdate(extra.args, list(defaults.as = "axis.line")))
+       temp <- list(axis.line = temp)
+
+       if(!is.null(extra.args$par.settings))
+           temp <- listUpdate(temp, extra.args$par.settings)
+       
+       temp$axis.line$local.col <- temp$axis.line$col
+       temp$axis.line$col <- "transparent"
+
+       output$par.settings <- temp
+
+#print(output)
+
+
+
+#        temp <- list(axis.line = list(col = "transparent"))
+#        output$par.settings <- if(is.null(extra.args$par.settings))
+#                                   temp else listUpdate(temp, extra.args$par.settings)
     }    
 
     output
 
 }
+
 
 
 

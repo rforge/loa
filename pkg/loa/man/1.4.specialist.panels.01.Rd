@@ -1,5 +1,5 @@
 \name{1.4.specialist.panels}
-\alias{1.4specialist.panels}
+\alias{1.4.specialist.panels}
 \alias{panel.kernelDensity}
 \alias{panel.binPlot}
 
@@ -15,7 +15,7 @@ panel.kernelDensity(x, y, z = NULL, ..., n = 20,
          kernel.fun = NULL, panel.range = TRUE, 
          process = TRUE, plot = TRUE, loa.settings = FALSE)
 
-panel.binPlot <- function(x = NULL, y = NULL, z = NULL, 
+panel.binPlot(x = NULL, y = NULL, z = NULL, 
          breaks=20, x.breaks = breaks, y.breaks = breaks,
          x1=NULL, x2=NULL, y1=NULL, y2=NULL,
          statistic = mean, ...,

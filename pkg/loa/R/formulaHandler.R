@@ -10,8 +10,16 @@
 
 
 #formulaHandler - handles the x formula
+#stripHandler   - handles strips
 
 #urgent
+##########################
+#stripHandler 
+##########################
+#temp fix for cond 
+#need a better fix
+#
+
 #fixes 
 #to dos
 #suggestions
@@ -28,7 +36,8 @@
 ###########################
 ###########################
 
-formulaHandler <- function(x, data = NULL, ..., check.xy.dimensions=TRUE){
+formulaHandler <- function(x, data = NULL, ..., formula.type="z~x*y|cond", 
+                           check.xy.dimensions=TRUE){
 
     #extra.args
     extra.args <- list(...)
@@ -118,10 +127,18 @@ formulaHandler <- function(x, data = NULL, ..., check.xy.dimensions=TRUE){
 ##    }
 
     #x,y
-    names(d1)[names(d1)=="right.x"] <- "x"
-    names(d1)[names(d1)=="right.x.name"] <- "x.name"
-    names(d1)[names(d1)=="right.y"] <- "y"
-    names(d1)[names(d1)=="right.y.name"] <- "y.name"
+    if(formula.type=="z~y*x|cond"){
+        names(d1)[names(d1)=="right.y"] <- "x"
+        names(d1)[names(d1)=="right.y.name"] <- "x.name"
+        names(d1)[names(d1)=="right.x"] <- "y"
+        names(d1)[names(d1)=="right.x.name"] <- "y.name"
+    } else {
+        names(d1)[names(d1)=="right.x"] <- "x"
+        names(d1)[names(d1)=="right.x.name"] <- "x.name"
+        names(d1)[names(d1)=="right.y"] <- "y"
+        names(d1)[names(d1)=="right.y.name"] <- "y.name"
+    }
+
 
 #######################
 #check for extra dimensions in x, y
@@ -150,5 +167,47 @@ formulaHandler <- function(x, data = NULL, ..., check.xy.dimensions=TRUE){
 }
 
 
+
+
+
+####################################
+####################################
+##stripHandler
+####################################
+####################################
+
+
+stripHandler <- function(..., striplab=NULL){
+
+##########################
+#messy 
+#needs a rethink
+##########################
+
+##########################
+#pass list 
+#with listLoad handling
+##########################
+
+    extra.args <- list(...)
+
+    #if not striplab
+    #nothing to do
+    if(is.null(striplab)) return(extra.args)
+
+    if(!"strip" %in% names(extra.args)) extra.args$strip <- TRUE 
+
+    if("strip" %in% names(extra.args)){
+
+        if(is.logical(extra.args$strip) && !extra.args$strip) return(extra.args)
+
+        temp <- if(is.function(extra.args$strip)) extra.args$strip else strip.default
+
+        extra.args$strip <- function(var.name, ...) temp(..., var.name=striplab)
+
+    }
+
+    return(extra.args)
+}
 
 

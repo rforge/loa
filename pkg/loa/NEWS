@@ -1,3 +1,26 @@
+Changes in loa 0.2.8 [2013-**-**]
+=====================================
+
+*       localScalesHandler update 
+        (axes col = "transparent" locally overridden 
+        when used to hidden panel box)
+*       panel.polar... functions added
+        (panel.polarPlot, panel.polarFrame, 
+        panel.polarAxes, panel.polarGrids, 
+        panel.polarLabels)
+*       namespace and depends updates
+        (MASS added to required packages; 
+        now Requires: lattice, Imports others)
+*       loaPlot updates 
+        (par.settings uses parHandler directly)
+*       provisional stripHandler added
+*       default cex range changed in cexHandler
+*       GoogleMap update: uses latest PanelPal
+        (older version now GoogleMap.old) 
+*       lat.lon.meuse dataset added 
+
+
+
 Changes in loa 0.2.7 [2013-05-07]
 =====================================
 
@@ -5,7 +28,6 @@ Changes in loa 0.2.7 [2013-05-07]
         (NULL case error fixed)
 *       draw.loaColorKey added
 *       panel.binPlot added
-*
 
 
 Changes in loa 0.2.6 [2013-05-06]

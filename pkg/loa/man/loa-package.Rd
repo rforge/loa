@@ -14,8 +14,8 @@
 \tabular{ll}{
 Package: \tab loa\cr
 Type: \tab Package\cr
-Version: \tab 0.2.4\cr
-Date: \tab 2012-11-07\cr
+Version: \tab 0.2.8\cr
+Date: \tab 2012-**-**\cr
 License: \tab GPL (>= 2)\cr
 LazyLoad: \tab yes\cr
 }
@@ -35,7 +35,9 @@ use of this framework. These are summarized in section 1 of this manual, and inc
 
 1.3. \code{\link{trianglePlot}} and associated functions.
 
-1.4. Specialist panels, e.g. \code{\link{panel.kernelDensity}}.
+1.4. Specialist panels, e.g. \code{\link{panel.kernelDensity}}, \code{\link{panel.polarPlot}}.
+
+1.5. Example data, e.g. \code{\link{lat.lon.meuse}}.
 
 While such 'stand alone' plot functions are of obvious value, the code framework is 
 of possibly wider interest because it provides a template for the rapid third-party 
@@ -83,8 +85,7 @@ for me what they are using it to do.
 
 }
 \author{
-Karl Ropkins
-Maintainer: Karl Ropkins <k.ropkins@its.leeds.ac.uk>
+Karl Ropkins <k.ropkins@its.leeds.ac.uk>
 }
 \references{
   Functions in \code{loa} make extensive use of code developed by others. 

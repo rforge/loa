@@ -111,14 +111,23 @@ keyHandler <- function(key = NULL, ..., output = "key"){
 ##############################
 
 
-draw.loaColorKey <- function(key = NULL, draw = FALSE, vp = NULL, ...){
+draw.loaColorKey <- function (key = NULL, draw = FALSE, vp = NULL, ...){
 
-    if(!"at" %in% names(key))
-        key$at <- seq(min(key$zlim), max(key$zlim), length.out=100)
+    if (!"at" %in% names(key)) 
+        key$at <- seq(min(key$zlim), max(key$zlim), length.out = 100)
 
-    key$col <- do.call(colHandler, listUpdate(key, list(z=key$zlim, output="all")))$col.regions
+    if(!"col" %in% names(key)){
+        key$col <- do.call(colHandler, listUpdate(key, list(z = key$zlim, 
+        output = "all")))$col.regions
+    }
+
+    if(!"alpha" %in% names(key)){
+        key$alpha <- do.call(colHandler, listUpdate(key, list(z = key$zlim, 
+        output = "all")))$alpha.regions
+    }
 
     draw.colorkey(key, draw, vp)
+
 }
 
 

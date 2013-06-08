@@ -7,9 +7,20 @@
 #so user/examples accessible
 #googleMaps and handler examples are issue if this changes
 
-##import(grid)
+
+#imports
+
 ##import(lattice)
-##import(RColorBrewer)
+
+import(grid)
+import(png)
+import(RgoogleMaps)
+import(RColorBrewer)
+
+#single imports
+
+importFrom(MASS, kde2d) #for panel.kernelDensity
+
 
 #loaPlot
 
@@ -21,6 +32,7 @@ export(panel.loaPlot2)
 #googleMap
 
 export(GoogleMap)
+export(GoogleMap.old)
 export(googleMap) 
 export(quickMap) 
 export(makeMapArg)
@@ -44,8 +56,16 @@ export(triXY2ABC)
 export(panel.kernelDensity)
 export(panel.binPlot)
 
+#polarPlots
+export(panel.polarPlot)
+export(panel.polarFrame)
+export(panel.polarAxes)
+export(panel.polarGrids)
+export(panel.polarLabels)
+
 #formulas
 export(formulaHandler)
+export(stripHandler)
 
 #plot.argument.handlers
 export(cexHandler)
@@ -86,6 +106,7 @@ export(draw.loaColorKey)
 export(listHandler)
 export(listUpdate)
 export(listExpand)
+export(listLoad)
 
 
 #plot.interactives

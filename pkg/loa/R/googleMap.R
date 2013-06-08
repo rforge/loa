@@ -2,6 +2,8 @@
 #[8 -TBC] functions 
 
 #GoogleMap - main function
+#GoogleMap.old
+#googlemap 
 #quickMap - simplified version as code demo
 #makeMapArg - map maker and modifier for above
 #getMapArg - recover map from previous GoogleMap plot
@@ -41,10 +43,116 @@
 ###########################
 ###########################
 
-
 googleMap <- function(...) GoogleMap(...)
 
-GoogleMap <- function(x, data = NULL, map = NULL,
+
+GoogleMap <- function (x, data = NULL, panel = panel.loaPlot,
+          map = NULL, map.panel = panel.GoogleMapsRaster, 
+          recolor.map = FALSE, ..., lon.lat = FALSE) 
+{
+
+
+#new rewrite using loaPlot 
+#note changes
+#z ~ lon * lat | cond
+#
+
+
+
+
+    extra.args <- list(...)
+
+    #formular default z ~ lat * lon | cond
+    if(!lon.lat)
+        if(!"formula.type" %in% names(extra.args))
+            extra.args$formula.type = "z~y*x|cond"
+
+    #make initial map recovery tight
+    if(is.null(extra.args$lim.borders))
+        extra.args$lim.borders = 0.001
+
+    ans <- do.call(loaPlot, listUpdate(list(x=x, data=data, panel=panel), 
+                                        extra.args))
+
+    if(is.null(map)){
+        temp <- list(xlim = ans$panel.args.common$xlim, 
+                     ylim = ans$panel.args.common$ylim,
+                     recolor.map = recolor.map,
+                     aspect = NULL)
+        temp <- listUpdate(temp, extra.args)
+        map <- do.call(makeMapArg, temp)
+    }
+
+####################
+    
+
+
+    #reset axes using map
+    ans$aspect.ratio <- map$aspect
+    ans$panel.args.common$xlim <- map$xlim
+    ans$x.limits <- map$xlim
+    ans$panel.args.common$ylim <- map$ylim
+    ans$y.limits <- map$ylim
+
+    #update x and y using map dimensions
+    #could be simpler
+
+    for(i in 1:length(ans$panel.args)){
+        temp <- LatLon2XY.centered(map, ans$panel.args[[i]]$y, 
+                                        ans$panel.args[[i]]$x)
+        ans$panel.args[[i]]$y <- temp$newY
+        ans$panel.args[[i]]$x <- temp$newX
+    }
+
+    #add map, 
+    #reset the aspect
+    panel <- ans$panel
+    panel.with.map <- function(...){
+                          map.panel(map)
+                          panel(...)}
+    map.axis.comps <- axis.components.GoogleMaps(map)
+    map.axis <- function(components, ...) 
+                   axis.default(components = map.axis.comps, ...)
+
+    ans <- update(ans, panel = panel.with.map, aspect = map$aspect, 
+                  axis = map.axis)
+
+    ans$panel.args.common$map <- map
+
+
+    ##############################
+    #rescale axis
+    ##############################
+
+    #scale axis for map projection
+    #map.axis.comps <- axis.components.GoogleMaps(map)
+    #map.axis <- function(components, ...) 
+    #               axis.default(components = map.axis.comps, ...)
+
+    ############################
+    #rescale data
+    ############################
+
+    #scale data for map projection
+    #temp <- LatLon2XY.centered(map, d1$right.x, d1$right.y)
+
+#################################
+
+
+    return(ans)
+
+}
+
+
+
+#####################################
+#####################################
+
+
+
+
+
+GoogleMap.old <- function(x, data = NULL, map = NULL,
     map.panel = panel.GoogleMapsRaster, 
     panel = panel.xyplot, 
     recolor.map = FALSE, ...){
@@ -368,7 +476,13 @@ makeMapArg <- function(ylim, xlim,
         #native raster handler
         #######################
 
-        if("nativeRaster" %in% class(map$myTile) & require(png)){
+#######################
+##        if("nativeRaster" %in% class(map$myTile) & require(png)){
+##dropped require png 
+##while testing namespace change
+######################
+
+        if("nativeRaster" %in% class(map$myTile)){
             #do to png native output
             writePNG(map$myTile, "XtempX.png")
             map$myTile <- readPNG("XtempX.png", native = FALSE)

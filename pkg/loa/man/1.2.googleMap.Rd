@@ -1,6 +1,7 @@
 \name{1.2.GoogleMap.and.geoplotting.tools}
 \alias{1.2.GoogleMap.and.geoplotting.tools}
 \alias{GoogleMap}
+\alias{GoogleMap.old}
 \alias{googleMap}
 \alias{quickMap}
 \alias{makeMapArg}
@@ -20,7 +21,11 @@
 }
 \usage{
 
-  GoogleMap(x, data = NULL, map = NULL, 
+  GoogleMap(x, data = NULL, panel = panel.loaPlot,
+        map = NULL, map.panel = panel.GoogleMapsRaster, 
+        recolor.map = FALSE, ..., lon.lat = FALSE) 
+
+  GoogleMap.old(x, data = NULL, map = NULL, 
         map.panel = panel.GoogleMapsRaster, 
         panel = panel.xyplot, 
         recolor.map = FALSE, ...)
@@ -47,17 +52,27 @@
 
 \arguments{
 
-  \item{x}{ (\code{GoogleMap} only) A formula with the general structure 
-   \code{z ~ latitude * longitude | cond}. The elements \code{latitude} 
-   and \code{longitude} (y and x on associated plots) are required, 
-   while \code{z} and conditioning \code{cond} are optional.
+  \item{x}{ For \code{GoogleMap} and \code{GoogleMap.old} only. A 
+   formula setting the plot structure, by default 
+   \code{z ~ latitude * longitude | cond}.
+   The axis elements \code{latitude} and \code{longitude} are required, 
+   while \code{z} and conditioning \code{cond} are optional. 
    }
 
-  \item{data}{ (\code{GoogleMap} only) If supplied, the assumed source 
-   of the elements of formula \code{x}, typically a \code{data.frame}.
+  \item{data}{ For \code{GoogleMap} and \code{GoogleMap.old} only. If 
+   supplied, the assumed source of the elements of formula \code{x}, 
+   typically a \code{data.frame}.
    }
 
-  \item{map}{ (\code{GoogleMap} and related functions only) If supplied, 
+  \item{panel, map.panel}{ For \code{GoogleMap} and \code{GoogleMap.old} 
+   only. The panels to use when generating the plot data and mao layers, 
+   respectively. \code{panel} is by default the standard \code{loa} 
+   scatter plot panel \code{\link{panel.loaPlot}}. \code{map.panel} can 
+   be the default \code{panel.GoogleMapsRaster} or the alternative 
+   \code{panel.GoogleMaps}. 
+   }
+
+  \item{map}{ For \code{GoogleMap} and related functions only. If supplied, 
    a modified \code{\link{RgoogleMaps}} output, to be used as the plot 
    background. If \code{NULL} (default), this is generated using 
    the \code{\link{RgoogleMaps}} function \code{\link{GetMap}}, 
@@ -68,23 +83,20 @@
    local handling and (lattice) plotting. 
    }
 
-  \item{map.panel, panel}{ (\code{GoogleMap} only) The panels to use 
-   when generating the plot map and data layers, respectively. 
-   \code{map.panel} can be the default \code{panel.GoogleMapsRaster} 
-   or the alternative \code{panel.GoogleMaps}. \code{panel} 
-   is by default the standard \code{lattice} scatter plot panel 
-   \code{\link{panel.xyplot}}. 
-   }
-
-  \item{recolor.map}{(\code{GoogleMap} and \code{RgoogleMapsWrapper} 
-   only). If supplied, a vector of elements that R can treat as colors, 
+  \item{recolor.map}{For \code{GoogleMap} and \code{RgoogleMapsWrapper} 
+   only. If supplied, a vector of elements that R can treat as colors, 
    used as a color scale to recolor \code{map}. This uses standard 
    \code{\link{RColorBrewer}} functions, so can handle arguments like 
    \code{recolor = c("white", "grey")} for greyscale, etc. Disabled 
    by the default \code{FALSE} or \code{NULL}.    
    }
 
-  \item{lat,lon}{ (\code{quickMap} only) Numeric vectors of latitude and 
+  \item{lon.lat}{For \code{GoogleMap} only, logical. Should the plot formula 
+   be applied as \code{z ~ lon * lat | cond}? This operation is handled 
+   using the \code{formula.type} argument in \code{\link{formulaHandler}}    
+   }
+
+  \item{lat,lon}{ For \code{quickMap} only. Numeric vectors of latitude and 
    longitude values.
    }
 
@@ -92,7 +104,7 @@
    and \code{xlim} are only required by \code{makeMapArg}, which uses these 
    to set the requested map size. For the axis handlers (\code{yscale...} and 
    \code{xscale...}) the local alternative \code{lim} is used for both 
-   \code{ylim} and \code{xlim}. In \code{GoogleMap} and \code{quickMap}, if 
+   \code{ylim} and \code{xlim} in generic code. In \code{GoogleMap} and \code{quickMap}, if 
    supplied, \code{xlim} and \code{ylim} are passed to \code{lattice} function 
    \code{\link{xyplot}} via \code{\link{LatLon2XY.centered}} to handle local 
    scaling.
@@ -102,13 +114,13 @@
    is determined based on \code{map} size, but can be forced by user.
    }
 
-  \item{show.data}{ (\code{quickMap} only) Logical, should the \code{lat}, 
+  \item{show.data}{ For \code{quickMap} only, a Logical. Should the \code{lat}, 
    \code{lon} values supplied be plotted on the map (\code{show.data = TRUE}) 
    or just be used to define the range/size of the map being generated? 
    Default \code{show.data = FALSE}.
    }
 
-  \item{object}{ (\code{getMapArg} only) a \code{lattice} plot to recover an 
+  \item{object}{ For \code{getMapArg} only, a \code{lattice} plot to recover an 
    \code{RgoogleMaps} map from. (If not supplied, this is assumed to last 
    lattice plot.)
    }
@@ -152,7 +164,13 @@
    are currently in development functions and may be subject to changes.
 
   \code{GoogleMap} provides lattice-style conditioning/handling for 
-   \code{\link{RgoogleMaps}} outputs. 
+   \code{\link{RgoogleMaps}} outputs. This uses \code{\link{loaPlot}} 
+   and the latest version of \code{\link{panelPal}} to manage default 
+   panel and key settings.  
+ 
+
+  \code{GoogleMap.old} is the previous version of the \code{GoogleMap} 
+   which uses the previous version of \code{\link{panelPal}} 
 
   \code{googleMap} is a \code{GoogleMap} wrapper, included because this 
    alternative form of the plot name was used in earlier versions of the 
@@ -192,7 +210,9 @@
   \code{makeMapArg} returns a modified form of the 
    \code{\link{RgoogleMaps}} function \code{\link{GetMap}} 
    output suitable for use as the \code{map} argument with 
-   the above functions.
+   the above functions. Note: the automatic assignment of the 
+   \code{\link{RgoogleMaps}} function argument \code{size} 
+   
 
   \code{getMapArg} recovers the \code{map} from an existing 
    \code{GoogleMap} output.
@@ -221,8 +241,21 @@
 
   IMPORTANT: Users wishing to add data to these plots, e.g. using 
    \code{update} or \code{layers} in \code{latticeExtra}, 
-   should first rescale the data. See Example below. 
-     
+   should first rescale the data. See Example below.
+
+  IMPORTANT: The Google API returns a map based from a 
+  limited number of panel sizes. This means where your data range 
+  and the available panel sizes may not alway align well. 
+  So, you may not always get the range you asked for! As \code{xlim} 
+  and \code{ylim} are passed to the API reseting with these 
+  can produce similar effects. \code{RgoogleMaps} includes a range of 
+  parameters, e.g. \code{size} and \code{zoom}, which can be used to 
+  tweak things. \code{makeMapArg} tries to guess these but it 
+  can some times be a little conservative. So, if you want to manually 
+  optimise the map ranges, the best option is currently to start with 
+  \code{GoogleMap(..., size=c(640,640)} and then reduce either or 
+  both of these values until you generate an appropriate map size.  
+       
 }
 
 
@@ -287,7 +320,7 @@ quickMap <- function(lat, lon, show.data = FALSE, ...){
 
     #plot data on map
     xyplot(lat~lon, 
-           xlim = map$xlim, ylim =map$ylim,
+           xlim = map$xlim, ylim = map$ylim,
            aspect = map$aspect, 
            axis = map.axis,
            panel = function(...){

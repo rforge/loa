@@ -4,7 +4,7 @@
 #listHandler
 #listUpdate
 #listExpand
-
+#listLoad
 
 #NOTE: much borrowed from lattice 
 
@@ -16,7 +16,10 @@
 #####
 #should listExpand be listExpandVectors?
 #because that is more descriptive
+#####
+#should listLoad have an output argument
 #
+
 
 ##################
 #to do
@@ -101,6 +104,67 @@ listExpand <- function(a, ref = NULL, use = NULL,
                              } else x 
                          })
     listUpdate(a, temp)
+}
+
+
+
+############################
+############################
+##listLoad
+############################
+############################
+
+listLoad <- function(..., load = NULL){
+
+    #######################
+    #listLoad v0.1
+    #######################
+    #kr 21/03/2013
+    #######################
+
+    #loads list with associated prefixed terms 
+    #and strips loaded cases from args
+
+    extra.args <- list(...)
+    output <- if(is.null(extra.args$output))
+                   "all" else extra.args$output
+
+#might want to restrict this to just characters
+#current default output always as "all"
+#current detault one list only
+
+    if(!isGood4LOA(load)) 
+        return(extra.args)
+
+#if list is false don't load it
+
+   if (is.logical(extra.args[[load]]) && !extra.args[[load]])
+        return(extra.args) 
+
+    load.cases <- grep(paste(load, "[.]", sep=""), names(extra.args), value=T)
+
+
+
+    if(length(load.cases)>0){
+        temp <- extra.args[load.cases]
+        names(temp) <- gsub(paste(load, ".", sep=""), "", names(temp))
+
+        extra.args <- extra.args[!names(extra.args) %in% load.cases]
+
+####################
+#rethink
+####################
+#load.list <- extra.args[[load]]
+#
+
+        if (is.logical(extra.args[[load]]) && extra.args[[load]]) 
+            extra.args[[load]] <- list()
+        if (is.list(temp))
+            extra.args[[load]] <- listUpdate(temp, extra.args[[load]])
+    }
+
+    return(extra.args)
+
 }
 
 

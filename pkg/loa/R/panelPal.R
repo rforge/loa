@@ -183,8 +183,10 @@ panelPal <- function(ans, panel = NULL, preprocess = FALSE,
         }
 
     ignore <- c("xlim", "ylim", "zlim", "xlab", "ylab", "zlab", "main",
-                "at", "col.regions", "cex.range", "pch.order", 
+                "at", "col.regions", "alpha.regions", "cex.range", "pch.order", 
                 "group.elements", "group.ids", "group.args", 
+                "allowed.scales", "disallowed.scales", "panel.scales",
+                "reset.xylims", "load.lists", "lim.borders",
                 "zcase.ids", "zcase.args")
     ignore <- unique(ignore, loa.settings$common.args)
 
@@ -325,12 +327,31 @@ panelPal <- function(ans, panel = NULL, preprocess = FALSE,
 
 #reset x/y lims if wanted
    
-    if(reset.xylims){
+##############################################
+##############################################
+##updated bit
+##############################################
+##############################################
+
+#could some of this be done at top?
+#in checks?
+
+##new
+    if(is.logical(reset.xylims)){
+        reset.xylims <- if(reset.xylims) "refit.xylims" else "no.action" 
+    }
+
+##note addition of lim.borders to limsHandler
+##this could be tidier
+
+
+    if("refit.xylims" %in% reset.xylims){
         if(!"xlim" %in% panel.checks){
             temp <- range(lapply(ans$panel.args, 
                               function(x) range(x$x, na.rm=TRUE, finite=TRUE))
                     , na.rm=TRUE, finite=TRUE)
-            temp <- limsHandler(x=temp)$xlim
+
+            temp <- limsHandler(x=temp, lim.borders=if(is.null(ans$panel.args.common$lim.borders)) 0.2 else ans$panel.args.common$lim.borders)$xlim
             ans$panel.args.common$xlim <- temp
             ans$x.limits <- temp
         }
@@ -338,11 +359,29 @@ panelPal <- function(ans, panel = NULL, preprocess = FALSE,
             temp <- range(lapply(ans$panel.args, 
                               function(x) range(x$y, na.rm=TRUE, finite=TRUE))
                     , na.rm=TRUE, finite=TRUE)
-            temp <- limsHandler(y=temp)$ylim
+            temp <- limsHandler(y=temp, lim.borders=if(is.null(ans$panel.args.common$lim.borders)) 0.2 else ans$panel.args.common$lim.borders)$ylim
             ans$panel.args.common$ylim <- temp
             ans$y.limits <- temp
         }
    }
+
+##new
+   if("max.xylims" %in% reset.xylims){
+        temp<- sqrt(c(ans$x.limits, ans$y.limits)^2)
+
+##if either side of 0? Do the sqrt(x^2)?
+
+
+        temp <- c(-max(temp), max(temp))
+##print(temp)
+        ans$panel.args.common$xlim <- temp
+        ans$x.limits <- temp
+        ans$panel.args.common$ylim <- temp
+        ans$y.limits <- temp
+   }
+
+#################################################
+#################################################
 
 
 

@@ -65,7 +65,7 @@ cexHandler <- function(z = NULL, cex = NULL,
         
     #cex.range setup
     if(is.logical(cex.range) && cex.range)
-        cex.range <- c(2, 10)
+        cex.range <- c(0.75, 3)
     if(is.numeric(cex.range)){
         temp <- range(cex.range, na.rm = TRUE, finite = TRUE)
         cex.range <- if(length(na.omit(temp)) < 2)
@@ -224,7 +224,7 @@ colHandler <- function(z = NULL, col = NULL,
         }
         col <- col2rgb(col)
         col <- rgb(col[1,], col[2,], col[3,], 
-                      alpha = alpha.regions * 255, max = 255)
+                      alpha = alpha.regions * 255, maxColorValue = 255)
     }    
 
     #show regions,colorkey if

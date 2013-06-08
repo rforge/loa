@@ -799,9 +799,9 @@ triABC2XY <- function(a, b=NULL, c=NULL, ..., force.abc=TRUE,
         cal[9, 3] <- lims[1,3]
         cal[9, 1] <- 1 - cal[9, 2] - cal[9, 3]
         lims[1,] <- apply(cal, 2, min)
-        lims[1,] <- round(lims[1,], dig = 4)
+        lims[1,] <- round(lims[1,], digits = 4)
         lims[2,] <- apply(cal, 2, max)
-        lims[2,] <- round(lims[2,], dig = 4)
+        lims[2,] <- round(lims[2,], digits = 4)
         #stop the bad
         lims[1,][lims[1,] < 0] <- 0
         lims[2,][lims[2,] > 1] <- 1

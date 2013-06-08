@@ -1,12 +1,13 @@
 Package: loa
 Type: Package
 Title: loa: various plots, options and add-ins for use with lattice 
-Version: 0.2.7
-Date: 2012-05-07
+Version: 0.2.8
+Date: 2012-06-05
 Author: Karl Ropkins
 Maintainer: Karl Ropkins <k.ropkins@its.leeds.ac.uk>
 Description: Various functions
-Depends: R (>= 2.10.0), grid, lattice, png, RgoogleMaps, RColorBrewer
+Depends: R (>= 2.13.0), lattice
+Imports: MASS, grid, png, RgoogleMaps, RColorBrewer
 License: GPL (>= 2)
 LazyLoad: yes
 LazyData: yes

@@ -78,6 +78,9 @@ loaPlot <- function (x, data = NULL, panel = panel.loaPlot, ...,
             if("local.scales" %in% names(temp)){
                 local.scales <- temp$local.scales
             }
+            if("reset.xylims" %in% names(temp)){
+                reset.xylims <- temp$reset.xylims
+            }
             if("load.lists" %in% names(temp)){
                 load.lists <- temp$load.lists
             }
@@ -95,6 +98,17 @@ loaPlot <- function (x, data = NULL, panel = panel.loaPlot, ...,
         for(i in load.lists)
             extra.args <- do.call(listLoad, listUpdate(extra.args, list(load = i)))
     }
+
+############################
+#new addition
+#par.settings handling
+############################
+   
+   #par.settings 
+   extra.args <- do.call(listLoad, listUpdate(extra.args, list(load="par.settings")))
+   extra.args$par.settings <- do.call(parHandler, extra.args)
+
+#
 
 
 #print(extra.args)
@@ -147,6 +161,12 @@ loaPlot <- function (x, data = NULL, panel = panel.loaPlot, ...,
 ##################################
 #could this go into formulaHandler?
 ##################################
+
+#temp fix for conditioning labels
+    extra.args <- do.call(stripHandler,
+                          listUpdate(list(striplab = names(d1$panel.condition)), extra.args)
+                         )
+
 
     ..loa.x <- d1$x
     ..loa.y <- d1$y
@@ -219,12 +239,19 @@ loaPlot <- function (x, data = NULL, panel = panel.loaPlot, ...,
 
 ############################
 ############################
-##panel.loaPlot
+##panel.loaPlot2
 ############################
 ############################
 
+################
+#working on this
+#################
+#issue with condPanelHandler
+#so reset from ...loaPlot to ...loaPlot2
+#################
 
-panel.loaPlot <- function(..., loa.settings = FALSE){
+
+panel.loaPlot2 <- function(..., loa.settings = FALSE){
 
 #################
 #panel to link 
@@ -265,12 +292,20 @@ panel.loaPlot <- function(..., loa.settings = FALSE){
 
 ############################
 ############################
-##panel.loaPlot2
+##panel.loaPlot
 ############################
 ############################
 
+################
+#working on other version
+#################
+#issue with condPanelHandler
+#so reset from ...loaPlot2 to ...loaPlot
+#this now default
+#################
 
-panel.loaPlot2 <- function(..., loa.settings = FALSE){
+
+panel.loaPlot <- function(..., loa.settings = FALSE){
 
 #################
 #panel to link 

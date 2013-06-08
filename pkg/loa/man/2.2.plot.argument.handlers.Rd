@@ -72,7 +72,7 @@ zHandler(z = NULL, expand.outputs = TRUE,
  \item{cex.range}{ If supplied, the range for \code{z} to be rescaled to when using this 
   to generate a \code{cex} scale. NOTE: \code{cex.range = FALSE} disables this \code{cex} 
   scaling and uses \code{z} values directly; \code{cex.range = TRUE} applied default scaling, 
-  equivalent to \code{cex.range = c(2, 10)}. 
+  equivalent to \code{cex.range = c(0.75, 3)}. 
   } 
 
  \item{region, colorkey, legend, pretty, at, cuts, col.regions, alpha.regions}{ The 
