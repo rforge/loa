@@ -1,11 +1,11 @@
-\name{2.1.formula.handlers}
-\alias{2.1.formula.handlers}
+\name{4.2.plot.structure.handlers}
+\alias{4.2.plot.structure.handlers}
 \alias{formulaHandler}
 \alias{stripHandler}
 
 
 \title{
-  Handler functions for front end plot arguments.
+  Handler functions for plot structure arguments.
 }
 \description{
   Function(s) for handlers front end plot arguments like x and strip.
@@ -14,7 +14,9 @@
 
   formulaHandler(x, data = NULL, ..., 
         formula.type = "z~x*y|cond", 
-        check.xy.dimensions = TRUE)
+        panel.zcases = FALSE,
+        check.xy.dimensions = TRUE, 
+        output = "extra.args")
 
   stripHandler(..., striplab=NULL)
 
@@ -41,10 +43,18 @@
    \code{\link{loaPlot}}  
    }
 
+   \item{panel.zcases}{For \code{formulaHandler} only, logical. Should zcase arguments, 
+   e.g. \code{z1} and \code{z2} in \code{z1 + z2 ~ x * y | cond} be treated as 
+   panel conditioning terms rather than grouping terms?  
+   }
+
    \item{striplab}{For \code{stripHandler} only, character vector. If supplied, the 
    label to add to the panel strip when conditioning is applied. By, default if applies 
    the standard \code{lattice} convention, i.e., show for numerics.   
    }
+
+   \item{output}{For \code{formulaHandler} only, character vector. The format to return 
+   function output in.}
 
 }
 
@@ -71,7 +81,7 @@
    defined in the supplied formula.
 
   \code{stripHandler} returns a list containing all supplied arguments, 
-   subject to the following modifications:\cr
+   subject to the following modifications:
    \tabular{ll}{
    * \tab strip generated or updated\cr
    * \tab (if supplied) striplab added as var.name\cr

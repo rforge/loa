@@ -1,5 +1,5 @@
-\name{2.6.other.panel.functions}
-\alias{2.6.other.panel.functions}
+\name{4.7.other.panel.functions}
+\alias{4.7.other.panel.functions}
 \alias{getArgs}
 \alias{getPlotArgs}
 \alias{isGood4LOA}

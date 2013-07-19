@@ -4,6 +4,7 @@
 
 #cexHandler
 #colHandler
+#colRegionsHandler
 #pchHandler
 #zHandler
 
@@ -292,6 +293,40 @@ colHandler <- function(z = NULL, col = NULL,
          alpha.regions = alpha.regions)
 
 }
+
+
+
+
+#####################
+#####################
+##colRegionsHandler
+#####################
+#####################
+
+#local function to handler col.regions 
+#[in development]
+
+colRegionsHandler <- function(...){
+
+#to think about
+############################
+#might want to refine this?
+
+   extra.args <- list(...)
+
+   if(!"col.regions" %in% names(extra.args))
+       return(NULL)
+
+   extra.args$at <- NULL
+   extra.args <- listUpdate(extra.args, list(z=1:100, zlim=c(1,100), output="col")) 
+
+   do.call(colHandler, extra.args)    
+
+}
+
+
+
+
 
 
 

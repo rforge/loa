@@ -5,6 +5,7 @@
 #loaPlot - main function
 #panel.loaPlot
 #panel.loaPlot2
+#panel.loaGrids
 
 
 #######################
@@ -67,12 +68,34 @@ loaPlot <- function (x, data = NULL, panel = panel.loaPlot, ...,
     group.args <- if(is.null(extra.args$group.args))
                       NULL else extra.args$group.args
 
+
+##################
+#colRegionsHandler add-in
+##################
+
+#    if("col.regions" %in% names(extra.args))
+        extra.args$col.regions <- do.call(colRegionsHandler, extra.args)
+
+#if needed because col expanded to col.regions
+
+##################
+
+
     if(is.list(loa.settings)){
 
         temp <- loa.settings$default.settings
 
         if(is.list(temp))
 
+#############################
+#############################
+##this needs fixing 
+##currently formals below are ignored
+##then set by panel
+#############################
+#############################
+
+##also 
 ##think about because this is not great
 
             if("local.scales" %in% names(temp)){
@@ -154,44 +177,52 @@ loaPlot <- function (x, data = NULL, panel = panel.loaPlot, ...,
     temp <- listUpdate(list(x=x, data = data),
                        extra.args)
 
-    d1 <- do.call(formulaHandler, temp)
+    #d1 <- do.call(formulaHandler, temp)
+    extra.args <- do.call(formulaHandler, temp)
+
+    
+
 
 #return(d1)
 
 ##################################
 #could this go into formulaHandler?
+#trying
 ##################################
 
 #temp fix for conditioning labels
-    extra.args <- do.call(stripHandler,
-                          listUpdate(list(striplab = names(d1$panel.condition)), extra.args)
-                         )
+#    extra.args <- do.call(stripHandler,
+#                          listUpdate(list(striplab = names(d1$panel.condition)), extra.args)
+#                         )
 
 
-    ..loa.x <- d1$x
-    ..loa.y <- d1$y
+#    ..loa.x <- d1$x
+#    ..loa.y <- d1$y
 
-     extra.args$z <- d1$z
-     extra.args$ref <- d1$x
-     extra.args <- listUpdate(list(xlab = d1$x.name, ylab = d1$y.name, zlab = if(is.null(extra.args$z)) NULL else d1$z.name),
-                              extra.args)
+#     extra.args$z <- d1$z
+#     extra.args$ref <- d1$x
+#     extra.args <- listUpdate(list(xlab = d1$x.name, ylab = d1$y.name, zlab = if(is.null(extra.args$z)) NULL else d1$z.name),
+#                              extra.args)
 
-    if("zcases" %in% names(d1))
-        extra.args$zcases <- d1$zcases
+#    if("zcases" %in% names(d1))
+#        extra.args$zcases <- d1$zcases
 
 
-    x <- "..loa.y~..loa.x"
-    if(!is.null(d1$panel.condition) && length(d1$panel.condition)>0){
-        ..loa.cond <- d1$panel.condition
-        temp <- paste("..loa.cond[[" , 1:length(..loa.cond), sep="")
-        temp <- paste(temp, "]]", sep="", collapse="+")
-        x <- paste(x, temp, sep="|")
+#    x <- "..loa.y~..loa.x"
+#    if(!is.null(d1$panel.condition) && length(d1$panel.condition)>0){
+#        ..loa.cond <- d1$panel.condition
+#        temp <- paste("..loa.cond[[" , 1:length(..loa.cond), sep="")
+#        temp <- paste(temp, "]]", sep="", collapse="+")
+#        x <- paste(x, temp, sep="|")
 
-    }
-#         ..loa.for <- paste(..loa.for, d1$panel.condition, sep ="|")
+#    }
+##         ..loa.for <- paste(..loa.for, d1$panel.condition, sep ="|")
 
     
-    extra.args$x <- as.formula(x)
+#    extra.args$x <- as.formula(x)
+
+###########################################################
+
     extra.args$panel <- function(..., subscripts) panel.xyplot(..., subscripts=subscripts)
               
     ans <- do.call(xyplot, extra.args)
@@ -325,14 +356,15 @@ panel.loaPlot <- function(..., loa.settings = FALSE){
     if(loa.settings)
         return(list(group.args= c("col"),
                     zcase.args= c("pch"),
-                    default.settings = list(key.fun = "draw.loaPlotZKey")))
+                    default.settings = list(key.fun = "draw.loaPlotZKey", 
+                                            grid = FALSE)))
 
     extra.args <- list(...)
 
     if("groups" %in% names(extra.args)){
         if("group.args" %in% names(extra.args) && length(extra.args$group.args)>0){
 
-#group.ids might not always bee there
+#group.ids might not always be there
 
             temp <- as.numeric(factor(extra.args$groups, levels = extra.args$group.ids))
             for(i in extra.args$group.args){
@@ -345,7 +377,7 @@ panel.loaPlot <- function(..., loa.settings = FALSE){
     if("zcases" %in% names(extra.args)){
         if("zcase.args" %in% names(extra.args) && length(extra.args$zcase.args)>0){
 
-#zcase.ids might not always bee there
+#zcase.ids might not always be there
 
             temp <- as.numeric(factor(extra.args$zcases, levels = extra.args$zcase.ids))
             for(i in extra.args$zcase.args){
@@ -354,6 +386,9 @@ panel.loaPlot <- function(..., loa.settings = FALSE){
         }
         extra.args$zcases <- NULL
     }
+
+    if(isGood4LOA(extra.args$grids))
+        panel.loaGrids(panel.scales = extra.args$panel.scales, grids = extra.args$grids) 
 
     extra.args$col <- do.call(colHandler, extra.args)
     extra.args$cex <- do.call(cexHandler, extra.args)
@@ -364,6 +399,52 @@ panel.loaPlot <- function(..., loa.settings = FALSE){
 
 
 
+
+
+#########################################################
+#########################################################
+#
+
+panel.loaGrids <- function(grids.x = NULL, grids.y = NULL,
+         xlim = NULL, ylim = NULL, ..., 
+         grids = NULL, panel.scales = NULL){
+
+######################
+#might want to rethink this
+#for grids being the ....
+#then grids.theta could be dropped
+
+
+    extra.args <- list(...)
+
+    if (!is.list(panel.scales)) panel.scales <- list()
+    if (!is.list(grids)) grids <- list()
+
+    panel.scales <- listUpdate(list(draw = TRUE, arrows = FALSE, tick.number = 5, 
+                                    abbreviate = FALSE, minlength = 4, tck = 1, 
+                                    col = "lightgrey", col.line = 1, cex = 0.8), 
+                              panel.scales)
+
+    x.par <- getPlotArgs("axis.line", local.resets = panel.scales,
+                             user.resets = grids, elements = "x",
+                             defaults.only = FALSE)
+   
+    y.par <- getPlotArgs("axis.line", local.resets = panel.scales,
+                         user.resets = grids, elements = "y", 
+                         defaults.only=FALSE)
+
+##########################
+##########################
+##this needs fixing
+##########################
+##########################
+
+#not linked to x and y scale settings.
+
+    #temp versios
+    panel.grid()
+
+}
 
 
 

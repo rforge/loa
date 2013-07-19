@@ -1,8 +1,9 @@
-\name{2.7.key.handlers}
-\alias{2.7.key.handlers}
+\name{4.6.key.handlers}
+\alias{4.6.key.handlers}
 \alias{keyHandler}
 \alias{draw.loaPlotZKey}
 \alias{draw.loaColorKey}
+\alias{draw.loaColorRegionsKey}
 
 \title{
   Key handling
@@ -21,6 +22,8 @@ draw.loaPlotZKey(key = NULL, draw = FALSE, vp = NULL, ...)
 
 draw.loaColorKey(key = NULL, draw = FALSE, vp = NULL, ...)
 
+draw.loaColorRegionsKey(key = NULL, draw = FALSE, vp = NULL, ...)
+
 }
 
 \arguments{
@@ -33,13 +36,11 @@ draw.loaColorKey(key = NULL, draw = FALSE, vp = NULL, ...)
   } 
 
   \item{output}{ The format to return the function output in. This is 
-  \code{'key'} for all rotune (in plot) use. [FURTHER DOCUMENTATION 
-   NEEDED]  
+  \code{'key'} for all routine (in plot) use.  
   } 
 
   \item{draw, vp}{ \code{lattice} and \code{grid} arguments using when 
-  plotting \code{GROB} objects. Generally, these can be ignored. [LINK 
-  FOR THOSE WANTING MORE INFORMATION?] 
+  plotting \code{GROB} objects. Generally, these can be ignored.  
   }
 
 }
@@ -54,12 +55,17 @@ draw.loaColorKey(key = NULL, draw = FALSE, vp = NULL, ...)
   \code{lattice}, e.g. \code{draw.key} and \code{draw.colorkey}.
 
   \code{draw.loaPlotZKey} is the default 'bubble plot' key used with 
-  \code{\link{loaPlot}}.  
+  \code{\link{loaPlot}}.
+
+  \code{draw.loaColorKey} and \code{draw.loaColorRegionsKey} are variations 
+  on the \code{draw.colorkey} function in \code{\link{lattice}}.
+  
      
 }
 
 \value{
-  \code{keyHandler} return a list of plot arguments [DETAILS].
+  \code{keyHandler} return a list of plot arguments to be used to generate 
+  a key .
 
   When run within plot calls, the \code{draw...key} functions associated 
   color keys. If they are used with \code{loa} plots and suitable 

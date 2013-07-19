@@ -1,5 +1,5 @@
-\name{2.5.panel.pal}
-\alias{2.5.panel.pal}
+\name{4.1.panel.pal}
+\alias{4.1.panel.pal}
 \alias{panelPal.old}
 \alias{panelPal}
 \alias{loaHandler}

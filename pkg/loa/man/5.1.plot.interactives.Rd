@@ -1,5 +1,5 @@
-\name{3.1.plot.interactives}
-\alias{3.1.plot.interactives}
+\name{5.1.plot.interactives}
+\alias{5.1.plot.interactives}
 \alias{getXY}
 \alias{getLatLon}
 

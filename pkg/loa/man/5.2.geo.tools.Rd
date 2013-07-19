@@ -1,5 +1,5 @@
-\name{3.2.geo.tools}
-\alias{3.2.geo.tools}
+\name{5.2.geo.tools}
+\alias{5.2.geo.tools}
 \alias{geoFrame}
 \alias{geoBearing}
 \alias{geoDistance}

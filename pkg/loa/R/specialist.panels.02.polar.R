@@ -123,6 +123,15 @@ panel.polarFrame <- function(..., grids = TRUE, axes = TRUE, labels = TRUE,
 
     extra.args <- list(...)
 
+####################################
+#might need to rethink this
+#temp fix so grids has range like 
+#default
+####################################
+
+    if(!is.null(extra.args$rlim))
+        extra.args$rlim <- c(0, extra.args$rlim)
+
 #####################################
 #might need to make these next calls
 #update from extra args

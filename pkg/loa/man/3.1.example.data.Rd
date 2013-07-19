@@ -1,5 +1,5 @@
-\name{1.5.example.data}
-\alias{1.5.example.data}
+\name{3.1.example.data}
+\alias{3.1.example.data}
 \alias{example.data}
 \alias{lat.lon.meuse}
 
@@ -34,18 +34,14 @@
   \code{lat.lon.meuse} was generated using method based on \code{mzn} object 
   production in \url{https://github.com/etes/Geoprocessing/blob/master/heatmap.R}.
 
-\code{
-    library(sp); library(gstat); library(rgdal)
-    data(meuse) 
-    coordinates(meuse) =~ x + y 
-    proj4string(meuse) = CRS("+init=epsg:28992") 
-    meuse1 = spTransform(meuse, CRS("+init=epsg:4326")) 
-    meuse2=as.data.frame(meuse1)
-    mzn=meuse2[,c(14,13,4)]
-    names(mzn)<-c("Latitude","Longitude","zinc")
-}
-
- 
+\code{ library(sp); library(gstat); library(rgdal)} \cr
+\code{ data(meuse) } \cr 
+\code{ coordinates(meuse) =~ x + y } \cr 
+\code{ proj4string(meuse) = CRS("+init=epsg:28992") } \cr      
+\code{ meuse1 = spTransform(meuse, CRS("+init=epsg:4326")) } \cr   
+\code{ meuse2=as.data.frame(meuse1) } \cr   
+\code{ mzn=meuse2[,c(14,13,4)] } \cr   
+\code{ names(mzn)<-c("Latitude","Longitude","zinc") } \cr   
 
 }
 
@@ -85,7 +81,23 @@ data in R. R News 5 (2), http://cran.r-project.org/doc/Rnews/.
 
 \examples{
 
-#to be confirmed
+#data structure
+
+head(lat.lon.meuse)
+
+#various plots
+
+loaPlot(~longitude*latitude, data=lat.lon.meuse)
+
+loaPlot(cadmium~longitude*latitude, data=lat.lon.meuse)
+
+loaPlot(cadmium~longitude*latitude, col.regions=c("lightblue", "darkblue"), 
+        data=lat.lon.meuse)
+
+loaPlot(cadmium+copper+lead+zinc~longitude*latitude, panel.zcases = TRUE, 
+        col.regions=c("lightblue", "darkblue"), 
+        key.z.main="Concentrations", data=lat.lon.meuse)
+
 
 }
 

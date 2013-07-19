@@ -87,7 +87,7 @@
    only. If supplied, a vector of elements that R can treat as colors, 
    used as a color scale to recolor \code{map}. This uses standard 
    \code{\link{RColorBrewer}} functions, so can handle arguments like 
-   \code{recolor = c("white", "grey")} for greyscale, etc. Disabled 
+   \code{recolor.map = c("white", "grey")} for greyscale, etc. Disabled 
    by the default \code{FALSE} or \code{NULL}.    
    }
 
@@ -299,9 +299,9 @@
 }
 
 \examples{
-#TO BE CONFIRMED
 
 #quickMap code
+#as example of third-party use of functions
 
 quickMap <- function(lat, lon, show.data = FALSE, ...){
 

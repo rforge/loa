@@ -52,7 +52,7 @@ panel.kernelDensity <- function (x, y, z = NULL, ...,
         return(list(process.args = process.args, 
                     plot.args = plot.args,
                     group.args = c("col"),
-                    default.settings = list(key.fun = "draw.loaColorKey")))
+                    default.settings = list(key.fun = "draw.loaColorRegionsKey")))
 
     ###################
     #process section
@@ -91,6 +91,11 @@ panel.kernelDensity <- function (x, y, z = NULL, ...,
             extra.args$contour <- TRUE
         if (!"region" %in% names(extra.args)) 
             extra.args$region <- TRUE
+        if("at" %in% names(extra.args)){
+            temp <- extra.args$at
+            extra.args$col.regions <- colHandler(z=1:(length(temp)-1), 
+                                                 col.regions=extra.args$col.regions)
+        }
         if (!"col" %in% names(extra.args)) 
             extra.args$col <- trellis.par.get("dot.symbol")$col
 
@@ -224,28 +229,49 @@ panel.binPlot <- function(x = NULL, y = NULL, z = NULL,
     #plot
     if(plot){
 
+######################
+#new bit
+######################
+
+       temp <- listUpdate(extra.args, list(x=x, y=y, z=z, subscripts=1:length(x)))
+       if(!"at" %in% names(temp))
+           temp$at <- seq(min(temp$zlim), max(temp$zlim), length.out = 100)
+
+
+       do.call(panel.levelplot, temp)
+
+#################
+
+############################
+#replaced bit
+############################
+
 ##warning if groups or zcases present
 ##and strip out before passing on
 
-        if(!"at" %in% names(extra.args))
-            extra.args$at <- seq(min(extra.args$zlim), max(extra.args$zlim), length.out=100)
-        extra.args$col <- do.call(colHandler, listUpdate(list(z=z), extra.args))
-        for(i in 1:length(x1)){
+#        if(!"at" %in% names(extra.args))
+#            extra.args$at <- seq(min(extra.args$zlim), max(extra.args$zlim), length.out=100)
+#        extra.args$col <- do.call(colHandler, listUpdate(list(z=z), extra.args))
+#        for(i in 1:length(x1)){
 
 ##this could be all panel.elements
 ##
 
-            temp <- list(x = c(x1[i], x1[i], x2[i], x2[i]), 
-                         y = c(y1[i], y2[i], y2[i], y1[i]),
-                         col = extra.args$col[i])
-            temp <- listUpdate(extra.args[!names(extra.args) %in% c("x1", "x2", "y1", "y2")], temp)
+#            temp <- list(x = c(x1[i], x1[i], x2[i], x2[i]), 
+#                         y = c(y1[i], y2[i], y2[i], y1[i]),
+#                         col = extra.args$col[i])
+#            temp <- listUpdate(extra.args[!names(extra.args) %in% c("x1", "x2", "y1", "y2")], temp)
 
 #might not need all this
 #track border
 
-            temp <- listUpdate(extra.args, temp)
-            do.call(lpolygon, temp)
-        }
+#            temp <- listUpdate(extra.args, temp)
+#            do.call(lpolygon, temp)
+#        }
+
+
+##################################
+
     }
 }
 

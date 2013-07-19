@@ -1,4 +1,22 @@
-Changes in loa 0.2.8 [2013-**-**]
+Changes in loa 0.2.9 [2013-06-30]
+=====================================
+
+*       draw.loaColorRegionsKey added
+*       panel.loaGrids added
+        (allows grids=T, etc from loaPlot)
+*       formulaHandler update
+        (new options, output and panel.zcases 
+        added)
+*       colRegionsHandler added
+        (colHandler wrapper for use with 
+        col.regions arg)
+*       panel.binPlot update
+        (now works with plots like GoogleMap 
+        with rescaled axes)
+
+
+
+Changes in loa 0.2.8 [2013-06-09]
 =====================================
 
 *       localScalesHandler update 

@@ -1,6 +1,6 @@
-\name{2.3.cond.handlers}
-\alias{2.3.cond.handlers}
-\alias{2.3.conditioning.handlers}
+\name{4.4.cond.handlers}
+\alias{4.4.cond.handlers}
+\alias{4.4.conditioning.handlers}
 \alias{condsPanelHandler}
 \alias{groupsPanelHandler}
 \alias{zcasesPanelHandler}

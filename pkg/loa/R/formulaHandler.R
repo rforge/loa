@@ -37,7 +37,8 @@
 ###########################
 
 formulaHandler <- function(x, data = NULL, ..., formula.type="z~x*y|cond", 
-                           check.xy.dimensions=TRUE){
+                           panel.zcases = FALSE,
+                           check.xy.dimensions=TRUE, output = "extra.args"){
 
     #extra.args
     extra.args <- list(...)
@@ -161,8 +162,49 @@ formulaHandler <- function(x, data = NULL, ..., formula.type="z~x*y|cond",
 #in future version
 #######################
 
-    #export results
-    d1
+    #structure zcases
+    if("zcases" %in% names(d1) && panel.zcases){
+        d1$panel.condition <- listUpdate(list(zcases = d1$zcases), d1$panel.condition)
+        d1$zcases <- NULL
+    }
+
+    #export results if lattice.like
+    if(output=="lattice.like") return(d1)
+
+    #temp fix for conditioning labels
+    extra.args <- do.call(stripHandler,
+                          listUpdate(list(striplab = names(d1$panel.condition)), extra.args)
+                         )
+
+
+    ..loa.x <- d1$x
+    ..loa.y <- d1$y
+
+     extra.args$z <- d1$z
+     extra.args$ref <- d1$x
+     extra.args$groups <- d1$groups
+     extra.args <- listUpdate(list(xlab = d1$x.name, ylab = d1$y.name, zlab = if(is.null(extra.args$z)) NULL else d1$z.name),
+                              extra.args)
+
+    
+
+    if("zcases" %in% names(d1))
+        extra.args$zcases <- d1$zcases
+
+
+    x <- "..loa.y~..loa.x"
+    if(!is.null(d1$panel.condition) && length(d1$panel.condition)>0){
+        ..loa.cond <- d1$panel.condition
+        temp <- paste("..loa.cond[[" , 1:length(..loa.cond), sep="")
+        temp <- paste(temp, "]]", sep="", collapse="+")
+        x <- paste(x, temp, sep="|")
+
+    }
+
+    
+    extra.args$x <- as.formula(x)
+
+    extra.args
  
 }
 

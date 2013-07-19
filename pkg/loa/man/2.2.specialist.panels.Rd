@@ -1,5 +1,5 @@
-\name{1.4.specialist.panels.02}
-\alias{1.4.specialist.panels.02}
+\name{2.2.specialist.panels}
+\alias{2.2.specialist.panels}
 \alias{panel.polarPlot}
 \alias{panel.polarFrame}
 \alias{panel.polarAxes}
@@ -8,7 +8,7 @@
 
 
 \title{
-  Special panel functions 01
+  Special panel functions 02
 }
 \description{
   In development specialist panel functions for polar plotting
@@ -123,8 +123,7 @@ panel.polarLabels(labels.theta = NULL, labels.r = NULL,
   The \code{panel.polar...} functions are intended to be used as the 
   \code{panel} argument in \code{loa} plot calls. So, e.g.:
 
-  \code{a <- 1:360}
-  
+  \code{a <- 1:360}\cr
   \code{loaPlot(a~a*a, panel=panel.polarPlot)}
 
   They can also be used with relatively simple \code{lattice} plots. 

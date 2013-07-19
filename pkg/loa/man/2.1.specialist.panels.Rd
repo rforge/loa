@@ -1,5 +1,5 @@
-\name{1.4.specialist.panels}
-\alias{1.4.specialist.panels}
+\name{2.1.specialist.panels}
+\alias{2.1.specialist.panels}
 \alias{panel.kernelDensity}
 \alias{panel.binPlot}
 
@@ -83,10 +83,9 @@ panel.binPlot(x = NULL, y = NULL, z = NULL,
    for \code{lattice} functions like \code{xyplot}. They are intended 
    to be used in the conventional form, e.g.:
 
-   \code{xyplot(..., panel = panel.kernelDensity)}
-
-   \code{xyplot(..., panel = function(...) panel.kernelDensity(..., n = 50))}
-   
+   \code{xyplot(..., panel = panel.kernelDensity)}\cr
+   \code{xyplot(..., n = 50, panel = panel.kernelDensity)}\cr
+   \code{xyplot(..., panel = function(...) panel.kernelDensity(..., n = 50))}\cr
    \code{#etc}
 
    The combination provides a mechanism for the routine preprocessing of 

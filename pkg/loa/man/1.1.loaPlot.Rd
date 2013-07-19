@@ -3,6 +3,7 @@
 \alias{loaPlot}
 \alias{panel.loaPlot}
 \alias{panel.loaPlot2}
+\alias{panel.loaGrids}
 
 
 \title{
@@ -28,6 +29,12 @@
   panel.loaPlot(..., loa.settings = FALSE)
   panel.loaPlot2(..., loa.settings = FALSE)
 
+  #grids
+
+  panel.loaGrids(grids.x = NULL, grids.y = NULL,
+        xlim = NULL, ylim = NULL, ..., 
+        grids = NULL, panel.scales = NULL)
+
 }
 
 \arguments{
@@ -39,7 +46,7 @@
    to be used in point, symbol, surface or glyph generation, and 
    \code{cond} is any additional conditioning to be applied. \code{x} and 
    \code{y} are required elements; \code{z} and \code{cond} are typically 
-   optional./cr
+   optional.\cr
    (Note: this element of the plot is handled by \code{\link{formulaHandler}}).
    }
 
@@ -106,6 +113,10 @@
    to manage plot reworking. See associated Help documents for further information.
    } 
 
+   \item{grids.x, grids.y, xlim, ylim, grids, panel.scales}{For \code{panel.loaGrids} only, grid 
+   settings, typically recovered by \code{loaPlot}. 
+   }
+
 }
 
 \details{
@@ -170,7 +181,6 @@
 
 ## Example 1
 ## Basic usage
-
 
 loaPlot(Ozone~Solar.R*Temp|Wind>8, 
         data=airquality, 
@@ -247,7 +257,7 @@ loaPlot(Ozone~Solar.R*Temp, data=airquality,
 loaPlot(Ozone~Solar.R*Temp|Wind>8, data=airquality, 
         col.regions="Reds")
 
-# The combined use loaPlot, panelPal and appropriately configured 
+# The combined use of loaPlot, panelPal and appropriately configured 
 # panel functions provides automatical handling of a range of plot 
 # elements, e.g.:
 
@@ -257,7 +267,7 @@ loaPlot(Ozone~Solar.R*Temp|Wind>8, data=airquality,
 # Notes:
 # Here, the choice of default key is set by the panel... function;
 # the panel by default bins data by location and for each bin cell
-# calculates the Average Ozone concentration just like a standard 
+# calculates the mean Ozone concentration just like a standard 
 # lattice panel would, but it also tracks these values (calculated 
 # within the panel) and scales panel-to-panel and panel-to-key 
 # so users do not have to do that retrospectively; and, finally, 

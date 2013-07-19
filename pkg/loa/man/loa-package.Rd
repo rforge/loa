@@ -14,8 +14,8 @@
 \tabular{ll}{
 Package: \tab loa\cr
 Type: \tab Package\cr
-Version: \tab 0.2.8\cr
-Date: \tab 2012-**-**\cr
+Version: \tab 0.2.9\cr
+Date: \tab 2012-06-30\cr
 License: \tab GPL (>= 2)\cr
 LazyLoad: \tab yes\cr
 }
@@ -35,9 +35,14 @@ use of this framework. These are summarized in section 1 of this manual, and inc
 
 1.3. \code{\link{trianglePlot}} and associated functions.
 
-1.4. Specialist panels, e.g. \code{\link{panel.kernelDensity}}, \code{\link{panel.polarPlot}}.
+Other \code{panel...} functions and example data are summarized in sections 2 and 
+3, respectively:
 
-1.5. Example data, e.g. \code{\link{lat.lon.meuse}}.
+2.1. Specialist panels, e.g. \code{\link{panel.kernelDensity}}, 
+
+2.2. Specialist panels for polar plotting, e.g. \code{\link{panel.polarPlot}}.
+
+3.1. Example data, e.g. \code{\link{lat.lon.meuse}}.
 
 While such 'stand alone' plot functions are of obvious value, the code framework is 
 of possibly wider interest because it provides a template for the rapid third-party 
@@ -50,30 +55,30 @@ alternative plots within the \code{\link{lattice}} framework. Firstly, plot func
 in section 1 have where possible been supplied as main plot functions and plot component 
 functions that handle data, axes, panels, etc. Secondly, the workhorse functions, those common 
 functions used through-out the package to simplify many routine operations have been grouped 
-together and summarized in section 2:
+together and summarized in section 4:
 
-2.1. Formula handlers: \code{\link{formulaHandler}}, etc.
+4.1. \code{\link{panelPal}}
 
-2.2. Common plot argument handlers: \code{\link{cexHandler}}, \code{\link{colHandler}}, 
+4.2. plot structure handlers: \code{\link{formulaHandler}}, etc.
+
+4.3. Plot lim(s) and scale(s) handlers: \code{\link{limsHandler}}, \code{\link{localScalesHandler}}, etc.
+
+4.4. Plot conditioning handlers: \code{\link{condsPanelHandler}}, etc.
+
+4.5. Common plot argument handlers: \code{\link{cexHandler}}, \code{\link{colHandler}}, 
 \code{\link{zHandler}}, etc.
 
-2.3. Plot conditioning handlers: \code{\link{condsPanelHandler}}, etc.
+4.6. Key handlers: \code{\link{keyHandler}}, etc.
 
-2.4. Plot lim(s) and scale(s) handlers: \code{\link{limsHandler}}, \code{\link{localScalesHandler}}, etc.
+4.7. Other panel functions: \code{\link{getArgs}}, etc.
 
-2.5. \code{\link{panelPal}}
+4.8. List handlers: \code{\link{listHandler}}, etc.
 
-2.6. Other panel functions: \code{\link{getArgs}}, etc.
+And, finally, functions used for working with data post-plotting, are summarized in section 5: 
 
-2.7. Key handlers: \code{\link{keyHandler}}, etc.
+5.1. Interactive functions for working with plot outputs: \code{\link{getXY}}, etc.
 
-2.8. List handlers: \code{\link{listHandler}}, etc.
-
-And, finally, functions used for working with data post-plotting, are summarized in section 3: 
-
-3.1. Interactive functions for working with plot outputs: \code{\link{getXY}}, etc.
-
-3.2. Various functions for latitude/longitude manipulation: \code{\link{geoFrame}}, etc.
+5.2. Various functions for latitude/longitude manipulation: \code{\link{geoFrame}}, etc.
 
 This package is very much intended to be an evolutionary exercise. I use it on a routine 
 basis to develop plots for use elsewhere and compare data visualization methods. However, 
