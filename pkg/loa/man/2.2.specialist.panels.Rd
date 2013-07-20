@@ -3,7 +3,7 @@
 \alias{panel.polarPlot}
 \alias{panel.polarFrame}
 \alias{panel.polarAxes}
-\alias{panel.polarGrids}
+\alias{panel.polarGrid}
 \alias{panel.polarLabels}
 
 
@@ -22,15 +22,15 @@ panel.polarPlot(x = NULL, y = NULL, r = NULL, theta = NULL, ...,
 
 #grid, axes and axes labelling
 
-panel.polarFrame(..., grids = TRUE, axes = TRUE, labels = TRUE, 
-         panel.scales = NULL, grids.panel = panel.polarGrids, 
+panel.polarFrame(..., grid = TRUE, axes = TRUE, labels = TRUE, 
+         panel.scales = NULL, grid.panel = panel.polarGrid, 
          axes.panel = panel.polarAxes, labels.panel = panel.polarLabels)
 
 panel.polarAxes(axes.theta = NULL, axes.r = NULL, thetalim = NULL, 
          rlim = NULL, ..., axes = NULL, panel.scales = NULL)
 
-panel.polarGrids(grids.theta = NULL, grids.r = NULL,
-         thetalim = NULL, rlim = NULL, ..., grids = NULL, 
+panel.polarGrid(grid.theta = NULL, grid.r = NULL,
+         thetalim = NULL, rlim = NULL, ..., grid = NULL, 
          panel.scales = NULL)
 
 panel.polarLabels(labels.theta = NULL, labels.r = NULL,
@@ -67,7 +67,7 @@ panel.polarLabels(labels.theta = NULL, labels.r = NULL,
   HELP documentation for further details. 
   } 
 
- \item{grids, axes, labels}{ plot management options for the grid, axis 
+ \item{grid, axes, labels}{ plot management options for the grid, axis 
    and axis label elements of the plot. These can be logicals (\code{TRUE} 
    to include the element or \code{FALSE} to remove it) or lists of plot 
    parameters.
@@ -77,7 +77,7 @@ panel.polarLabels(labels.theta = NULL, labels.r = NULL,
   generating grids, axes and labels within the plot panel.
   }
 
- \item{grids.panel, axes.panel, labels.panel}{ Used by the \code{panel...Frame} 
+ \item{grid.panel, axes.panel, labels.panel}{ Used by the \code{panel...Frame} 
   functions to identify the \code{panel...} functions to use when 
   generating the grid, axes and axis labelling elements of the plot.
   }
@@ -89,8 +89,8 @@ panel.polarLabels(labels.theta = NULL, labels.r = NULL,
   \code{ylim} in standard \code{lattice} plots).
   }
 
-\item{grids.theta, grids.r}{ Like \code{axes.theta} and \code{axes.r} but for 
-  grids.
+\item{grid.theta, grid.r}{ Like \code{axes.theta} and \code{axes.r} but for 
+  grid.
   } 
 
 \item{labels.theta, labels.r}{ Like \code{axes.theta} and \code{axes.r} but for 

@@ -8,7 +8,8 @@
   Handler functions for plot structure arguments.
 }
 \description{
-  Function(s) for handlers front end plot arguments like x and strip.
+  Function(s) for handling (front end) plot arguments like x and strip that manage 
+  the plot structure.
 }
 \usage{
 
@@ -44,7 +45,7 @@
    }
 
    \item{panel.zcases}{For \code{formulaHandler} only, logical. Should zcase arguments, 
-   e.g. \code{z1} and \code{z2} in \code{z1 + z2 ~ x * y | cond} be treated as 
+   e.g. \code{z1} and \code{z2} in \code{z1 + z2 ~ x * y | cond}, be treated as 
    panel conditioning terms rather than grouping terms?  
    }
 

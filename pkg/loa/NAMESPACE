@@ -27,7 +27,7 @@ importFrom(MASS, kde2d) #for panel.kernelDensity
 export(loaPlot)
 export(panel.loaPlot)
 export(panel.loaPlot2)
-export(panel.loaGrids)
+export(panel.loaGrid)
 
 
 #googleMap
@@ -61,7 +61,7 @@ export(panel.binPlot)
 export(panel.polarPlot)
 export(panel.polarFrame)
 export(panel.polarAxes)
-export(panel.polarGrids)
+export(panel.polarGrid)
 export(panel.polarLabels)
 
 #formulas

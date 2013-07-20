@@ -223,17 +223,41 @@ loaPlot(a~a*b)
 loaPlot(a~a*b, panel = panel.binPlot) 
 
  
-####################################
-#to do
-####################################
-
 ## example 2
-## automatic subscripting 
+## automatic subscripting with loa
 
-#compare lattice xyplot output
-#and loaPlot
+# some data
+
+a <- 1:10
+ref <- rep(1:2, each=5)
+
+# lattice xyplot loaPlot output
+
+xyplot(a~a|ref, col=ref, pch=19)
+
+# note that the 'col' argument does not 
+# automatically track plot conditioning. 
+
+# with lattice plots you need to assign
+# arguments you want to track in this 
+# manner using subscripts, as discussed 
+# in Lattice, Chapter 5.
+
+# now compare a similar loaPlot
+
+loaPlot(~a*a|ref, col=ref, pch=19)
+
+# the panelPal function automatically 
+# applies assumes subscripting
+
+# also try
+# loaPlot(~a*a|ref, col=ref, pch=ref)
 
 
+
+#####################################
+#to do
+#####################################
 
 ##example 3 
 

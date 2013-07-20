@@ -3,7 +3,7 @@
 \alias{loaPlot}
 \alias{panel.loaPlot}
 \alias{panel.loaPlot2}
-\alias{panel.loaGrids}
+\alias{panel.loaGrid}
 
 
 \title{
@@ -31,9 +31,9 @@
 
   #grids
 
-  panel.loaGrids(grids.x = NULL, grids.y = NULL,
+  panel.loaGrid(grid.x = NULL, grid.y = NULL,
         xlim = NULL, ylim = NULL, ..., 
-        grids = NULL, panel.scales = NULL)
+        grid = NULL, panel.scales = NULL)
 
 }
 
@@ -113,7 +113,7 @@
    to manage plot reworking. See associated Help documents for further information.
    } 
 
-   \item{grids.x, grids.y, xlim, ylim, grids, panel.scales}{For \code{panel.loaGrids} only, grid 
+   \item{grid.x, grid.y, xlim, ylim, grid, panel.scales}{For \code{panel.loaGrid} only, grid 
    settings, typically recovered by \code{loaPlot}. 
    }
 

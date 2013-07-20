@@ -4,7 +4,7 @@
 #panel.polarPlot
 #panel.polarFrame
 #panel.polarAxes
-#panel.polarGrids
+#panel.polarGrid
 #panel.polarLabels
 
 #NOTE: much borrowed from... 
@@ -15,7 +15,7 @@
 #repairs
 ############################
 
-#grids and labels need a fix re rlim
+#grid and labels need a fix re rlim
 ##should it go (0, max)?
 
 #axes not showing?
@@ -62,12 +62,12 @@ panel.polarPlot <- function(x = NULL, y = NULL, r = NULL, theta = NULL, ...,
                     zcase.args= c("pch"),
                     default.settings = list(local.scales = TRUE,
                                             local.scales.panel = panel.polarFrame,
-                                            grids = TRUE, axes = TRUE, labels = TRUE,
+                                            grid = TRUE, axes = TRUE, labels = TRUE,
                                             allowed.scales =c("r", "theta"),  
                                             disallowed.scales = c("x", "y"),
                                             aspect = "loa.iso", 
                                             reset.xylims = c("refit.xylims", "max.xylims"),
-                                            load.lists = c("grids", "axes", "labels"),                                            
+                                            load.lists = c("grid", "axes", "labels"),                                            
                                             key.fun = "draw.loaPlotZKey")))
 
     if(process){
@@ -96,9 +96,10 @@ panel.polarPlot <- function(x = NULL, y = NULL, r = NULL, theta = NULL, ...,
 ###################
 
         if(extra.args$local.scales)
-            if(is.function(extra.args$local.scales.panel))
+            if(is.function(extra.args$local.scales.panel)){
                 do.call(extra.args$local.scales.panel, extra.args)
-
+                extra.args$grid <- NULL
+            }
         do.call(data.panel, extra.args)
     }
 }
@@ -108,15 +109,15 @@ panel.polarPlot <- function(x = NULL, y = NULL, r = NULL, theta = NULL, ...,
 ###########################
 ##panel.polarFRame
 ##panel.panelAxes
-##panel.polarGrids
+##panel.polarGrid
 ##panel.polarLabels
 ###########################
 ###########################
 
 
-panel.polarFrame <- function(..., grids = TRUE, axes = TRUE, labels = TRUE, 
+panel.polarFrame <- function(..., grid = TRUE, axes = TRUE, labels = TRUE, 
          panel.scales = NULL,
-         grids.panel = panel.polarGrids, 
+         grid.panel = panel.polarGrid, 
          axes.panel = panel.polarAxes, 
          labels.panel = panel.polarLabels
 ){
@@ -125,7 +126,7 @@ panel.polarFrame <- function(..., grids = TRUE, axes = TRUE, labels = TRUE,
 
 ####################################
 #might need to rethink this
-#temp fix so grids has range like 
+#temp fix so grid has range like 
 #default
 ####################################
 
@@ -138,9 +139,9 @@ panel.polarFrame <- function(..., grids = TRUE, axes = TRUE, labels = TRUE,
 #####################################
 
 
-    if(isGood4LOA(grids))
-           grids.panel(rlim=extra.args$rlim, grids.theta=(0:12)*30, 
-                       panel.scales = panel.scales, grids = grids) 
+    if(isGood4LOA(grid))
+           grid.panel(rlim=extra.args$rlim, grid.theta=(0:12)*30, 
+                       panel.scales = panel.scales, grid = grid) 
            
     if(isGood4LOA(axes))
            axes.panel(rlim=extra.args$rlim, axes.theta=(0:3)*90, 
@@ -178,8 +179,8 @@ panel.polarAxes <- function(axes.theta = NULL, axes.r = NULL,
 
     if(!is.null(theta.par$theta))
         axes.theta <- theta.par$theta
-    if(!is.null(theta.par$grids.theta))
-        axes.theta <- theta.par$grids.theta
+    if(!is.null(theta.par$grid.theta))
+        axes.theta <- theta.par$grid.theta
     if(is.null(axes.theta)){
         axes.theta <- if(!is.null(theta.par$at))
                            theta.par$at else
@@ -195,8 +196,8 @@ panel.polarAxes <- function(axes.theta = NULL, axes.r = NULL,
 
     if(!is.null(r.par$r))
         axes.r <- r.par$r
-    if(!is.null(r.par$grids.r))
-        axes.r <- r.par$grids.r
+    if(!is.null(r.par$grid.r))
+        axes.r <- r.par$grid.r
     if(is.null(axes.r)){
         axes.r <- if(!is.null(r.par$at))
                         r.par$at else
@@ -219,7 +220,7 @@ panel.polarAxes <- function(axes.theta = NULL, axes.r = NULL,
 #    }
 
 ##mix fix
-##same in polar.polarGrids
+##same in polar.polarGrid
 
 
     for(i in axes.theta){
@@ -247,20 +248,20 @@ panel.polarAxes <- function(axes.theta = NULL, axes.r = NULL,
 ##############################################
 
 
-panel.polarGrids <- function(grids.theta = NULL, grids.r = NULL,
+panel.polarGrid <- function(grid.theta = NULL, grid.r = NULL,
          thetalim = NULL, rlim = NULL, ..., 
-         grids = NULL, panel.scales = NULL){
+         grid = NULL, panel.scales = NULL){
 
 ######################
 #might want to rethink this
-#for grids being the ....
-#then grids.theta could be dropped
+#for grid being the ....
+#then grid.theta could be dropped
 
 
     extra.args <- list(...)
 
     if (!is.list(panel.scales)) panel.scales <- list()
-    if (!is.list(grids)) grids <- list()
+    if (!is.list(grid)) grid <- list()
 
     panel.scales <- listUpdate(list(draw = TRUE, arrows = FALSE, tick.number = 5, 
                                     abbreviate = FALSE, minlength = 4, tck = 1, 
@@ -268,7 +269,7 @@ panel.polarGrids <- function(grids.theta = NULL, grids.r = NULL,
                               panel.scales)
 
     theta.par <- getPlotArgs("axis.line", local.resets = panel.scales,
-                             user.resets = grids, elements = "theta",
+                             user.resets = grid, elements = "theta",
                              defaults.only = FALSE)
    
 ##################
@@ -276,11 +277,11 @@ panel.polarGrids <- function(grids.theta = NULL, grids.r = NULL,
 ##################
 
     if(!is.null(theta.par$theta))
-        grids.theta <- theta.par$theta
-    if(!is.null(theta.par$grids.theta))
-        grids.theta <- theta.par$grids.theta
-    if(is.null(grids.theta)){
-        grids.theta <- if(!is.null(theta.par$at))
+        grid.theta <- theta.par$theta
+    if(!is.null(theta.par$grid.theta))
+        grid.theta <- theta.par$grid.theta
+    if(is.null(grid.theta)){
+        grid.theta <- if(!is.null(theta.par$at))
                            theta.par$at else
                                if(!is.null(thetalim))
                                    pretty(thetalim, theta.par$tick.number) else
@@ -288,7 +289,7 @@ panel.polarGrids <- function(grids.theta = NULL, grids.r = NULL,
     }
 
     r.par <- getPlotArgs("axis.line", local.resets = panel.scales,
-                         user.resets = grids, elements = "r", 
+                         user.resets = grid, elements = "r", 
                          defaults.only=FALSE)
 
     
@@ -299,11 +300,11 @@ panel.polarGrids <- function(grids.theta = NULL, grids.r = NULL,
 
 
     if(!is.null(r.par$r))
-        grids.r <- r.par$r
-    if(!is.null(r.par$grids.r))
-        grids.r <- r.par$grids.r
-    if(is.null(grids.r)){
-        grids.r <- if(!is.null(r.par$at))
+        grid.r <- r.par$r
+    if(!is.null(r.par$grid.r))
+        grid.r <- r.par$grid.r
+    if(is.null(grid.r)){
+        grid.r <- if(!is.null(r.par$at))
                         r.par$at else
                             if(!is.null(rlim))
                                 pretty(rlim, r.par$tick.number) else
@@ -314,9 +315,9 @@ panel.polarGrids <- function(grids.theta = NULL, grids.r = NULL,
     #make the arc grid.r 
 
 
-    for(i in grids.r){
-        theta <- seq(min(grids.theta), max(grids.theta), 
-                     length.out = 10 * (max(grids.theta)-min(grids.theta)))
+    for(i in grid.r){
+        theta <- seq(min(grid.theta), max(grid.theta), 
+                     length.out = 10 * (max(grid.theta)-min(grid.theta)))
         r <- rep(i, length(theta))
         x <- r * sin(pi * theta/180)
         y <- r * cos(pi * theta/180)
@@ -328,10 +329,10 @@ panel.polarGrids <- function(grids.theta = NULL, grids.r = NULL,
 ##minor origin fix
 ##same in panel.polarAxes
 
-    for(i in grids.theta){
+    for(i in grid.theta){
         theta <- c(0, i)
-#        r <- c(min(grids.r), max(grids.r))
-        r <- c(0, max(grids.r)) 
+#        r <- c(min(grid.r), max(grid.r))
+        r <- c(0, max(grid.r)) 
         x <- r * sin(pi * theta/180)
         y <- r * cos(pi * theta/180)
         temp <- listUpdate(list(x=x, y=y, col="grey"), r.par)
@@ -368,8 +369,8 @@ panel.polarLabels <- function(labels.theta = NULL, labels.r = NULL,
     
     if(!is.null(theta.par$theta))
         labels.theta <- theta.par$theta
-    if(!is.null(theta.par$grids.theta))
-        labels.theta <- theta.par$grids.theta
+    if(!is.null(theta.par$grid.theta))
+        labels.theta <- theta.par$grid.theta
     if(is.null(labels.theta)){
         labels.theta <- if(!is.null(theta.par$at))
                            theta.par$at else
@@ -386,8 +387,8 @@ panel.polarLabels <- function(labels.theta = NULL, labels.r = NULL,
 
     if(!is.null(r.par$r))
         labels.r <- r.par$r
-    if(!is.null(r.par$grids.r))
-        labels.r <- r.par$grids.r
+    if(!is.null(r.par$grid.r))
+        labels.r <- r.par$grid.r
     if(is.null(labels.r)){
         labels.r <- if(!is.null(r.par$at))
                         r.par$at else

@@ -5,7 +5,7 @@
 #loaPlot - main function
 #panel.loaPlot
 #panel.loaPlot2
-#panel.loaGrids
+#panel.loaGrid
 
 
 #######################
@@ -387,12 +387,15 @@ panel.loaPlot <- function(..., loa.settings = FALSE){
         extra.args$zcases <- NULL
     }
 
-    if(isGood4LOA(extra.args$grids))
-        panel.loaGrids(panel.scales = extra.args$panel.scales, grids = extra.args$grids) 
+    if(isGood4LOA(extra.args$grid))
+        panel.loaGrid(panel.scales = extra.args$panel.scales, grid = extra.args$grid) 
 
     extra.args$col <- do.call(colHandler, extra.args)
     extra.args$cex <- do.call(cexHandler, extra.args)
     extra.args$pch <- do.call(pchHandler, listUpdate(extra.args, list(z=NULL)))
+
+#dissable xyplot(..., grid)
+    extra.args$grid <- NULL
  
     do.call(panel.xyplot, extra.args)
  }
@@ -405,44 +408,48 @@ panel.loaPlot <- function(..., loa.settings = FALSE){
 #########################################################
 #
 
-panel.loaGrids <- function(grids.x = NULL, grids.y = NULL,
+panel.loaGrid <- function(grid.x = NULL, grid.y = NULL,
          xlim = NULL, ylim = NULL, ..., 
-         grids = NULL, panel.scales = NULL){
+         grid = NULL, panel.scales = NULL){
 
 ######################
-#might want to rethink this
-#for grids being the ....
-#then grids.theta could be dropped
+#this needs fixing so it works like panel.polarPlot, etc
+#also for grid and ....
+#grid.x/y could be dropped?
 
 
     extra.args <- list(...)
 
     if (!is.list(panel.scales)) panel.scales <- list()
-    if (!is.list(grids)) grids <- list()
+    if (!is.list(grid)) grid <- list()
 
     panel.scales <- listUpdate(list(draw = TRUE, arrows = FALSE, tick.number = 5, 
                                     abbreviate = FALSE, minlength = 4, tck = 1, 
                                     col = "lightgrey", col.line = 1, cex = 0.8), 
                               panel.scales)
 
-    x.par <- getPlotArgs("axis.line", local.resets = panel.scales,
-                             user.resets = grids, elements = "x",
-                             defaults.only = FALSE)
-   
-    y.par <- getPlotArgs("axis.line", local.resets = panel.scales,
-                         user.resets = grids, elements = "y", 
-                         defaults.only=FALSE)
+#####################################
+#this needs tidying
+#it works but could be more stable
+#####################################
 
-##########################
-##########################
-##this needs fixing
-##########################
-##########################
+    temp <- listUpdate(grid, grid.x)
+    temp$v = -1
+    temp$h = 0
 
-#not linked to x and y scale settings.
+    x.par <- getPlotArgs("axis.line", local.resets = panel.scales, 
+        user.resets = temp, elements = "x", defaults.only = FALSE)
+    x.par$col.line <- x.par$col
+    do.call(panel.grid, x.par)
 
-    #temp versios
-    panel.grid()
+    temp <- listUpdate(grid, grid.y)
+    temp$v = 0
+    temp$h = -1
+
+    y.par <- getPlotArgs("axis.line", local.resets = panel.scales, 
+        user.resets = temp, elements = "y", defaults.only = FALSE)
+    y.par$col.line <- y.par$col
+    do.call(panel.grid, y.par)
 
 }
 

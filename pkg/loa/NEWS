@@ -2,8 +2,8 @@ Changes in loa 0.2.9 [2013-06-30]
 =====================================
 
 *       draw.loaColorRegionsKey added
-*       panel.loaGrids added
-        (allows grids=T, etc from loaPlot)
+*       panel.loaPlotGrid added
+        (loaPlot(..., grid=T), etc now uses this)
 *       formulaHandler update
         (new options, output and panel.zcases 
         added)
