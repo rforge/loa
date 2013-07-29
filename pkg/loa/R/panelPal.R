@@ -173,6 +173,40 @@ panelPal <- function(ans, panel = NULL, preprocess = FALSE,
     if(!"ylim" %in% names(ans$panel.args.common))
         ans$panel.args.common$ylim <- ans$y.limits
 
+#new bit - testing
+
+#make zcase.sublim
+#need to rethink labels so 
+#zcase.sublim named to say 
+#unique, etc if not range
+  
+    #note: this is pre-rearrange
+
+    if("z" %in% names(ans$panel.args.common) && "zcases" %in% names(ans$panel.args.common)){
+        #have inputs to make zcase.sublim
+        if(!"zcase.zlim" %in% names(ans$panel.args.common)){
+            #for each panel get the range (or unique) of z
+            if(!"zcase.ids" %in% ans$panel.args.common){
+                ans$panel.args.common$zcase.ids <- if(is.factor(ans$panel.args.common$zcases))
+                                                       levels(ans$panel.args.common$zcases) else 
+                                                           sort(unique(ans$panel.args.common$zcases))
+                #might want to rethink the sort
+                #for some cases
+
+#track down where else this is generated
+#conmpare outputs
+
+            }
+            temp <- lapply(ans$panel.args.common$zcase.ids, function(x) { 
+                               temp <- ans$panel.args.common$z[ans$panel.args.common$zcases==x]
+                               if(is.numeric(temp)) range(temp) else 
+                                   if(is.factor(temp)) levels(temp) else 
+                                       unique(temp)
+                               #might need to rethink this
+                           })
+            ans$panel.args.common$zcase.zlim <- temp
+        }
+    }
 
     loa.settings <- list()
 
@@ -187,7 +221,7 @@ panelPal <- function(ans, panel = NULL, preprocess = FALSE,
                 "group.elements", "group.ids", "group.args", 
                 "allowed.scales", "disallowed.scales", "panel.scales",
                 "reset.xylims", "load.lists", "lim.borders",
-                "zcase.ids", "zcase.args")
+                "zcase.ids", "zcase.args", "zcase.zlim")
     ignore <- unique(ignore, loa.settings$common.args)
 
     temp <- listUpdate(ans$panel.args.common, list(loa.settings = loa.settings, 
@@ -383,9 +417,15 @@ panelPal <- function(ans, panel = NULL, preprocess = FALSE,
 #################################################
 #################################################
 
+    ###########################
+    #update other lims/uniques
+    ###########################
 
+#could make this tidier
+#could this bit be done better at start?
 
-#update other lims/uniques
+#compare this and new bit and see if 
+#complexity is needed
 
     #get names of elements in panel.args[[1]] that are numeric
     ranges <- sapply(names(ans$panel.args[[1]]), 
@@ -425,6 +465,9 @@ panelPal <- function(ans, panel = NULL, preprocess = FALSE,
         ans$panel.args.common <- listUpdate(ans$panel.args.common, temp)    
     }
 
+    #################
+    #add in key
+    #################
 
     if(is.list(legend)){
         legend[[1]]$args$key <- listUpdate(legend[[1]]$args$key, ans$panel.args.common)                 
@@ -432,12 +475,7 @@ panelPal <- function(ans, panel = NULL, preprocess = FALSE,
         ans <- update(ans, legend = legend)
     }
 
-
-
-
-return(ans)
-
-
+    return(ans)
 
 }
 

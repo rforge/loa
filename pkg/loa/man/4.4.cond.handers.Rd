@@ -8,6 +8,7 @@
 \alias{groupsHandler}
 \alias{zcasesHandler}
 \alias{groupsAndZcasesHandler}
+\alias{stepwiseZcasesGlyphHandler}
 
 
 
@@ -31,7 +32,6 @@
   groupsAndZcasesPanelHandler(panel=NULL, ..., 
          plot = TRUE, process = TRUE)  
 
-
   groupsHandler(z = NULL, groups = NULL, ..., group.ids = NULL, 
          handler = "zzz")
 
@@ -39,6 +39,9 @@
          handler = "zzz")
 
   groupsAndZcasesHandler(..., loa.settings = NULL)
+
+  stepwiseZcasesGlyphHandler(zcases = NULL, ..., zcase.ids = NULL, 
+         panel.elements = NULL, loaGlyph = NULL)
 
 }
 
@@ -60,9 +63,10 @@
 
    }
 
-   \item{plot, process}{Passed to and handled by \code{\link{panelPal}}. For panels that can be 
-   preprocessed, these turn off or one processing and the plotting steps of the panel code. See 
-   \code{\link{panelPal}} Help documentation from further details. 
+   \item{plot, process, loa.settings}{Passed to and handled by \code{\link{panelPal}}. 
+   For panels that can be preprocessed, \code{plot} and \code{process} turn off or 
+   on processing and the plotting steps of the panel code. See \code{\link{panelPal}} Help 
+   documentation from further details. 
    }
 
 
@@ -74,8 +78,22 @@
    zcase condition. 
    }
 
-  \item{z, group.ids, handler, zcases.ids, loa.settings}{[TO BE DOCUMENTED]
+  \item{z, handler}{ The \code{z} data series and any associated plot arguments that 
+   need special handling.
   }
+
+  \item{group.ids, zcases.ids, zcase.ids}{ If given, vectors of the unique cases in 
+   \code{groups} and \code{zcases}, respectively.
+  }
+
+  \item{panel.elements}{ If given, the names of all plot arguments that have been 
+   vectorized by \code{panelPal}.
+  }
+
+  \item{loaGlyph}{ (For \code{stepwiseZcasesGlyphHandler} only), the loa glyph to 
+   drawn. See \code{\link{loa.glyphs}} for further details.
+  }
+  
 
 }
 
@@ -96,7 +114,10 @@
    and \code{z2} cases in the plot \code{loaPlot(z1+z2~x*y)}.
 
   \code{groupsAndZcasesPanelHandler} is a wrapper for \code{groups} and \code{zcase} that 
-  allows users to simultaneously and uniquely handle both types of conditioning. 
+  allows users to simultaneously and uniquely handle both types of conditioning.
+
+  \code{stepwiseZcasesGlyphHandler} is a \code{...Handler} function for generating gylph plots 
+  based on multiple z inputs. 
  
 }
 
@@ -105,9 +126,6 @@
   All \code{..PanelHandlers} functions are intended for use with \code{\link{panelPal}}. 
   Using different combinations of these allows plot developers a high degree of 
   flexibility. 
-
-  [DOCUMENT FURTHER]
-
    
 }
 

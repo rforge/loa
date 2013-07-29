@@ -64,6 +64,10 @@ export(panel.polarAxes)
 export(panel.polarGrid)
 export(panel.polarLabels)
 
+#glyphs
+export(panel.zcasePieSegmentPlot)
+
+
 #formulas
 export(formulaHandler)
 export(stripHandler)
@@ -83,6 +87,7 @@ export(condsPanelHandler)
 export(groupsHandler)
 export(zcasesHandler)
 export(groupsAndZcasesHandler)
+export(stepwiseZcasesGlyphHandler)
 
 #scales.handlers
 export(limsHandler)
@@ -111,6 +116,12 @@ export(listHandler)
 export(listUpdate)
 export(listExpand)
 export(listLoad)
+
+
+#loa.shapes/glyphs
+export(loaPolygon)
+export(loaCircle)
+export(loaPieSegment)
 
 
 #plot.interactives

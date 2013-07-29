@@ -370,6 +370,12 @@ groupsHandler <- function(z = NULL, groups = NULL, ..., group.ids = NULL,
 
 ############################################
 
+#fix
+################################
+#to be checked should this
+#be zcases.ids or zcase.ids
+################################
+
 
 zcasesHandler <- function(z = NULL, zcases = NULL, ..., zcases.ids = NULL, 
                           handler = "zzz"){
@@ -468,6 +474,110 @@ groupsAndZcasesHandler <- function(..., loa.settings = NULL){
 
 
 
+
+
+
+
+###########################################################
+
+
+
+stepwiseZcasesGlyphHandler <- function(zcases = NULL, ..., zcase.ids = NULL, 
+                              panel.elements = NULL, loaGlyph = NULL){
+
+    #########################
+    #stepwise Glyph handler 
+    #where glyph elements are 
+    #by zcases
+    #########################
+
+    ######################
+    #set up
+    ######################
+
+    extra.args <- list(...)
+
+
+    #########################
+    #checks
+    #########################
+
+    if(is.null(zcases)){
+
+        #stop?
+
+    }
+    
+    if(is.null(loaGlyph)){
+
+        #stop?
+
+    }
+
+    if(is.null(panel.elements)){
+
+        #make a substitute panel.elements
+
+    }
+
+    if(is.null(zcase.ids)){
+
+       #make substitute zcase.ids
+       zcase.ids <- if(is.factor(zcases)) 
+                        levels(zcases) else unique(zcases)
+
+    }
+
+
+    #######################
+    #main variables
+    #######################
+
+    zcase.count <- length(zcase.ids)
+    zcase.len <- max(sapply(zcase.ids, function(x) length(extra.args$x[zcases==x])))
+
+    #might want to think about warning if different x cases are different
+    #might want to drop x from test?
+    #this would simplify if we assumed all zcases were same length
+    #which I think we can?
+
+    for(a in 1:zcase.len){
+    
+        for(b in 1:zcase.count){
+
+            temp <- extra.args
+
+            temp$zrow.ids <- temp$z[seq(a, length(extra.args$z), zcase.len)]
+
+            for(i in panel.elements){
+
+                temp[[i]] <- temp[[i]][zcases == zcase.ids[b]][a]
+
+            }
+
+            if("zcase.args" %in% names(extra.args)){
+
+                for(i in extra.args$zcase.args){
+
+                    temp[[i]] <- extra.args[[i]][zcase.ids==zcase.ids[b]]
+
+                }
+
+            }
+
+    #could move a lot of the following out of formals?
+ 
+            temp$zcase.ref <- c(b, zcase.count)
+            temp$zcase.ids <- zcase.ids
+            temp$count.ref <- c(a, zcase.len)
+
+            do.call(loaGlyph, temp)
+
+        }
+    
+    }
+
+}
 
 
 

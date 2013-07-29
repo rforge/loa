@@ -226,32 +226,38 @@ loaPlot(a~a*b, panel = panel.binPlot)
 ## example 2
 ## automatic subscripting with loa
 
-# some data
+# Other arguments are not automatically 
+# aligned with the main plots. 
+
+# For example, consider the data:
 
 a <- 1:10
 ref <- rep(1:2, each=5)
 
-# lattice xyplot loaPlot output
+# and associated lattice xyplot output:
 
 xyplot(a~a|ref, col=ref, pch=19)
 
-# note that the 'col' argument does not 
+# Here, the 'col' argument does not 
 # automatically track plot conditioning. 
 
-# with lattice plots you need to assign
+# With lattice plots you need to assign
 # arguments you want to track in this 
 # manner using subscripts, as discussed 
-# in Lattice, Chapter 5.
+# in Lattice Chapter 5.
 
-# now compare a similar loaPlot
+# Now compare a similar loaPlot:
 
 loaPlot(~a*a|ref, col=ref, pch=19)
 
-# the panelPal function automatically 
-# applies assumes subscripting
+# Here, panelPal automatically handles 
+# such subscripting. It extends this 
+# assumption to all supplied arguments.  
 
-# also try
+# For example, try
 # loaPlot(~a*a|ref, col=ref, pch=ref)
+# loaPlot(~a*a|ref, col=ref, pch=1:10)
+# etc
 
 
 
