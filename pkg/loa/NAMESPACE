@@ -64,7 +64,8 @@ export(panel.polarAxes)
 export(panel.polarGrid)
 export(panel.polarLabels)
 
-#glyphs
+#zcase glyph plot
+export(panel.zcasePiePlot)
 export(panel.zcasePieSegmentPlot)
 
 
@@ -110,6 +111,7 @@ export(keyHandler)
 export(draw.loaPlotZKey)
 export(draw.loaColorKey)
 export(draw.loaColorRegionsKey)
+export(draw.zcasePlotKey)
 
 #list.handlers
 export(listHandler)

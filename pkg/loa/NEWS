@@ -2,6 +2,7 @@ Changes in loa 0.2.9 [2013-06-30]
 =====================================
 
 *       loaPolygon, loaCircle, loaPieSegment added
+*       panel.zcasePiePlot
 *       panel.zcasePieSegmentPlot added
 *       draw.loaColorRegionsKey added
 *       panel.loaPlotGrid added

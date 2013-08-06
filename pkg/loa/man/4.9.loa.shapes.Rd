@@ -1,5 +1,6 @@
 \name{4.9.loa.shapes}
 \alias{4.9.loa.shapes}
+\alias{loa.shapes}
 \alias{loa.glyphs}
 \alias{loaPolygon}
 \alias{loaCircle}

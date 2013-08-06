@@ -1,5 +1,6 @@
 \name{2.3.specialist.panels}
 \alias{2.3.specialist.panels}
+\alias{panel.zcasePiePlot}
 \alias{panel.zcasePieSegmentPlot}
 
 
@@ -10,6 +11,9 @@
   In development specialist panel functions for generating zcase glyph structures
 }
 \usage{
+
+panel.zcasePiePlot(..., zcase.rescale=TRUE, 
+         loa.settings = FALSE)
 
 panel.zcasePieSegmentPlot(..., zcase.rescale=TRUE, 
          loa.settings = FALSE)
@@ -34,6 +38,8 @@ panel.zcasePieSegmentPlot(..., zcase.rescale=TRUE,
 \details{
 
   All these \code{panel...} functions generate glyphs using \code{z} inputs. 
+
+  The \code{panel.zcasePiePlot} generates... 
 
   The \code{panel.zcasePieSegmentPlot} generates... 
 

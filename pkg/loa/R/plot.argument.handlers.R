@@ -132,9 +132,24 @@ colHandler <- function(z = NULL, col = NULL,
          ..., zlim = NULL, output="col"){
 
 
+    #temp update test
+    extra.args <- list(...)
+
+    #scheme check
+    if("scheme" %in% names(extra.args) & !"par.settings" %in% names(extra.args))
+        extra.args$par.settings <- do.call(parHandler, extra.args)
+
+
     #check par.settings
-    if(is.null(col.regions) & !is.null(list(...)$par.settings))
-        col.regions <- list(...)$par.settings$regions$col
+#could refer these to extra.args not list(...)
+
+#    if(is.null(col.regions) & !is.null(list(...)$par.settings))
+#        col.regions <- list(...)$par.settings$regions$col
+
+
+    if(is.null(col.regions) & !is.null(extra.args$par.settings))
+        col.regions <- extra.args$par.settings$regions$col
+
 
     #if col.regions supplied
     if(!is.null(col.regions) && length(col.regions) < 100){

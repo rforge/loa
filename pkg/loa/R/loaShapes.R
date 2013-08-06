@@ -43,6 +43,20 @@ loaPolygon <- function(x, y, ..., polygon = NULL, loa.scale = NULL){
 #could give different default for polygon
 #diamond, circle, etc.
 
+    #new test
+    #have to do this because lpolygon hardcoded
+    #to border=TRUE="black"
+    extra.args <- list(...)
+    if(!"border" %in% names(extra.args))
+        extra.args$border <- do.call(getPlotArgs, 
+                                     listUpdate(extra.args, 
+                                     list(defaults.as="plot.polygon")))$border
+
+    if(!"col" %in% names(extra.args))
+        extra.args$col <- do.call(getPlotArgs, 
+                                  listUpdate(extra.args, 
+                                  list(defaults.as="plot.symbol")))$col
+
     if(is.null(polygon))
         polygon = list(x=c(1, 1, -1, -1), 
                        y=c(1, -1, -1, 1))
@@ -67,27 +81,34 @@ loaPolygon <- function(x, y, ..., polygon = NULL, loa.scale = NULL){
 
         #covert x and y scales to npc
 
-        x <- as.numeric(grid:::convertX(grid:::unit(x, "native"), "npc"))
-        y <- as.numeric(grid:::convertY(grid:::unit(y, "native"), "npc"))
+#        x <- as.numeric(grid:::convertX(grid:::unit(x, "native"), 
+#            "npc"))
+#        y <- as.numeric(grid:::convertY(grid:::unit(y, "native"), 
+#            "npc"))
+#        temp.fun <- function(x) x[2] - x[1]
+#        if ("scale" %in% names(loa.scale)) {
+#            polygon$x <- polygon$x * loa.scale$scale
+#            polygon$y <- polygon$y * loa.scale$scale
+#        }
+#        temp <- sapply(current.panel.limits("mm"), temp.fun)
+#        temp <- temp[2]/temp[1]
+#        x <- x + (polygon$x * temp)
+#        y <- y + polygon$y
+#        x <- as.numeric(grid:::convertX(grid:::unit(x, "npc"), 
+#            "native"))
+#        y <- as.numeric(grid:::convertY(grid:::unit(y, "npc"), 
+#            "native"))
 
-        #this is currently relative 
-        temp.fun <- function(x) x[2]-x[1]
-#        temp <- sapply(current.panel.limits("mm"), temp.fun)/sapply(current.panel.limits(), temp.fun)
-#        temp <- temp[1]/temp[2] 
+        #tested simplification
 
-        if("scale" %in% names(loa.scale)){
-            polygon$x <- polygon$x * loa.scale$scale
-            polygon$y <- polygon$y * loa.scale$scale
-        }
-
-        temp <- sapply(current.panel.limits("mm"), temp.fun)
-        temp <- temp[2]/temp[1]
-
-        x <- x + (polygon$x * temp)
-        y <- y + polygon$y  
-
-        x <- as.numeric(grid:::convertX(grid:::unit(x, "npc"), "native"))   
-        y <- as.numeric(grid:::convertY(grid:::unit(y, "npc"), "native"))   
+        temp <- current.panel.limits("native")
+        ref1 <- (temp[[1]][2]-temp[[1]][1])/50
+        ref2 <- (temp[[2]][2]-temp[[2]][1])/50
+        temp <- current.panel.limits("mm")
+        ref3 <- (temp[[2]][2]-temp[[2]][1])/
+                (temp[[1]][2]-temp[[1]][1])
+        x <- x + (polygon$x * ref1 * ref3)
+        y <- y + (polygon$y * ref2)
 
     } else {
 
@@ -98,9 +119,14 @@ loaPolygon <- function(x, y, ..., polygon = NULL, loa.scale = NULL){
 
     }
 
-    lpolygon(x, y, ...)
+    do.call(lpolygon, listUpdate(list(x=x, y=y), extra.args))
 
 }
+
+
+#######################################
+#loaCircle
+#######################################
 
 
 loaCircle <- function(..., polygon = NULL, radius = 1){
@@ -116,6 +142,11 @@ loaCircle <- function(..., polygon = NULL, radius = 1){
     do.call(loaPieSegment, extra.args)
 
 }
+
+
+######################################
+#loaPieSegment
+######################################
 
 
 loaPieSegment <- function(..., polygon = NULL, start = 0, angle=360, radius = 1, center=TRUE){

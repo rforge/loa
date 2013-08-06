@@ -302,7 +302,7 @@ panel.loaPlot2 <- function(..., loa.settings = FALSE){
     if(loa.settings)
         return(list(group.args= c("col"),
                     zcase.args= c("pch"),
-                    default.settings = list(key.fun = "draw.loaPlotZKey")))
+                    default.settings = list(key = "draw.loaPlotZKey")))
 
 
 

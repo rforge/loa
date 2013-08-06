@@ -4,6 +4,7 @@
 \alias{draw.loaPlotZKey}
 \alias{draw.loaColorKey}
 \alias{draw.loaColorRegionsKey}
+\alias{draw.zcasePlotKey}
 
 \title{
   Key handling
@@ -23,6 +24,8 @@ draw.loaPlotZKey(key = NULL, draw = FALSE, vp = NULL, ...)
 draw.loaColorKey(key = NULL, draw = FALSE, vp = NULL, ...)
 
 draw.loaColorRegionsKey(key = NULL, draw = FALSE, vp = NULL, ...)
+
+draw.zcasePlotKey(key = NULL, draw = FALSE, vp = NULL, ...)
 
 }
 
@@ -59,7 +62,9 @@ draw.loaColorRegionsKey(key = NULL, draw = FALSE, vp = NULL, ...)
 
   \code{draw.loaColorKey} and \code{draw.loaColorRegionsKey} are variations 
   on the \code{draw.colorkey} function in \code{\link{lattice}}.
-  
+
+  \code{draw.zcasePlotKey} is a simple legend based on \code{zcase} 
+  annotation.
      
 }
 

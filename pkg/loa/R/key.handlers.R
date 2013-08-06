@@ -1,15 +1,24 @@
 #in development code
 #[TBC - NUMBER] functions 
 
-#keyHandong
+#key Handling
 
 #do properly
 
 
+#urgent 
+##################
+#tidy all of these
+#
+
+#
+
+
+
 
 ###########################
 ###########################
-#
+#keyHandler
 ###########################
 ###########################
 
@@ -39,8 +48,9 @@ keyHandler <- function(key = NULL, ..., output = "key"){
     key <- if(is.list(key)) key else 
                if(is.null(key)) list() else 
                    if(is.logical(key) && key) list() else 
-                       FALSE
-
+                       if(is.character(key) | is.function(key))
+                           list(fun=key) else
+                               FALSE
 
 
     if(isGood4LOA(key)){
@@ -169,7 +179,227 @@ draw.loaColorRegionsKey <- function (key = NULL, draw = FALSE, vp = NULL, ...){
 
 
 
+######################################
+######################################
+##draw.zcasePlotKey
+######################################
+######################################
 
+
+draw.zcasePlotKey <- function (key = NULL, draw = FALSE, vp = NULL, ...) 
+{
+    extra.args <- list(...)
+
+    if (!is.list(key)) {
+        warning("suspect key ignored", call. = FALSE)
+        return(nullGrob())
+    }
+
+    if(!"zcase.ids" %in% names(key)){
+        key$zcase.ids <- if("zlab" %in% names(key))
+                             key$zlab else " "
+    }
+
+    #taken from draw.loaPlotZKey
+    #could simplify this
+
+    z.main <- nullGrob()
+    z.main.ht <- unit(0.01, "cm")
+    zcases.main.ht <- z.main.ht
+    zcases.main.wd <- z.main.ht
+    zcases.elements <- z.main
+    zcases.elements.ht <- z.main.ht
+    zcases.elements.wd <- z.main.ht
+    zcases.labels <- z.main
+    zcases.labels.ht <- z.main.ht
+    zcases.labels.wd <- z.main.ht
+
+    temp <- key$panel.elements
+    z.check <- if (is.null(temp)) 
+        FALSE
+    else if ("z" %in% temp) 
+        TRUE
+    else FALSE
+    z.check <- FALSE
+
+    z <-list()
+
+
+#this is where zcases starts
+#in the original code
+
+    zcases.temp <- key[grep("^zcases[.]", names(key))]
+    names(zcases.temp) <- gsub("^zcases[.]", "", names(zcases.temp))
+    zcases <- if (!"zcases" %in% names(key)) 
+        list()
+    else if (is.list(key$zcases)) 
+        key$zcases
+    else if (is.logical(key$zcases) && key$zcases) 
+        list()
+    else FALSE
+
+
+    zcases <- if (is.logical(zcases) && !zcases) 
+        zcases
+    else if (is.list(zcases)) 
+        listUpdate(zcases, zcases.temp)
+    else zcases.temp
+    if (is.list(zcases) && !"at" %in% names(zcases)) 
+        zcases$at <- key$zcase.ids
+    if (is.list(zcases) && length(zcases) > 0) {
+
+
+#could simplify this
+#currently needs 
+#key.zcases.main to reset name
+#but key.main should be enough
+
+        if (!"main" %in% names(zcases)) 
+            zcases$main <- "zcases"
+        if (!"labels" %in% names(zcases)) 
+            zcases$labels <- if (is.null(zcases$at)) 
+                NULL
+            else as.character(zcases$at)
+
+ 
+        zcases$col <- if ("col" %in% names(key)) 
+                key$col
+            else if (is.null(z$col)) 
+                do.call(colHandler, listUpdate(key, list(z = NULL, 
+                  ref = 1:length(zcases$labels))))
+            else z$col[1]
+
+#might not track if multiple cols are set 
+#not zcases as set.
+       
+        zcases$border <- if("border" %in% names(key))
+                    key$border else 
+                    getPlotArgs("plot.polygon")$border
+
+        
+#        if (!"cex" %in% names(zcases)) 
+#            zcases$cex <- if ("cex" %in% key$zcase.args) 
+#                key$cex
+#            else if (is.null(z$cex)) 
+#                do.call(cexHandler, listUpdate(key, list(z = NULL, 
+#                  ref = 1:length(zcases$labels))))
+#            else z$cex[1]
+
+#        if (!"pch" %in% names(zcases)) 
+#            zcases$pch <- if ("pch" %in% key$zcase.args) 
+#                key$pch
+#            else if (is.null(z$pch)) 
+#                do.call(pchHandler, listUpdate(key, list(z = NULL, 
+#                  ref = 1:length(zcases$labels))))
+#            else z$pch[1]
+
+
+         #don't need these
+
+         zcases$cex<-3
+         zcases$pch<-15
+
+        if (isGood4LOA(zcases$main)) {
+            txt <- zcases$main[[1]][[1]]
+            temp <- if (is.list(zcases$main)) 
+                listUpdate(list(cex = 1.1), zcases$main)
+            else list(cex = 1.1)
+            txt.settings <- getPlotArgs("axis.text", user.resets = temp)
+            zcases.main <- textGrob(txt, gp = do.call(gpar, txt.settings))
+            zcases.main.ht <- unit(2, "grobheight", data = list(zcases.main))
+            zcases.main.wd <- unit(1.1, "grobwidth", data = list(zcases.main))
+        }
+        if (isGood4LOA(zcases$col) & isGood4LOA(zcases$cex) & 
+            isGood4LOA(zcases$pch)) {
+
+            len <- length(key$zcase.ids)
+
+            temp <- rep(zcases$cex, length.out = len) * 0.8
+            y <- rep(temp/2, each = 2)
+            y <- y + 0.5
+            if (isGood4LOA(zcases$labels)) {
+                y[y < 1] <- 1
+            }
+            ht <- sum(y)
+            y <- cumsum(y)
+            y <- y[seq(1, length(y), 2)]/ht
+            x <- rep(0.5, length(y))
+
+#this should be tidied
+
+             x1 <- rep(c(0.2, 0.2, 0.8, 0.8), len)
+             y1 <- rep(c(0.2, 0.8, 0.8, 0.2), len)
+             y1 <- y1 + rep(0:(len-1), each=4)
+             y1 <- y1/(max(y1)+0.2)
+
+            zcases.elements <- polygonGrob(x = x1, y = y1,
+                  id.lengths=rep(4,len),  
+                  default.units = "npc", gp = gpar(fill = rep(zcases$col, 
+                  length.out = len), col =rep(zcases$border, len)))
+
+
+#            zcases.elements <- pointsGrob(x = x, y = y, pch = rep(zcases$pch, 
+#                length.out = len), size = unit(par("cex"), "char"), 
+#                default.units = "npc", gp = gpar(col = rep(zcases$col, 
+#                  length.out = len), cex = temp * 0.8))
+
+            zcases.elements.ht <- unit(ht/4, "cm")
+            zcases.elements.wd <- unit(max(zcases$cex)/4, "cm")
+
+        }
+        if (isGood4LOA(zcases$labels)) {
+            txt <- if (is.list(zcases$labels)) 
+                zcases$labels[[1]]
+            else zcases$labels
+            temp <- if (is.list(zcases$labels)) 
+                listUpdate(list(cex = 1), zcases$labels)
+            else list(cex = 1)
+            txt.settings <- getPlotArgs("axis.text", user.resets = temp)
+            zcases.labels <- textGrob(txt, x = 0, y = y, just = c("left", 
+                "centre"), gp = do.call(gpar, txt.settings), 
+                default.units = "npc")
+            zcases.labels.ht <- unit(1.1, "grobheight", data = list(zcases.labels))
+            zcases.labels.wd <- unit(1.1, "grobwidth", data = list(zcases.labels))
+        }
+    }
+
+
+    scales.ht <- unit.c(zcases.main.ht, zcases.elements.ht)
+
+#simplify
+    temp1 <- max(zcases.elements.wd)
+    temp2 <- max(zcases.labels.wd)
+    temp3 <- max(zcases.main.wd)
+    if (as.numeric(convertX(temp1 + temp2, "cm")) > as.numeric(convertX(temp3, 
+        "cm"))) {
+        scales.wd <- unit.c(temp1, temp2)
+    }
+    else {
+        scales.wd <- unit.c(temp1, temp3 - temp2)
+    }
+    key.layout <- grid.layout(nrow = 2, ncol = 2, heights = scales.ht, 
+        widths = scales.wd, respect = TRUE, just = "right")
+    key.gf <- frameGrob(layout = key.layout, vp = vp)
+    key.gf <- placeGrob(key.gf, zcases.main, row = 1, col = 1:2)
+    key.gf <- placeGrob(key.gf, zcases.elements, row = 2, col = 1)
+    key.gf <- placeGrob(key.gf, zcases.labels, row = 2, col = 2)
+    key.gf
+}
+
+
+
+
+
+
+
+
+
+
+
+#############################################################
+#############################################################
+##draw.loaPlotZKey
+#############################################################
 #############################################################
 
 
@@ -691,7 +921,7 @@ if(is.list(zcases) && length(zcases) > 0){
 ##################
 
     temp1 <- max(z.elements.wd, groups.elements.wd, zcases.elements.wd) 
-    temp2 <- max(z.labels.wd, groups.labels.wd, zcases.elements.wd)    
+    temp2 <- max(z.labels.wd, groups.labels.wd, zcases.labels.wd)    
     temp3 <- max(z.main.wd, groups.main.wd, zcases.main.wd)
     
     if(as.numeric(convertX(temp1 + temp2, "cm")) > as.numeric(convertX(temp3, "cm"))){
