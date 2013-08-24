@@ -34,7 +34,7 @@
   \code{lat.lon.meuse} was generated using method based on \code{mzn} object 
   production in \url{https://github.com/etes/Geoprocessing/blob/master/heatmap.R}.
 
-\code{ library(sp); library(gstat); library(rgdal)} \cr
+\code{library(sp); library(gstat); library(rgdal)} \cr
 \code{ data(meuse) } \cr 
 \code{ coordinates(meuse) =~ x + y } \cr 
 \code{ proj4string(meuse) = CRS("+init=epsg:28992") } \cr      

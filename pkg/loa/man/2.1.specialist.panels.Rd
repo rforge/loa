@@ -18,7 +18,7 @@ panel.kernelDensity(x, y, z = NULL, ..., n = 20,
 panel.binPlot(x = NULL, y = NULL, z = NULL, 
          breaks=20, x.breaks = breaks, y.breaks = breaks,
          x1=NULL, x2=NULL, y1=NULL, y2=NULL,
-         statistic = mean, ...,
+         statistic = mean, pad.grid = TRUE, ...,
          plot = TRUE, process = TRUE, loa.settings = FALSE 
          )
 
@@ -73,6 +73,10 @@ panel.binPlot(x = NULL, y = NULL, z = NULL,
   plot and a warning generated.  
  }
 
+ \item{pad.grid}{ For \code{panel.binPlot}, Logical, should empty bins be 
+  reported? If \code{TRUE}, they are reported as \code{NAs}; if \code{FALSE}, 
+  they are not reported.      
+ }
 
 } 
 
@@ -145,6 +149,9 @@ a <- rnorm(1000)
 b <- rnorm(1000)
 
 xyplot(a~b, panel = panel.kernelDensity)
+
+#or with loaPlot
+#loaPlot(~a*b, panel = panel.kernelDensity)
 
 #etc.
 

@@ -119,7 +119,7 @@ panel.kernelDensity <- function (x, y, z = NULL, ...,
 panel.binPlot <- function(x = NULL, y = NULL, z = NULL, 
          breaks=20, x.breaks = breaks, y.breaks = breaks,
          x1=NULL, x2=NULL, y1=NULL, y2=NULL,
-         statistic = mean, ...,
+         statistic = mean, pad.grid = TRUE, ...,
          plot = TRUE, process = TRUE, loa.settings = FALSE 
          ){
 
@@ -146,7 +146,7 @@ panel.binPlot <- function(x = NULL, y = NULL, z = NULL,
     if(loa.settings)
         return(list(group.args= c("col"),
                     zcase.args= c("pch"),
-                    common.args = c("breaks", "x.breaks", "y.breaks", "statistics"),
+                    common.args = c("breaks", "pad.grid", "x.breaks", "y.breaks", "statistics"),
                     default.settings = list(key.fun = "draw.loaColorKey")))
 
     extra.args <- list(...)
@@ -204,6 +204,9 @@ panel.binPlot <- function(x = NULL, y = NULL, z = NULL,
 
         ans <- aggregate(z, data.frame(x.case,y.case), statistic)
 
+#think about this
+#
+
         temp <- ans$x.case
         levels(temp) <- x.1.5
         x <- as.numeric(as.character(temp))
@@ -221,6 +224,29 @@ panel.binPlot <- function(x = NULL, y = NULL, z = NULL,
         y2 <- as.numeric(as.character(temp))
 
         z <- ans$x
+
+#check position of pad grid for 
+
+        #new bit re pad.grid
+        if(pad.grid){
+            
+            #add in the NA cases if padded grid out fully
+            #might replace this with a drop or na.action option later?
+
+            test <- expand.grid(list(x=x.1.5, y=y.1.5))
+            ans <- data.frame(x=x, y=y,z=z)
+            ans <- merge(test, ans, all=TRUE)
+
+            x <- ans$x
+            y <- ans$y
+            z <- ans$z
+            
+
+        }
+
+
+#think about x1, x2, y1, y2
+#do we need them?
 
         if(!plot)
             return(list(x=x, y=y, z=z, x1=x1, x2=x2, y1=y1, y2=y2))

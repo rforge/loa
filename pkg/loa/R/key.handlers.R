@@ -927,7 +927,8 @@ if(is.list(zcases) && length(zcases) > 0){
     if(as.numeric(convertX(temp1 + temp2, "cm")) > as.numeric(convertX(temp3, "cm"))){
         scales.wd <- unit.c(temp1, temp2)
     } else {
-        scales.wd <- unit.c(temp1, temp3 - temp2)
+#testing changes - temp2 to - temp1
+        scales.wd <- unit.c(temp1, temp3 - temp1)
     }
     
 ###    scales.wd <- unit.c(z.elements.wd, z.labels.wd)
