@@ -4,6 +4,8 @@
 #getXY
 #getLatLon
 
+#screenLatticePlot
+
 #NOTE: much borrowed from lattice 
 
 
@@ -116,5 +118,183 @@ getLatLon <- function(..., map = NULL, object = trellis.last.object(),
     getXY(..., scale.correction = scale.correction)
 }
 
+
+
+
+######################
+######################
+##screenLatticePlot
+######################
+######################
+
+#needs a lot of tidying but it is promising
+
+
+screenLatticePlot <- function(object = trellis.last.object(),...){
+#temp
+
+this.panel <- object$panel
+xlim <- object$x.limits
+ylim <- object$y.limits
+
+x.ref <- (max(xlim) - min(xlim))/20
+y.ref <- (max(ylim) - min(ylim))/20
+
+x1 <- (x.ref *18) + min(xlim)
+y1 <- (y.ref *18) + min(ylim) 
+
+x2 <- (x.ref *15) + min(xlim)
+y2 <- (y.ref *18) + min(ylim) 
+
+x3 <- (x.ref *12) + min(xlim)
+y3 <- (y.ref *18) + min(ylim) 
+
+x4 <- (x.ref *9) + min(xlim)
+y4 <- (y.ref *18) + min(ylim) 
+
+
+my.x <- c(NA, NA)
+my.y <- c(NA, NA)
+
+
+
+test <- FALSE
+
+while(!test){
+
+    test2 <- FALSE
+
+    temp <- object$x.limits
+    x.ref <- (max(temp) - min(temp))/20
+    x1 <- (x.ref *18) + min(temp)
+    x2 <- (x.ref *15) + min(temp)
+    x3 <- (x.ref *12) + min(temp)
+    x4 <- (x.ref *9) + min(temp)
+
+    temp <- object$y.limits
+    y.ref <- (max(temp) - min(temp))/20
+    y1 <- (y.ref *18) + min(temp)
+    y2 <- y1
+    y3 <- y1
+    y4 <- y1
+
+    polygon <- list(x=c(x.ref, x.ref, -x.ref, -x.ref),
+                    y=c(y.ref, -y.ref, -y.ref, y.ref))
+
+    control.panel <- function(...){
+        temp <- listUpdate(list(...), list(x=x1, y=y1, polygon=polygon, 
+                                       loa.scale=list(fit="absolute")))
+        do.call(loaPolygon, temp)
+        llines(x=c(x1+x.ref, x1-x.ref), y=c(y1+y.ref, y1-y.ref), col="green")
+
+        temp <- listUpdate(list(...), list(x=x2, y=y2, polygon=polygon, 
+                                           loa.scale=list(fit="absolute")))
+        do.call(loaPolygon, temp)
+        temp <- listUpdate(list(...), list(x=x3, y=y3, polygon=polygon, 
+                                           loa.scale=list(fit="absolute")))
+        do.call(loaPolygon, temp)
+
+        temp <- listUpdate(list(...), list(x=x4, y=y4, polygon=polygon, 
+                                           loa.scale=list(fit="absolute")))
+        do.call(loaPolygon, temp)
+
+    }
+
+    reaction.panel <- function(x=x, y=y, ...){
+         x <- na.omit(my.x)
+         y <- na.omit(my.y)
+
+         if(length(x)==1 && length(y)==1)
+             lpoints(x=x,y=y, cex=4, pch=3, col="black")
+
+         if(length(x)>1 && length(y)>1){
+             x0 <- c(max(x), max(x), min(x), min(x))
+             y0 <- c(max(y), min(y), min(y), max(y))
+             lpolygon(x=x0, y=y0)
+         } 
+
+    } 
+
+    object$panel <- function(...){
+        this.panel(...)
+        control.panel(...)
+        reaction.panel(...)
+    }
+
+    plot(object)
+
+    ans <- getXY(n=1)
+
+    if(!test){
+        if(length(ans$x)<1 || length(ans$y)<1){
+            output <- "cancelled"
+            test <- TRUE
+        }
+    }
+    if(!test){
+         if(ans$x > x1-x.ref & ans$x < x1+x.ref & ans$y > y1-y.ref & ans$y < y1+y.ref){
+                 test <- TRUE
+                 output <- "button" 
+         }
+    }
+
+    if(!test){
+         if(ans$x > x2-x.ref & ans$x < x2+x.ref & ans$y > y2-y.ref & ans$y < y2+y.ref){
+                 test <- TRUE
+                 output <- "button2" 
+         }
+    }
+
+
+    if(!test){
+         if(ans$x > x3-x.ref & ans$x < x3+x.ref & ans$y > y3-y.ref & ans$y < y3+y.ref){
+                 #test <- TRUE
+                 #output <- "button3"
+                 #zoom
+                if(length(na.omit(my.x))>1 && length(na.omit(my.y))>1){
+                    x0 <- c(max(my.x), max(my.x), min(my.x), min(my.x))
+                    y0 <- c(max(my.y), min(my.y), min(my.y), max(my.y))
+                    object$x.limits <- x0
+                    object$y.limits <- y0
+                    object$panel.args.common$xlim <- x0
+                    object$panel.args.common$ylim <- x0
+                    my.x <- c(NA,NA)
+                    my.y <- c(NA,NA)
+                    test2 <- TRUE
+                }  
+         }
+    }
+
+    if(!test){
+         if(ans$x > x4-x.ref & ans$x < x4+x.ref & ans$y > y4-y.ref & ans$y < y4+y.ref){
+                 #test <- TRUE
+                 #output <- "button4"
+                 #reset
+                 object$x.limits <- xlim
+                 object$y.limits <- ylim
+                 object$panel.args.common$xlim <- xlim
+                 object$panel.args.common$ylim <- ylim
+                 my.x <- c(NA,NA)
+                 my.y <- c(NA,NA)
+                 test2 <- TRUE             
+         }
+    }
+
+    if(!test & !test2){
+       my.x <- c(ans$x[1], my.x)[1:2]
+       my.y <- c(ans$y[1], my.y)[1:2]
+    }
+
+
+
+}
+
+print(output)
+
+#end
+object$panel <- this.panel
+object
+
+}
 
 

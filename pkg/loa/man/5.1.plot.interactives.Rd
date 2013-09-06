@@ -2,6 +2,7 @@
 \alias{5.1.plot.interactives}
 \alias{getXY}
 \alias{getLatLon}
+\alias{screenLatticePlot}
 
 \title{
   Interactive plot functions
@@ -18,6 +19,8 @@ getLatLon(..., map = NULL, object = trellis.last.object(),
                                 temp <- XY2LatLon(map, x$x, x$y)
                                 as.list(as.data.frame(temp))
                             })
+
+screenLatticePlot(object = trellis.last.object(), ...)
 
 }
 
@@ -82,7 +85,9 @@ getLatLon(..., map = NULL, object = trellis.last.object(),
 
   \code{getLatLon} is wrapper for \code{getXY} for use 
    with \code{GoogleMap} outputs and other similarly 
-   georeferenced plots. See Note below. 
+   georeferenced plots. See Note below.
+
+  \code{screenLatticePlot} is a crude plot screening function.  
      
 }
 
@@ -155,8 +160,6 @@ getLatLon(..., map = NULL, object = trellis.last.object(),
 ##example 2
 
 ##Move getLatLon code to examples
-
-
 
 
 }

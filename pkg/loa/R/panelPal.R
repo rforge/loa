@@ -399,6 +399,7 @@ panelPal <- function(ans, panel = NULL, preprocess = FALSE,
         }
    }
 
+
 ##new
    if("max.xylims" %in% reset.xylims){
         temp<- sqrt(c(ans$x.limits, ans$y.limits)^2)
@@ -464,6 +465,20 @@ panelPal <- function(ans, panel = NULL, preprocess = FALSE,
         names(temp) <- paste(ranges, "unique", sep="")
         ans$panel.args.common <- listUpdate(ans$panel.args.common, temp)    
     }
+
+##############
+#new
+##############
+    
+   if("zlim.in.ylim" %in% reset.xylims & !"ylim" %in% panel.checks){
+        if("zlim" %in% names(ans$panel.args.common)){
+            temp <- range(c(ans$panel.args.common$zlim, ans$y.limits))
+            temp <- limsHandler(y=temp, lim.borders=if(is.null(ans$panel.args.common$lim.borders)) 0.1 else ans$panel.args.common$lim.borders)$ylim
+            ans$panel.args.common$ylim <- temp
+            ans$y.limits <- temp
+        }
+   }
+
 
     #################
     #add in key

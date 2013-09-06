@@ -101,7 +101,7 @@ listLoad(..., load = NULL)
 
 \note{
   IN DEVELOPMENT: \code{listLoad} is an in-development workhorse function 
-  that generates lists based on the suuplied \code{load} argument. 
+  that generates lists based on the supplied \code{load} argument. 
 
   It assumes each element of \code{load} is the name of an expected list 
   and searches the associated additional arguments for arguments to 

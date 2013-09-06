@@ -3,6 +3,8 @@ Changes in loa 0.2.10 [2013-08-11]
 
 *       refinement to panel.binPlot 
         (added pad.grid)
+*       added panel.compareZcases
+*       added screenLatticePlot
 
 
 

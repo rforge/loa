@@ -68,6 +68,9 @@ export(panel.polarLabels)
 export(panel.zcasePiePlot)
 export(panel.zcasePieSegmentPlot)
 
+#other plot panels
+export(panel.compareZcases)
+
 
 #formulas
 export(formulaHandler)
@@ -127,9 +130,10 @@ export(loaPieSegment)
 
 
 #plot.interactives
-
 export(getXY)
 export(getLatLon)
+export(screenLatticePlot)
+
 
 #misc
 export(geoFrame)
