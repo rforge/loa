@@ -2,6 +2,7 @@
 \alias{4.2.plot.structure.handlers}
 \alias{formulaHandler}
 \alias{stripHandler}
+\alias{getZcaseDimensions}
 
 
 \title{
@@ -13,13 +14,15 @@
 }
 \usage{
 
-  formulaHandler(x, data = NULL, ..., 
-        formula.type = "z~x*y|cond", 
-        panel.zcases = FALSE,
-        check.xy.dimensions = TRUE, 
+  formulaHandler(x, data = NULL, groups = NULL, 
+        ..., expand.plot.args = TRUE, formula.type = "z~x*y|cond", 
+        panel.zcases = FALSE, check.xy.dimensions = TRUE, 
+        check.coord.dimensions = TRUE, get.zcase.dimensions = TRUE, 
         output = "extra.args")
 
   stripHandler(..., striplab=NULL)
+
+  getZcaseDimensions(...)
 
 }
 
@@ -32,15 +35,19 @@
    \code{x}, typically a \code{data.frame}.
    }
 
+  \item{groups}{ If supplied, the grouping argument to be used with 
+   \code{x} and \code{data}.
+   }
+
   \item{...}{ Additional arguments are passed on to related functions. 
    }
 
-   \item{check.xy.dimensions}{For \code{formulaHandler} only, logical. Should the formula 
-   structure be tested before attempting to generate the plot?  
+   \item{expand.plot.args}{For \code{formulaHandler} only, logical. Should any 
+   short elements of the plot structure be expanded? 
    }
 
-   \item{formula.type}{For \code{formulaHandler} only, character vector. The plot 
-   structure to be used when generating the plot, e.g. \code{z ~ x * y | cond} for 
+   \item{formula.type}{For \code{formulaHandler} only, character vector or function. 
+   The plot structure to be used when generating the plot, e.g. \code{z ~ x * y | cond} for 
    \code{\link{loaPlot}}  
    }
 
@@ -49,30 +56,45 @@
    panel conditioning terms rather than grouping terms?  
    }
 
-   \item{striplab}{For \code{stripHandler} only, character vector. If supplied, the 
-   label to add to the panel strip when conditioning is applied. By, default if applies 
-   the standard \code{lattice} convention, i.e., show for numerics.   
+   \item{check.xy.dimensions, check.coord.dimensions}{For \code{formulaHandler} only, logicals. 
+   Should the formula structure be tested before attempting to generate the plot? See Note below.  
+   }
+
+   \item{get.zcase.dimensions}{For \code{formulaHandler} only, logical. Should the dimensions 
+   of any multiple \code{zcases} b calculated? See Note below.  
    }
 
    \item{output}{For \code{formulaHandler} only, character vector. The format to return 
-   function output in.}
+   function output in.
+   }
+
+   \item{striplab}{For \code{stripHandler} only, character vector. If supplied, the 
+   label to add to the panel strip when conditioning is applied. By default, it applies 
+   the standard \code{lattice} convention, i.e., show for numerics.   
+   }
 
 }
 
 \details{
+
   \code{formulaHandler} manages the formula component or \code{x} element of 
    of loa plot functions. 
 
    For example, for \code{loaPlot} it assumes the general formula structure 
    \code{z ~ x * y | cond}, and applies it in a similar fashion to the 
-   \code{\link{lattice}} function \code{\link{levelplot}}. \code{x} and 
-   \code{y} are the horizontal and vertical axes, \code{z} is any 
-   additional information to be used in point, symbol, surface or glyph 
-   generation, and \code{cond} any additional conditioning to be applied. 
-   (\code{X} and \code{y} are required elements; \code{z} and \code{cond} 
-   are typically optional.)
+   \code{\link{lattice}} function \code{\link{levelplot}}. 
 
-  \code{stripHandler} manages the strip component of loa plot functions. 
+   Within the formula part of the plot call \code{x} and \code{y} are the 
+   horizontal and vertical axes, \code{z} is any additional information to be 
+   used in point, symbol, surface or glyph generation, and \code{cond} any 
+   additional conditioning to be applied. (The coordinates, \code{x} and 
+   \code{y}, are required elements; \code{z} and \code{cond} are typically 
+   optional.) 
+
+   \code{stripHandler} manages the strip component of loa plot functions.
+
+   \code{getZcaseDimensions} tracks the dimensions of multiple \code{z} 
+    
  
 }
 
@@ -83,16 +105,55 @@
 
   \code{stripHandler} returns a list containing all supplied arguments, 
    subject to the following modifications:
-   \tabular{ll}{
-   * \tab strip generated or updated\cr
-   * \tab (if supplied) striplab added as var.name\cr
-   }
+
+  \describe{
+    
+      \item{\code{strip}:}{
+        Updated or generated if not supplied.
+      }
+
+      \item{\code{striplab}:}{
+        Added to \code{strip} via the \code{strip} 
+        argument \code{var.name} if undeclared in call 
+        (and stripped from argument list). 
+      }
+
+  }
+
+  \code{getZcaseDimensions} returns a list containing all the supplied 
+  arguments, plus two additions arguments (if supplied in the call): 
+  \code{zcase.zlim} and \code{z.rowsum.lim}. \code{zcase.zlim} is a 
+  list of \code{lim} values, one for each \code{zcase}. 
+  \code{z.rowsum.lim} is the range of 'by-row' sums of \code{zcases}.  
+  These are calculated using any \code{zcase} information supplied in 
+  the call.  
     
 }
 
 \note{
 
   These function are in development and may be subject to changes.
+
+  The current version of \code{formulaHandler} includes code from the 
+  \code{stats} function \code{get_all_vars}. It operates in a similar 
+  fashion to the previous version but checks zcase dimensions.
+
+  The previous version of \code{formulaHandler} was a wrapper for 
+  the \code{lattice} function \code{latticeParseFormula}. This 
+  version of \code{formulaHandler} was updated to simplify multiple 
+  \code{z} argument handling.
+
+  The latest version of \code{formulaHandler} includes more flexible 
+  \code{formula.type} handling. For example, it can now handle formulas 
+  that have more than two coordinates. As a result the 
+  \code{check.xy.dimensions} argument was replaced with a 
+  \code{check.coord.dimensions} argument. The previous argument 
+  will however remain in the function formals and function as before 
+  until all related code has been updated.
+
+  The latest version of \code{formulaHandler} uses \code{getZcaseDimensions} 
+  to calculate the dimensions of \code{z} if it is multi-part, e.g. 
+  \code{z1 + z2 + etc ~ x * y} rather than \code{z ~ x * y}.    
      
 }
 

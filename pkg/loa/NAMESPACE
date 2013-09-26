@@ -136,11 +136,12 @@ export(screenLatticePlot)
 
 
 #misc
-export(geoFrame)
-export(geoBearing)
-export(geoDistance)
-export(geoElevation)
-export(geoDestination)
+##now in grey.area
+#export(geoFrame)
+#export(geoBearing)
+#export(geoDistance)
+#export(geoElevation)
+#export(geoDestination)
 
 
 

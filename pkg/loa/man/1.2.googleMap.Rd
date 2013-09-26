@@ -73,13 +73,13 @@
    }
 
   \item{map}{ For \code{GoogleMap} and related functions only. If supplied, 
-   a modified \code{\link{RgoogleMaps}} output, to be used as the plot 
+   a modified \code{RgoogleMaps} output, to be used as the plot 
    background. If \code{NULL} (default), this is generated using 
-   the \code{\link{RgoogleMaps}} function \code{\link{GetMap}}, 
+   the \code{RgoogleMaps} function \code{\link{GetMap}}, 
    the supplied latitude, longitude ranges, and any additional 
-   \code{\link{RgoogleMaps}} arguments supplied within the call. The 
+   \code{RgoogleMaps} arguments supplied within the call. The 
    map is supplied via \code{makeMapArg} which modifies the 
-   \code{\link{RgoogleMaps}} output before returning it to simplify 
+   \code{RgoogleMaps} output before returning it to simplify 
    local handling and (lattice) plotting. 
    }
 
@@ -133,7 +133,7 @@
    For \code{GoogleMap} these are \code{makeMapArg}, \code{\link{cexHandler}}, 
    \code{\link{cexHandler}} and \code{\link{xyplot}}.
 
-   \code{makeMapArg} uses the \code{\link{RgoogleMaps}} function \code{\link{GetMap}}. 
+   \code{makeMapArg} uses the \code{RgoogleMaps} function \code{\link{GetMap}}. 
    So, most \code{GetMap} arguments can be directly accessed from either 
    \code{GoogleMap} or \code{quickMap} via this route, e.g. \code{maptype = "satellite"}. 
    The returned object is then modified to simplify its handling by the 
@@ -164,7 +164,7 @@
    are currently in development functions and may be subject to changes.
 
   \code{GoogleMap} provides lattice-style conditioning/handling for 
-   \code{\link{RgoogleMaps}} outputs. This uses \code{\link{loaPlot}} 
+   \code{RgoogleMaps} outputs. This uses \code{\link{loaPlot}} 
    and the latest version of \code{\link{panelPal}} to manage default 
    panel and key settings.  
  
@@ -181,7 +181,7 @@
    functions.
 
   \code{makeMapArg} accepts latitude and longitude ranges and 
-   \code{\link{RgoogleMaps}} function \code{\link{GetMap}} arguments, 
+   \code{RgoogleMaps} function \code{\link{GetMap}} arguments, 
    and produces an output suitable for use with the 
    \code{panel.GoogleMapsRaster} and \code{panel.GoogleMaps} panel 
    functions or in subsequent \code{GoogleMap} calls if, e.g., the users 
@@ -208,10 +208,10 @@
    much like conventional \code{lattice} plot functions.
 
   \code{makeMapArg} returns a modified form of the 
-   \code{\link{RgoogleMaps}} function \code{\link{GetMap}} 
+   \code{RgoogleMaps} function \code{\link{GetMap}} 
    output suitable for use as the \code{map} argument with 
    the above functions. Note: the automatic assignment of the 
-   \code{\link{RgoogleMaps}} function argument \code{size} 
+   \code{RgoogleMaps} function argument \code{size} 
    
 
   \code{getMapArg} recovers the \code{map} from an existing 
@@ -235,7 +235,7 @@
    longitudes along axis needs to be locally handled to 
    account for this.
 
-  \code{GoogleMap} and \code{quickMaps} use \code{\link{RgoogleMaps}} 
+  \code{GoogleMap} and \code{quickMaps} use \code{RgoogleMaps} 
    functions \code{\link{LatLon2XY}}, \code{\link{LatLon2XY.centered}} 
    and \code{\link{XY2LatLon}} to locally scale both axis and data.  
 
@@ -284,14 +284,11 @@
   Karl Ropkins
 }
 
-\seealso{
-   For work with (latitude, longitude) data, see \code{\link{getLatLon}} 
-   regarding recovering infomation from existing plots and \code{\link{geoDistance}}, 
-   etc, regarding data manipulation.    
+\seealso{  
 
    For information of related functions in other packages, see
 
-   \code{\link{RgoogleMaps}}: \code{\link{GetMap}}; \code{\link{LatLon2XY}}; 
+   \code{RgoogleMaps}: \code{\link{GetMap}}; \code{\link{LatLon2XY}}; 
    \code{\link{LatLon2XY.centered}}; and, \code{\link{XY2LatLon}}.
 
    \code{\link{lattice}}: \code{\link{xyplot}}; \code{\link{panel.xyplot}}; and 

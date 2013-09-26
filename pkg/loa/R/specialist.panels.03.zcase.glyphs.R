@@ -45,6 +45,9 @@ panel.zcasePiePlot <- function (..., zcase.rescale = TRUE,
 
     extra.args <- list(...)
 
+#compare these with getZcaseDimensions
+#could do this as a make defaults option?
+
     if(!"z" %in% names(extra.args))
         extra.args$z <- rep(1, length(extra.args$x))
 
@@ -102,7 +105,12 @@ panel.zcasePiePlot <- function (..., zcase.rescale = TRUE,
 #print(zcase.sums)
 
 #hard reset
-    extra.args$zlim <- range(zcase.sums)
+    if("z.rowsum.lim" %in% names(extra.args))
+        extra.args$zlim <- extra.args$z.rowsum.lim else range(zcase.sums)
+
+#make nice pie for single z case
+    if(length(extra.args$zcase.ids) < 2 && !"centre" %in% names(extra.args))
+        extra.args$center <- FALSE
 
     temp <- unique(c(extra.args$panel.elements, extra.args$group.args, "zcase.ref", "angle", "start"))
     temp <- temp[!temp %in% "z"]
@@ -222,9 +230,18 @@ panel.zcasePieSegmentPlot <- function (..., zcase.rescale = TRUE,
     # so later full pies lay on 
     # earlier pies if there is any overlap
 
+
+#make nice pie for single z case
+    if(length(extra.args$zcase.ids) < 2 && !"centre" %in% names(extra.args))
+        extra.args$center <- FALSE
+
     zcase.count <- length(extra.args$zcase.ids)
     zcase.len <- max(sapply(extra.args$zcase.ids, function(x) length(extra.args$x[extra.args$zcases == 
         x])))
+
+
+
+
 
     ref <- unlist(lapply(1:zcase.len, function(i) seq(i, length(extra.args$x), zcase.len))) 
     temp <- unique(c(extra.args$panel.elements, extra.args$zcase.args, extra.args$group.args))

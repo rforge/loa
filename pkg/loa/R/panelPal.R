@@ -221,7 +221,7 @@ panelPal <- function(ans, panel = NULL, preprocess = FALSE,
                 "group.elements", "group.ids", "group.args", 
                 "allowed.scales", "disallowed.scales", "panel.scales",
                 "reset.xylims", "load.lists", "lim.borders",
-                "zcase.ids", "zcase.args", "zcase.zlim")
+                "zcase.ids", "zcase.args", "zcase.zlim", "z.rowsum.lim")
     ignore <- unique(ignore, loa.settings$common.args)
 
     temp <- listUpdate(ans$panel.args.common, list(loa.settings = loa.settings, 

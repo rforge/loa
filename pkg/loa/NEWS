@@ -1,8 +1,20 @@
+Changes in loa 0.2.11 [2013-09-06]
+=====================================
+
+*       refinement to formulaHandler
+        (improved formula.type)
+        (improve multi-zcase management)
+*       update to panel.zcasePiePlot 
+*       minor update to panelPal
+*       geo calculations removed 
+        (now in grey.area package)
+
+
 Changes in loa 0.2.10 [2013-08-11]
 =====================================
 
 *       refinement to panel.binPlot 
-        (added pad.grid)
+        (added pad.grid argument)
 *       added panel.compareZcases
 *       added screenLatticePlot
 

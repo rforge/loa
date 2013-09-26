@@ -14,8 +14,8 @@
 \tabular{ll}{
 Package: \tab loa\cr
 Type: \tab Package\cr
-Version: \tab 0.2.10\cr
-Date: \tab 2013-08-11\cr
+Version: \tab 0.2.11\cr
+Date: \tab 2013-09-06\cr
 License: \tab GPL (>= 2)\cr
 LazyLoad: \tab yes\cr
 }
@@ -77,8 +77,6 @@ together and summarized in section 4:
 And, finally, functions used for working with data post-plotting, are summarized in section 5: 
 
 5.1. Interactive functions for working with plot outputs: \code{\link{getXY}}, etc.
-
-5.2. Various functions for latitude/longitude manipulation: \code{\link{geoFrame}}, etc.
 
 This package is very much intended to be an evolutionary exercise. I use it on a routine 
 basis to develop plots for use elsewhere and compare data visualization methods. However, 

@@ -114,7 +114,7 @@ screenLatticePlot(object = trellis.last.object(), ...)
 
   \code{getLatLon} provides an example of the mechanism, and is 
   for use with georeferenced plots that have been locally scaled 
-  using \code{\link{RgoogleMaps}} functions like 
+  using \code{RgoogleMaps} functions like 
   \code{\link{LatLon2XY}}. \code{getLatLon} uses \code{XY2LatLon} to 
   rescale \code{x} and \code{y} values and then \code{as...} functions 
   to convert the outputs of this step to a list format like that 
@@ -147,7 +147,7 @@ screenLatticePlot(object = trellis.last.object(), ...)
    \code{\link{lattice}}: \code{\link{grid.locator}}; 
    \code{\link{trellis.focus}} and \code{\link{lpoints}} 
 
-   \code{\link{GoogleMap}}: \code{\link{LatLon2XY}}, etc.  
+   \code{RgoogleMap}: \code{\link{LatLon2XY}}, etc.  
 }
 
 \examples{
