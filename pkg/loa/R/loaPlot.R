@@ -395,8 +395,10 @@ panel.loaPlot <- function(..., loa.settings = FALSE){
     extra.args$pch <- do.call(pchHandler, listUpdate(extra.args, list(z=NULL)))
 
 #dissable xyplot(..., grid)
-    extra.args$grid <- NULL
- 
+#stop panel.xyplot reapplying alpha, etc.
+    extra.args <- listHandler(extra.args, 
+                      ignore = c("grid", "col.regions", "alpha", "alpha.regions"))
+
     do.call(panel.xyplot, extra.args)
  }
 

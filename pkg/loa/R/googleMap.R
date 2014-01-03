@@ -46,102 +46,70 @@
 googleMap <- function(...) GoogleMap(...)
 
 
-GoogleMap <- function (x, data = NULL, panel = panel.loaPlot,
-          map = NULL, map.panel = panel.GoogleMapsRaster, 
-          recolor.map = FALSE, ..., lon.lat = FALSE) 
-{
-
+GoogleMap <- function (x, data = NULL, panel = panel.loaPlot, map = NULL, 
+    map.panel = panel.GoogleMapsRaster, recolor.map = FALSE, 
+    ..., lon.lat = FALSE) {
 
 #new rewrite using loaPlot 
 #note changes
 #z ~ lon * lat | cond
 #
 
-
-
-
     extra.args <- list(...)
 
     #formular default z ~ lat * lon | cond
-    if(!lon.lat)
-        if(!"formula.type" %in% names(extra.args))
+    if (!lon.lat) 
+        if (!"formula.type" %in% names(extra.args)) 
             extra.args$formula.type = "z~y*x|cond"
 
-    #make initial map recovery tight
-    if(is.null(extra.args$lim.borders))
-        extra.args$lim.borders = 0.001
-
-    ans <- do.call(loaPlot, listUpdate(list(x=x, data=data, panel=panel), 
-                                        extra.args))
-
-    if(is.null(map)){
-        temp <- list(xlim = ans$panel.args.common$xlim, 
-                     ylim = ans$panel.args.common$ylim,
-                     recolor.map = recolor.map,
-                     aspect = NULL)
+    #make map based on data range
+    temp <- do.call(formulaHandler, listUpdate(extra.args, list(x=x, data=data, output="lattice.like")))
+    myx <- if("xlim" %in% names(extra.args))
+                extra.args$xlim else temp$x
+    myy <- if("ylim" %in% names(extra.args))
+                extra.args$ylim else temp$y
+    if (is.null(map)) {
+        temp <- list(xlim = myx, ylim = myy, 
+            recolor.map = recolor.map, aspect = NULL)
         temp <- listUpdate(temp, extra.args)
         map <- do.call(makeMapArg, temp)
     }
 
-####################
-    
+    #plot basic plot
+    ans <- do.call(loaPlot, listUpdate(list(x = x, data = data, 
+        panel = panel), extra.args))
 
-
-    #reset axes using map
+    #insert and setup map
     ans$aspect.ratio <- map$aspect
     ans$panel.args.common$xlim <- map$xlim
     ans$x.limits <- map$xlim
     ans$panel.args.common$ylim <- map$ylim
     ans$y.limits <- map$ylim
-
-    #update x and y using map dimensions
-    #could be simpler
-
-    for(i in 1:length(ans$panel.args)){
-        temp <- LatLon2XY.centered(map, ans$panel.args[[i]]$y, 
-                                        ans$panel.args[[i]]$x)
+    for (i in 1:length(ans$panel.args)) {
+        temp <- RgoogleMaps:::LatLon2XY.centered(map, ans$panel.args[[i]]$y, 
+            ans$panel.args[[i]]$x)
         ans$panel.args[[i]]$y <- temp$newY
         ans$panel.args[[i]]$x <- temp$newX
     }
-
-    #add map, 
-    #reset the aspect
     panel <- ans$panel
-    panel.with.map <- function(...){
-                          map.panel(map)
-                          panel(...)}
+    panel.with.map <- function(...) {
+        map.panel(map)
+        panel(...)
+    }
     map.axis.comps <- axis.components.GoogleMaps(map)
-    map.axis <- function(components, ...) 
-                   axis.default(components = map.axis.comps, ...)
-
+    map.axis <- function(components, ...) axis.default(components = map.axis.comps, 
+        ...)
     ans <- update(ans, panel = panel.with.map, aspect = map$aspect, 
-                  axis = map.axis)
-
+        axis = map.axis)
     ans$panel.args.common$map <- map
 
-
-    ##############################
-    #rescale axis
-    ##############################
-
-    #scale axis for map projection
-    #map.axis.comps <- axis.components.GoogleMaps(map)
-    #map.axis <- function(components, ...) 
-    #               axis.default(components = map.axis.comps, ...)
-
-    ############################
-    #rescale data
-    ############################
-
-    #scale data for map projection
-    #temp <- LatLon2XY.centered(map, d1$right.x, d1$right.y)
-
-#################################
-
-
+    #output plot
     return(ans)
-
 }
+
+
+
+
 
 
 

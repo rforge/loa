@@ -1,3 +1,20 @@
+Changes in loa 0.2.13 [2013-12-23]
+=====================================
+
+*       refinement to panel.loaPlot
+        (better alpha/alpha.regions 
+        tracking)
+
+
+Changes in loa 0.2.12 [2013-11-11]
+=====================================
+
+*       refinement to GoogleMap
+        (more robust map sizing for single  
+        point plots)
+        (improve multi-zcase management)
+
+
 Changes in loa 0.2.11 [2013-09-06]
 =====================================
 
