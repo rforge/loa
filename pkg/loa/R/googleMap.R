@@ -85,11 +85,27 @@ GoogleMap <- function (x, data = NULL, panel = panel.loaPlot, map = NULL,
     ans$x.limits <- map$xlim
     ans$panel.args.common$ylim <- map$ylim
     ans$y.limits <- map$ylim
+
+    #update xy elements
+    #think about better handling
+    #think about doing in panelPal
+    #and passing coversion program so all similar
+    #think about keeping lat,lon?
+    if(is.null(ans$panel.args.common$x.elements))
+        ans$panel.args.common$x.elements <- "x"
+    if(is.null(ans$panel.args.common$y.elements))
+        ans$panel.args.common$y.elements <- gsub("x", "y", ans$panel.args.common$x.elements)
     for (i in 1:length(ans$panel.args)) {
-        temp <- RgoogleMaps:::LatLon2XY.centered(map, ans$panel.args[[i]]$y, 
-            ans$panel.args[[i]]$x)
-        ans$panel.args[[i]]$y <- temp$newY
-        ans$panel.args[[i]]$x <- temp$newX
+
+        for(j in 1:length(ans$panel.args.common$y.elements)){
+
+            temp <- RgoogleMaps:::LatLon2XY.centered(map, 
+                ans$panel.args[[i]][[ans$panel.args.common$y.elements[j]]], 
+                ans$panel.args[[i]][[ans$panel.args.common$x.elements[j]]])
+            ans$panel.args[[i]][[ans$panel.args.common$y.elements[j]]] <- temp$newY
+            ans$panel.args[[i]][[ans$panel.args.common$x.elements[j]]] <- temp$newX
+
+        }
     }
     panel <- ans$panel
     panel.with.map <- function(...) {
@@ -106,7 +122,6 @@ GoogleMap <- function (x, data = NULL, panel = panel.loaPlot, map = NULL,
     #output plot
     return(ans)
 }
-
 
 
 

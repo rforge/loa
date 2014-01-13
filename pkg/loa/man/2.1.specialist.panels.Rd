@@ -7,7 +7,7 @@
   Special panel functions 01
 }
 \description{
-  In development specialist panel functions for use with lattice
+  Specialist panel functions for use with lattice and loa plots.
 }
 \usage{
 
@@ -18,9 +18,8 @@ panel.kernelDensity(x, y, z = NULL, ..., n = 20,
 panel.binPlot(x = NULL, y = NULL, z = NULL, 
          breaks=20, x.breaks = breaks, y.breaks = breaks,
          x1=NULL, x2=NULL, y1=NULL, y2=NULL,
-         statistic = mean, pad.grid = TRUE, ...,
-         plot = TRUE, process = TRUE, loa.settings = FALSE 
-         )
+         statistic = mean, pad.grid = FALSE, ...,
+         plot = TRUE, process = TRUE, loa.settings = FALSE)
 
 }
 
@@ -82,29 +81,51 @@ panel.binPlot(x = NULL, y = NULL, z = NULL,
 
 
 \details{
-  Special \code{panel...} functions are intended for use with 
-  \code{\link{panelPal}}. They provide alternative data handling 
-   for \code{lattice} functions like \code{xyplot}. They are intended 
-   to be used in the conventional form, e.g.:
+   Some specialist \code{panel...} functions can be used be used with 
+   conventional \code{lattice} functions like \code{xyplot}, e.g.:
+ 
+  \code{xyplot(..., panel = panel.kernelDensity)}\cr
+  \code{xyplot(..., n = 50, panel = panel.kernelDensity)}\cr
+  \code{xyplot(..., panel = function(...) panel.kernelDensity(..., n = 50))}\cr
+  \code{#etc}
 
-   \code{xyplot(..., panel = panel.kernelDensity)}\cr
-   \code{xyplot(..., n = 50, panel = panel.kernelDensity)}\cr
-   \code{xyplot(..., panel = function(...) panel.kernelDensity(..., n = 50))}\cr
+   However, they are intended for use with \code{\link{panelPal}}. 
+   The combination provides a mechanism for the routine preprocessing of 
+   panel data, the association of specialist keys, and the routine alignment 
+   of panel and legend settings in cases where values are reworked within the 
+   panel function call.
+
+   Typically, these are intended for use with \code{\link{panelPal}}, e.g.:
+
+   \code{loaPlot(..., panel = panel.kernelDensity)}\cr
    \code{#etc}
 
-   The combination provides a mechanism for the routine preprocessing of 
-   panel data and the routine alignment panel and legend settings in cases 
-   where values are reworked within the panel function call.
-
   \code{panel.kernelDensity} generates kernel density estimations 
-   based on the supplied \code{x} and \code{y} data ranges.
+   based on the supplied \code{x} and \code{y} data ranges. It ignores 
+   any supplied \code{z} information if supplied in the form:
 
+   \code{loaPlot(z~x*y, ..., panel = panel.kernelDensity)} 
+
+  \code{panel.binPlot} bins supplied \code{z} data according to \code{x} and 
+   \code{y} values and associated break points (set by \code{break} arguments), 
+   and then calculates the required statistic for each of these. By default, 
+   this is \code{\link{mean}}, but alternative functions can be set using the 
+   \code{statistic} argument. if no \code{z} values are supplied, as in
+
+   \code{loaPlot(~x*y, ..., panel = panel.binPlot)} 
+ 
+   ... \code{panel.binPlot} resets \code{statistic} to \code{\link{length}} and 
+   gives a count of the number of elements in each bin.
+
+   These \code{panel...} functions       
+ 
 }
 
 \value{
 
-  As with other \code{panel...} functions, output suitable for 
-  use as the \code{panel} argument in \code{lattice} plot calls. 
+  As with other \code{panel...} functions in this package, output are suitable 
+  for use as the \code{panel} argument in \code{loa} (and sometimes 
+  \code{lattice}) plot calls. 
    
 }
 
@@ -128,30 +149,75 @@ panel.binPlot(x = NULL, y = NULL, z = NULL,
 
 \note{
 
+  Both \code{panel...} functions can color both regions and lines. For 
+   \code{panel.kernelDensity} these are colored regions and contour lines 
+   separating them. For \code{panel.binPlot} these are the individual data 
+   bins and the borders surrounding them. In both cases the color scheme 
+   applied to the colored regions ares controlled by \code{col.regions} and the 
+   colors applied to the lines are controlled by \code{col}. 
+
   \code{panel.kernelDensity} passes additional arguments on to the 
    \code{kernel.fun} to estimate kerenel density and the \code{lattice} 
    function \code{panel.contourplot} to generate the associated plot. 
    If no \code{kernel.fun} is supplied in the \code{panel} call, the 
-   \code{MASS} function \code{kde2d} is used to estimate kernel density.  
+   \code{MASS} function \code{kde2d} is used to estimate kernel density.
+
+  \code{panel.binPlot} passes limited arguments on to \code{lrect}.  
 
 }
 
 \seealso{
 
-   \code{\link{panelPal}}
+   In \code{loa}: \code{\link{panelPal}}
 
-   \code{\link{lattice}}, \code{\link{xyplot}}, \code{\link{panel.contourplot}},
+   In \code{\link{lattice}}: \code{\link{xyplot}}, \code{\link{panel.contourplot}},
+   \code{\link{lrect}} 
+
 }
 
 \examples{
 
+## Example 1
+## Specialist kernel density panel example 
+
 a <- rnorm(1000)
 b <- rnorm(1000)
+c <- rnorm(1000)
 
-xyplot(a~b, panel = panel.kernelDensity)
+xyplot(a~b, panel = panel.kernelDensity, at = 0:5*5)
 
-#or with loaPlot
-#loaPlot(~a*b, panel = panel.kernelDensity)
+loaPlot(~a*b, panel = panel.kernelDensity)
+
+#  Note 1:
+#  at sets col.regions for the color surface, but, as this is calculated 
+#  in-panel, this is not known at time of call. So, you need to set when 
+#  using specialist panels with standard lattice plots. 
+#  (Same is ture for any panel where plot attributes that are set in-panel 
+#  and need to be known in all panels and keys for consistent output.)
+#  loa panels include separate process and plot steps that panelPal can use  
+#  to track these. 
+
+#  Note 2:
+#  By default, the panel ignores z data.  
+#
+#  compare: 
+#  loaPlot(c~a*b, panel = panel.kernelDensity)        #where z term (c) ignored
+#  loaPlot(c~a*b, panel = panel.kernelDensity, n=100) #finer surface resolution
+
+
+## Example 2
+## Specialist bin plot panel example 
+
+#  By default, the panel bins supplied z case as mean
+#  modify by supplying alternative as statistic
+
+loaPlot(c~a*b, panel = panel.binPlot)
+loaPlot(c~a*b, panel = panel.binPlot, statistic=max)
+
+#  Note:
+#  If z is not supplied, statistic defaults to length to give a count 
+#
+#  loaPlot(~a*b, panel = panel.binPlot)               #where z term not supplied
 
 #etc.
 

@@ -75,6 +75,7 @@ loaPieSegment(..., polygon = NULL, start = 0,
   glyph type structures.
 
 }
+
 \references{
   These functions make extensive use of code developed by others.  
 
@@ -88,23 +89,20 @@ loaPieSegment(..., polygon = NULL, start = 0,
   Karl Ropkins
 }
 
-\note{
-  TO DO
-
-}
+%\note{
+%  TO DO
+%}
 
 \seealso{
-   \code{\link{lattice}}, \code{\link{xyplot}}, 
+   In other packages: See \code{\link{lrect}}, and similar, in \code{\link{lattice}} 
 }
 
-\examples{
 
-##example 1
-##general
-
-#TO DO
-
-}
+%\examples{
+%##example 1
+%##general
+%#TO DO
+%}
 
 
 \keyword{ methods }

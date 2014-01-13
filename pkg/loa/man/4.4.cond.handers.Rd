@@ -161,10 +161,9 @@
 
 }
 
-\examples{
-#TO BE CONFIRMED
-
-
-}
+%examples to do
+%\examples{
+%#TO BE CONFIRMED
+%}
 
 \keyword{ methods }

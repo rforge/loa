@@ -193,7 +193,10 @@ colHandler <- function(z = NULL, col = NULL,
                 zlim <- range(z, finite=TRUE)
             }
         }
-        zrng <- lattice:::extend.limits(range(as.numeric(zlim), finite = TRUE))
+#test fix
+#        zrng <- lattice:::extend.limits(range(as.numeric(zlim), finite = TRUE))
+        zrng <- range(as.numeric(zlim), finite = TRUE)
+        if(length(unique(zrng))<2) zrng <- lattice:::extend.limits(zrng) 
         if(is.null(at)) 
             at <- if(pretty) 
                       pretty(zrng, cuts) else 
@@ -206,7 +209,11 @@ colHandler <- function(z = NULL, col = NULL,
         #all other cases use
         #using col
         z <- if(is.numeric(col)) col else as.factor(col)
-        zrng <- lattice:::extend.limits(range(as.numeric(z), finite = TRUE))
+#test fix
+#        zrng <- lattice:::extend.limits(range(as.numeric(z), finite = TRUE))
+        zrng <- range(as.numeric(z), finite = TRUE)
+        if(length(unique(zrng))<2) zrng <- lattice:::extend.limits(zrng) 
+
         if(is.null(at)) 
             at <- if(pretty) 
                      pretty(zrng, cuts) else 
@@ -332,10 +339,16 @@ colRegionsHandler <- function(...){
    if(!"col.regions" %in% names(extra.args))
        return(NULL)
 
-   extra.args$at <- NULL
-   extra.args <- listUpdate(extra.args, list(z=1:100, zlim=c(1,100), output="col")) 
+   if("isolate.col.regions" %in% names(extra.args) && extra.args$isolate.col.regions)
+       extra.args$col <- NULL
 
-   do.call(colHandler, extra.args)    
+   extra.args$at <- NULL
+#   extra.args <- listUpdate(extra.args, list(z=1:100, zlim=c(1,100), output="col")) 
+#   do.call(colHandler, extra.args)    
+   
+   do.call(colHandler, listUpdate(extra.args, 
+                                  list(z=1:100, zlim=c(1,100), ref=1:100)))
+
 
 }
 

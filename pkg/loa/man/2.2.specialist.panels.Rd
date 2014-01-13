@@ -64,7 +64,7 @@ panel.polarLabels(labels.theta = NULL, labels.r = NULL,
 
  \item{loa.settings, plot, process}{ \code{loa} panel management 
   arguments, handled by \code{\link{panelPal}}. See associated 
-  HELP documentation for further details. 
+  help documentation for further details. 
   } 
 
  \item{grid, axes, labels}{ plot management options for the grid, axis 
@@ -150,24 +150,23 @@ panel.polarLabels(labels.theta = NULL, labels.r = NULL,
 
 \note{
 
-  \code{panel.polarPlot} is IN-DEVELOPMENT. Please handle with care. 
+  \code{panel.polarPlot} is in-development. Function arguments may change. 
 
 }
 
 \seealso{
 
-   \code{\link{loaPlot}}, \code{\link{panelPal}}
+   In \code{loa}: \code{\link{loaPlot}}; and \code{\link{panelPal}}.
 
-   \code{\link{lattice}}, \code{\link{xyplot}},
+   In other packages: \code{\link{xyplot}} in \code{\link{lattice}}.
 }
 
-\examples{
 
-##TO DO
-
-#etc.
-
-}
+%%examples to do
+%\examples{
+%##TO DO
+%#etc.
+%}
 
 
 \keyword{ methods }

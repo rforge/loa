@@ -4,7 +4,7 @@
 
 
 \title{
-  Special panel functions 03
+  Special panel functions 04
 }
 \description{
   In development specialist panel functions 
@@ -18,9 +18,10 @@ panel.compareZcases(x=x, y=y, z=NULL, ...,
 
 \arguments{
 
-  \item{x, y, z}{ Standard plot data series, typically vectors}
+  \item{x, y, z}{ Standard plot data series, typically vectors.
+  }
 
-  \item{...}{ Additional arguments. See below.  
+  \item{...}{ Additional arguments, typically passed on.  
   } 
 
   \item{loa.settings}{ loa options, to be handled by \code{panelPal}. 
@@ -31,7 +32,8 @@ panel.compareZcases(x=x, y=y, z=NULL, ...,
 
 \details{ 
 
-  The \code{panel.compareZcases} generates...
+  The \code{panel.compareZcases} generates a simple plot which 
+  compares \code{z} and \code{y} elements.
  
 }
 
@@ -40,12 +42,11 @@ panel.compareZcases(x=x, y=y, z=NULL, ...,
   These \code{panel...} functions are intended to be used as the 
   \code{panel} argument in \code{loa} plot calls. So, e.g.:
 
-  \code{a <- 1:10}\cr
-  \code{b <- a}\cr
-  \code{c <- a}\cr
-  \code{c[5:6] <- c(1,10)}\cr
-  \code{loaPlot(c~a*b, panel=panel.compareZcases, col.regions="Reds")}     
-   
+  \code{x <- 1:10}\cr
+  \code{y <- 1:10}\cr
+  \code{z <- y + rnorm(10)}\cr
+  \code{loaPlot(z~x*y, panel=panel.compareZcases, col.regions="Reds")}\cr
+
 }
 
 \references{
@@ -64,24 +65,23 @@ panel.compareZcases(x=x, y=y, z=NULL, ...,
 
 \note{
 
-  These functions are IN-DEVELOPMENT. 
+  These are ad hoc \code{panel...} functions. Not sure of their 
+  life expectancy... 
 
 }
 
 \seealso{
 
-   \code{\link{loaPlot}}, \code{\link{panelPal}}
+   In \code{loa}: \code{\link{loaPlot}}, \code{\link{panelPal}}.
 
-   \code{\link{lattice}}, \code{\link{xyplot}},
+   In other packages: \code{\link{xyplot}} in \code{\link{lattice}}.
 }
 
-\examples{
-
-##TO DO
-
-#etc.
-
-}
+%examples to do
+%\examples{
+%##TO DO
+%#etc.
+%}
 
 
 \keyword{ methods }

@@ -2,6 +2,7 @@
 \alias{3.1.example.data}
 \alias{example.data}
 \alias{lat.lon.meuse}
+\alias{roadmap.meuse}
 
 
 \docType{data}
@@ -18,6 +19,8 @@
 
    lat.lon.meuse
 
+   roadmap.meuse
+
 }
 
 
@@ -27,6 +30,9 @@
    have been transformed to latitudes and longtiudes and the object 
    class has been converted from \code{SpatialPointsDataFrame} to 
    \code{data.frame}. 
+
+  \code{roadmap.meuse} is a previously downloaded map intended for 
+   use with off-line plot examples using \code{lat.lon.meuse}.
      
 }
 
@@ -43,15 +49,21 @@
 \code{ mzn=meuse2[,c(14,13,4)] } \cr   
 \code{ names(mzn)<-c("Latitude","Longitude","zinc") } \cr   
 
+  \code{roadmap.meuse} was generated using:
+
+\code{GoogleMap(zinc~latitude*longitude, data=lat.lon.meuse, size=c(450,500), maptype="roadmap")} \cr
+\code{roadmap.meuse <- getMapArg()} \cr
+
 }
 
-\note{
-  None at present
-}
 
-\source{
-  Reference in preparation
-}
+%\note{
+%  None at present
+%}
+
+%\source{
+%  
+%}
 
 \references{
 
@@ -65,8 +77,8 @@ Doctoraalveldwerkverslag, Dept. of Physical Geography, Utrecht University
 P.A. Burrough, R.A. McDonnell, 1998. Principles of Geographical Information Systems. 
 Oxford University Press. 
 
-Stichting voor Bodemkartering (STIBOKA), 1970. Bodemkaart van Nederland : Blad 59 Peer, 
-Blad 60 West en 60 Oost Sittard: schaal 1 : 50 000. Wageningen, STIBOKA. 
+Stichting voor Bodemkartering (Stiboka), 1970. Bodemkaart van Nederland : Blad 59 Peer, 
+Blad 60 West en 60 Oost Sittard: schaal 1 : 50 000. Wageningen, Stiboka. 
 
 For \code{sp}:
 
@@ -81,11 +93,13 @@ data in R. R News 5 (2), http://cran.r-project.org/doc/Rnews/.
 
 \examples{
 
-#data structure
+## data structure of lat.lon.meuse
 
 head(lat.lon.meuse)
 
-#various plots
+
+## various loaPlot examples 
+## using lat.lon.meuse
 
 loaPlot(~longitude*latitude, data=lat.lon.meuse)
 
@@ -94,10 +108,31 @@ loaPlot(cadmium~longitude*latitude, data=lat.lon.meuse)
 loaPlot(cadmium~longitude*latitude, col.regions=c("lightblue", "darkblue"), 
         data=lat.lon.meuse)
 
-loaPlot(cadmium+copper+lead+zinc~longitude*latitude, panel.zcases = TRUE, 
+loaPlot(cadmium*50+copper*10+lead*2+zinc~longitude*latitude, panel.zcases = TRUE, 
         col.regions=c("lightblue", "darkblue"), 
         key.z.main="Concentrations", data=lat.lon.meuse)
 
+
+## (off line) GoogleMap example
+## using lat.lon.meuse and roadmap.meuse
+
+GoogleMap(zinc~latitude*longitude, data=lat.lon.meuse, 
+          map=roadmap.meuse, col.regions=c("grey", "darkred"))
+
+#  Note 1:
+#  With loaPlot and GoogleMap, note latitude, longitude axes 
+#  assignments: 
+#  loaPlot plots z ~ x * y | cond. 
+#  GoogleMap plots z ~ lat * lon | cond (z ~ y * x | cond)
+
+#  Note 2:
+#  Here, the map argument is supplied so example works off-line. 
+#  If not supplied and R is on-line, GoogleMap will (try to) get map 
+#  from the Google API. Looke at:
+#  GoogleMap(zinc~latitude*longitude, data=lat.lon.meuse, 
+#            col.regions=c("grey", "darkred"))
+#  (The map will appear slightly different, because non-default 
+#  size and maptype settings were used to make roadmap.meuse. See above.)  
 
 }
 

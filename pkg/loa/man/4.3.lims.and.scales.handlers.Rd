@@ -40,7 +40,7 @@ panel.localScale(x.loc, y.loc, lim, ..., panel.scale = NULL,
    }
 
   \item{scales, panel.scale}{ A list of elements like the \code{scales} 
-   argument used with \code{lattice} functions. DETAILS... Current 
+   argument used with \code{lattice} functions. Current 
    default elements \code{draw (= TRUE)}, \code{arrows (= FALSE)}, 
    \code{tick.number (= 5)}, \code{abbreviate (= FALSE)}, 
    \code{minlength (= 4)}, and \code{tck (= 1)}.
@@ -54,7 +54,7 @@ panel.localScale(x.loc, y.loc, lim, ..., panel.scale = NULL,
    } 
 
  \item{disallowed.scales}{ A character vector containing the names 
-   of any axes that are not required. NOTE: If found, these are 
+   of any axes that are not required. Note: If found, these are 
    removed from \code{scales} before evaluation.
    } 
 
@@ -67,7 +67,7 @@ panel.localScale(x.loc, y.loc, lim, ..., panel.scale = NULL,
  \item{x.loc, y.loc, lim}{ two member vectors setting the \code{x} 
    and \code{y} locations where the scale is to be drawn (\code{x.loc} 
    ans \code{y.loc}), and the limits of the range to be annotated on the 
-   scale (\code{lim}). NOTE: These are currently handled 'as is', i.e. 
+   scale (\code{lim}). Note: These are currently handled 'as is', i.e. 
    for both locations and limit, the first element is the start point 
    and the second is the end point, and any other elements are ignored.  
    }
@@ -127,7 +127,7 @@ panel.localScale(x.loc, y.loc, lim, ..., panel.scale = NULL,
    \code{panel.localScale} is a local axis/scale plotter. It can be used 
     in combination with \code{localScalesHandler}, and should called 
     once for each axis that is required, or it can be used 'stand alone' 
-    panel to add a local scale to a lattice plot. EXAMPLES?
+    panel to add a local scale to a lattice plot. 
 
 }
 
@@ -145,19 +145,17 @@ panel.localScale(x.loc, y.loc, lim, ..., panel.scale = NULL,
 }
 
 \note{
-  \code{panel.localScale} IS CURRENT IN REVISION. ARROWS ARE CURRENTLY 
-   UNAVAILABLE.
+  \code{panel.localScale} is currently in revision. Scale arrows are 
+  currently not available. 
 }
 
 \seealso{
-   \code{\link{lattice}}, \code{\link{xyplot}},
+   In other packages: \code{\link{xyplot}} in \code{\link{lattice}}.
 }
 
 \examples{
 
-#to be confirmed
-#generation of in-panel scale
-#ref to trianglePlot for example application
+## See trianglePlot Example 2 for example application
 
 }
 

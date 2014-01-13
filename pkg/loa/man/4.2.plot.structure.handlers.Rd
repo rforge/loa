@@ -104,21 +104,9 @@
    defined in the supplied formula.
 
   \code{stripHandler} returns a list containing all supplied arguments, 
-   subject to the following modifications:
-
-  \describe{
-    
-      \item{\code{strip}:}{
-        Updated or generated if not supplied.
-      }
-
-      \item{\code{striplab}:}{
-        Added to \code{strip} via the \code{strip} 
-        argument \code{var.name} if undeclared in call 
-        (and stripped from argument list). 
-      }
-
-  }
+   subject to the following modifications: \code{strip}, Updated or generated 
+   if not supplied; \code{striplab}, added to \code{strip} via the \code{strip} 
+   argument \code{var.name}, if this is undeclared in call.
 
   \code{getZcaseDimensions} returns a list containing all the supplied 
   arguments, plus two additions arguments (if supplied in the call): 
@@ -176,16 +164,13 @@
 
    In loa: \code{\link{loaPlot}}; \code{\link{panelPal}}
 
-   For information of related functions in other packages, see
-
-   \code{\link{lattice}}: \code{\link{levelplot}}.
+   In other packages: \code{\link{levelplot}} in \code{\link{lattice}}.
 
 }
 
-\examples{
-#TO BE CONFIRMED
-
-
-}
+%examples to do
+%\examples{
+%#TO BE CONFIRMED
+%}
 
 \keyword{ methods }

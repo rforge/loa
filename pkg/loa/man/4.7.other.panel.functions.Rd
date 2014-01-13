@@ -188,14 +188,12 @@ isGood4LOA(arg)
 }
 
 \seealso{
-   \code{\link{lattice}}, \code{\link{xyplot}},
+   In other packages: See \code{\link{xyplot}} in \code{\link{lattice}}.
 }
 
 \examples{
 
-#to be confirmed
-
-#getPlotArgs/isGood4LOA example
+#getPlotArgs/isGood4LOA notes
 
 #in formals
 #my.plot <- function(..., user.reset = TRUE, ...) 

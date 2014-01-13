@@ -1,4 +1,4 @@
-\name{1.3.triangle.plots}
+\name{1.3.trianglePlot}
 \alias{1.3.triangle.plots}
 \alias{trianglePlot}
 \alias{panel.triangleFrame}
@@ -83,8 +83,6 @@ triXY2ABC(x, y = NULL, ..., force.xy = TRUE,
    default \code{panel.triangleFrame} which manages the data, axes and 
    grid components of the plot appearance.
 
-   THIS NEEDS MORE DETAIL? GIVE COMMON EXAMPLES
-
    With other functions these are generally passed on but ignored.
    } 
 
@@ -128,7 +126,7 @@ triXY2ABC(x, y = NULL, ..., force.xy = TRUE,
 
   \item{if.na}{ Character. Handling method to be used if \code{NAs} are present. 
    The default \code{'remove.row'} replaces all enteries in the same row with 
-   \code{NAs}. (NOTE: this is different from \code{\link{na.omit}} which would 
+   \code{NAs}. (Note: this is different from \code{\link{na.omit}} which would 
    remove the whole row. Here, the row is retained as \code{NAs} to maintain 
    indices for conditioning.) Other options currently include: \code{'make.zero'} 
    to replace the \code{NA} with \code{0}; and \code{'keep.as.is'} to leave 
@@ -143,7 +141,7 @@ triXY2ABC(x, y = NULL, ..., force.xy = TRUE,
   } 
 
   \item{verbose}{ Logical, default \code{FALSE}. Should a full output be returned? 
-   The alternative \code{FALSE} generates a minimal report. DOCUMENT FURTHER?
+   The alternative \code{FALSE} generates a minimal report. 
   } 
 
 }
@@ -170,17 +168,6 @@ triXY2ABC(x, y = NULL, ..., force.xy = TRUE,
     conventional plots. However, they can also be set at once using \code{lims}, as in e.g. 
     \code{lims = c(0, 1)} to set all axes to full ranges, or on the basis of minimum and maximum 
     cut-offs using \code{abc.mins} and \code{abc.maxs}, respectively.    
-   
-    IMPORTANT: This is an in-development component of this plot, and the 'best handling 
-    strategy has not been decided. In particular, users should be aware that given 
-    the inter-connected nature of the a/b/c components of the plot, you will not 
-    always get what you ask for, especially if your a, b c limits contradict! 
-    For example, \code{lims=c(0,0.1)} should in theory set all ranges to (0, 0.1). But, 
-    the triangle \code{a = b = c = c(0, 0.1)} can not exist as a proportional plot because 
-    none of the associated combinations add up to 1. Therefore, the plot attempts 
-    to recover the extended range that includes all your requested ranges 
-    (\code{a = c(0, 0.1)}, \code{b = c(0, 0.1)}  and \code{c = c(0, 0.1)}), which in 
-    this case is the full range: \code{a = b = c = c(0, 1)}.
 
     \code{trianglePlot} uses \code{\link{localScalesHandler}} to override normal 
     \code{lattice} handling of \code{scales}. This allows parameters for axes other 
@@ -211,14 +198,18 @@ triXY2ABC(x, y = NULL, ..., force.xy = TRUE,
    conventional \code{lattice} plot functions.
 
    \code{panel.triangle...} functions are intended for use 
-   within a \code{trianglePlot} or \code{\link{xyplot}} 
-   function call and return appropriate inputs.
+   within a \code{trianglePlot} function call. With careful 
+   handling, they may also be used in conventional \code{lattice} 
+   plot calls. 
 
    \code{triABC2XY} returns a list containing the named 
-   components \code{x} and \code{y}.
+   components \code{x} and \code{y}, which are the 2-D (x,y) equivalents 
+   of supplied (a,b,c) \code{trianglePlot} elements.
 
    \code{triXY2ABC} returns a list containing the named 
-   components \code{a}, \code{b} and \code{c}.
+   components \code{a}, \code{b} and \code{c}, which are the (a,b,c) 
+   \code{trianglePlot} coordinates associated with supplied 2-D equivalents 
+   (x, y).
 
 }
 \references{
@@ -267,56 +258,88 @@ triXY2ABC(x, y = NULL, ..., force.xy = TRUE,
 
 \note{
 
-   \code{panel.triangleAxes} CODE IS CURRENTLY IN REVISION.
+   General: 
 
-   \code{triABC2XY} CODE IS CURRENTLY IN REVISION.
-
-   GENERAL: With triangle plots, the (a, b, c) scales are proportional. So regardless of the 
+   With triangle plots, the (a, b, c) scales are proportional. So regardless of the 
    absolute sizes of a coordinate set (a,b,c), values are plotted and handled 
-   as proportions, i.e. a/(a+b+c), b/(a+b+c) and c/(a+b+c), respectively. For example, 
-   \code{triXY2ABC} recovers the relative proportions of a, b and c, not the absolute 
-   amounts. Typically, absolute values are discarded during the plot operation, unless, 
-   e.g. retained as the \code{z} component of the plot call. 
+   as proportions, i.e. a/(a+b+c), b/(a+b+c) and c/(a+b+c), respectively. This means 
+   that absolute values of \code{a}, \code{b} and \code{c} are lost when points are 
+   plotted on these axes. So, the function \code{triXY2ABC} give the relative proportions 
+   of \code{a}, \code{b} and \code{c}, not the absolute amounts, when translating a 2-D 
+   (x,y) point into the associated (a, b, c) coordinate.  
 
-   \code{triABC2XY} and \code{triXY2ABC}: With these two functions data handling is 
-   highly robust. Inputs can be individual vectors, or as a single data.frame or list. 
+   Development:
 
-   This handling can also be fine-tuned using the \code{force...} arguments. For 
-   example, with the call \code{triABC2XY(..., force.abc = TRUE)}, if data is 
-   supplied as a data.frame or list the named elements \code{'a'}, \code{'b'} 
-   and \code{'c'} will be used as \code{a}, \code{b} and \code{c} respectively 
-   if present, while with the alternative (\code{force.abc = FALSE}) the first 
-   three elements are always used regardless of any naming.     
-         
+   This is an in-development plot, and 'best handling' strategies has not been decided for 
+   several elements. So, future versions of these functions may differ significantly from the 
+   current version. 
+
+   In particular:
+
+   Currently, \code{trianglePlot} provides scale adjustment options by \code{alim}, 
+   \code{blim}, \code{clim} setting. Other options are also being evaluated, e.g. 
+   \code{lims} to set all axes ranges the same, \code{maxs} to setting all axes range 
+   maximums, \code{mins} to set all axes range minimums, etc. One of the issues here is 
+   that the axes ranges are all inter-linked. The range of one axes is a function of the 
+   other two axes ranges. So, setting these can generate contradictions. For example, 
+   \code{lims=c(0,0.1)} should in theory set all ranges to (0, 0.1). But, the triangle 
+   \code{a = b = c = c(0, 0.1)} cannot exist. Therefore, the plot would attempt to recover 
+   the extended range that includes all the requested ranges (\code{a = c(0, 0.1)}, 
+   \code{b = c(0, 0.1)}  and \code{c = c(0, 0.1)}), which in this case is the full 
+   range: \code{a = b = c = c(0, 1)}. Any suggestions on this topic are very welcome. 
+
+   \code{trianglePlot}:
+
+   The \code{\link{panelPal}} function was extensively revised as part of the 0.1 -> 0.2 
+   package version update. The current version of \code{trianglePlot} still uses the old version 
+   of \code{panelPal} (\code{panelPal.old}). The migration of \code{trianglePlot} to the latest 
+   version of \code{panelPal} is on the current package 'to-do'. 
+
+   This update should provide improved plot handling similar to the current versions of \code{\link{loaPlot}} 
+   and \code{\link{GoogleMap}} which both already use the new version of \code{panelPal}.
+
+   \code{panel.triangleAxes}: 
+
+   Code currently in revision. Please handle with care.
+   
+   \code{triABC2XY}: 
+
+   Code currently in revision. Please handle with care.
+              
 }
 
 \seealso{
-   For in-panel axis/scale generation, see \code{\link{localScalesHandler}} and 
+
+   In \code{loa}: For in-panel axis/scale generation, see \code{\link{localScalesHandler}} and 
    \code{\link{panel.localScale}}. 
 
-   Related functions in other packages: \code{\link{lattice}}, \code{\link{xyplot}}. 
+   In other packages: \code{\link{xyplot}} in \code{\link{lattice}}. 
+
 }
 
 \examples{
 
-##example 1
+## Example 1
+## trianglePlot Examples
 
-##trianglePlot
-##TO DO
-##confirm data source
+#  lat.lon.meuse plots
 
-##example 2
+#  Cu/Pb/Zn triangle plot
+trianglePlot(~copper+lead+zinc, data=lat.lon.meuse)   
 
-##data handling
-##TO DO
+#  ... with Cd as zcase 
+#  (bubble plot, col and cex scaling)
+trianglePlot(cadmium~copper+lead+zinc, data=lat.lon.meuse)
+
+#  ... and conditioning by lime
+trianglePlot(cadmium~copper+lead+zinc|lime, data=lat.lon.meuse)
 
 
+##  Example 2
+##  Local scales/axis control in trianglePlot
 
-##example 3
-##local scales/axis control in trianglePlot
-
-##tri.frame - a 'standalone' function to demonstrate the
-##axes, ticks, grids, annotation handling in trianglePlot
+#  tri.frame - a 'standalone' function to demonstrate the
+#  axes, ticks, grids, annotation handling in trianglePlot
 
 tri.frame <- function(panel=panel.triangleGrids, axes = TRUE, ticks = TRUE, 
                       grids = TRUE, annotation = TRUE, ...){
@@ -354,7 +377,9 @@ tri.frame <- function(panel=panel.triangleGrids, axes = TRUE, ticks = TRUE,
 
 }
 
-##you can send this any of the above panels
+#  You can send this any of the above panels
+#  (works like x,y scales in lattice but for 
+#  a,b,c scales of trianglePlot) 
 
 tri.frame(panel.triangleGrids) #just the triangle plot grids
 tri.frame(panel.triangleAxes)  #just the triangle plot axes

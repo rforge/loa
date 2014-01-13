@@ -11,11 +11,11 @@
 }
 
 \description{
-  loaPlot is a standard XYZ plotting function, where X and Y denote the axes of 
-  a conventional XY plot and Z denotes a third terms which is visualized at 
-  associated XY coordinates. By default, loaPlot links Z to plot point size and 
-  color to generate a bubbleplot style output, or using modified plot calls 
-  to provide a wider range of other plots.   
+  loaPlot is a standard XYZ plotting function, where X and Y are the axes of 
+  a conventional XY plot and Z is an element (or elements if supplied in the 
+  form Z1 + Z2 + Z3...) visualized at associated XY coordinates. By default, 
+  loaPlot links Z to plot point size and color to generate a bubbleplot style 
+  output, or using modified plot calls other plot types.   
 }
 
 \usage{
@@ -93,12 +93,12 @@
 
    \item{load.lists}{For \code{loaPlot} only, character vector. In-development alternative to 
    list based arguments. This option identifies plot call arguments that \code{loaPlot} should 
-   manage using \code{\link{listLoad}}. See associated HELP documentation for further details.   
+   manage using \code{\link{listLoad}}. See associated help documentation for further details.   
    }
 
    \item{by.group, by.zcase}{For \code{loaPlot} only. Arguments for routine 
    by group and by zcase handling of plot inputs.\cr 
-   IMPORTANT: These are current under review.
+   Important: These are current under review.
    }
  
    \item{preprocess}{For \code{loaPlot} only, logical, passed to \code{\link{panelPal}}. If 
@@ -144,6 +144,9 @@
 
   \code{panel.loaPlot2} is an alternative versions of \code{panel.loaPlot} that is 
   currently under revision. Please use with care.
+
+  \code{loaPlot} arguments \code{by.group} and \code{by.zcase} are currently in 
+  revision. Please use with care. 
      
 }
 
@@ -169,9 +172,9 @@
 
 \seealso{
 
-   \code{\link{panelPal}} 
+   In \code{loa}: \code{\link{panelPal}} 
 
-   For information on related functions in other packages, see
+   In other packages, see
 
    \code{\link{lattice}}: \code{\link{xyplot}}; and \code{\link{levelplot}}.
 
@@ -184,8 +187,7 @@
 
 loaPlot(Ozone~Solar.R*Temp|Wind>8, 
         data=airquality, 
-        col.regions="Blues", 
-        cex.range=c(0.75,3))
+        col.regions="Blues")
 
 # Notes:
 # Formula structure z ~ x * y |cond like levelplot.
@@ -212,19 +214,20 @@ loaPlot(Ozone~Solar.R*Temp|Wind>8,
 ## Basic modifications
 
 loaPlot(Ozone~Solar.R*Temp, groups=airquality$Wind>8, 
-        data=airquality, cex.range=c(0.75,3)) 
+        data=airquality) 
 
 # When groups are applied, by default group id is linked to col.
 # The follow example illustrates three options:
 
 loaPlot(Ozone~Solar.R*Temp, groups=airquality$Wind>8, 
-        data=airquality, cex.range=c(0.75,3), 
-        group.args=c("pch"), pch=c(1,4), col="blue", pch=c(1,4))
+        data=airquality,  
+        group.args=c("pch"), pch=c(1,4), 
+        col="blue")
 
 # notes:
 # Here, group.args is used to change the default group arguments.
 # (So, pch rather than col is used to identify groups.)
-# pch is then assigned by group rather than by x (and y) or z case. 
+# pch is then assigned by group rather than by (x,y) case or z case. 
 # (See panelPal Help further further details of assignments in loa.)
 # col supplied by the user supercedes the default z linkage.
 # (So, here cex remains z scales but col is fixed as blue.)
@@ -234,13 +237,13 @@ loaPlot(Ozone~Solar.R*Temp, groups=airquality$Wind>8,
 ## Key handling
 
 loaPlot(Ozone~Solar.R*Temp, data=airquality, 
-        cex.range=c(0.75,3), col.regions=c("green", "red"))
+        col.regions=c("green", "red"))
 
 # Key settings are by the key argument (as in lattice) 
 # or key... arguments via keyHandler and listLoad, so e.g.:
 
 loaPlot(Ozone~Solar.R*Temp, data=airquality, 
-        cex.range=c(0.75,3), col.regions=c("green", "red"), 
+        col.regions=c("green", "red"), 
         key.fun = draw.loaColorKey)
 
 # Notes:
@@ -269,11 +272,11 @@ loaPlot(Ozone~Solar.R*Temp|Wind>8, data=airquality,
 # the panel by default bins data by location and for each bin cell
 # calculates the mean Ozone concentration just like a standard 
 # lattice panel would, but it also tracks these values (calculated 
-# within the panel) and scales panel-to-panel and panel-to-key 
+# within the panels) and scales panel-to-panel and panel-to-key 
 # so users do not have to do that retrospectively; and, finally, 
 # it retains in-panel calculations so users can recover them.
-# (See panelPal for methods and panel.binPlot for further details 
-# of this particular panel function.)
+# (See associated helps for further details: ?panelPal about methods; 
+# and ?panel.binPlot about the panel function.)
  
 }
 

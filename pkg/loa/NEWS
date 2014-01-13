@@ -1,3 +1,28 @@
+Changes in loa 0.2.15 [2014-01-10]
+=====================================
+
+*       refinements to loaPlot, panel.binPlot,
+        panel.kernelDensity, draw.loaColorKey 
+        and draw.loaColorRegionsKey 
+        (better alpha/alpha.regions 
+        tracking)
+*       refinements to GoogleMap and 
+        panelPal (better local scale 
+        tracking)
+*       added example data roadmap.meuse 
+        (for off-line ?GoogleMap examples)
+*       updated help examples for loaPlot, 
+        GoogleMap, trianglePlot
+
+
+Changes in loa 0.2.14 [2014-01-04]
+=====================================
+
+*       refinement to draw.loaPlotZKey
+        (better alpha/alpha.regions 
+        tracking)
+
+
 Changes in loa 0.2.13 [2013-12-23]
 =====================================
 

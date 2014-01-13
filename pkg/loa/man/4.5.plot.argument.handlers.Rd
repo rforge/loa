@@ -68,7 +68,7 @@ zHandler(z = NULL, expand.outputs = TRUE,
   } 
 
  \item{cex, col, pch}{ For associated handlers, the parameter value(s) to be managed (i.e., 
-  \code{cex} for \code{cexHandler}, etc. NOTE: In all cases if these are not 
+  \code{cex} for \code{cexHandler}, etc. Note: In all cases if these are not 
   \code{NULL} these supersede any supplied \code{z} or 
   \code{...Handler} modification.  
   } 
@@ -86,7 +86,7 @@ zHandler(z = NULL, expand.outputs = TRUE,
   invisible to 1 for solid) and \code{colorkey} which can be a logical (forcing 
   the colorkey on or off) or a list of components that can be used to fine-tune the 
   appearance of the colorkey. 
-  NOTE: The generation of colorscales is handled by \code{\link{RColorBrewer}}.
+  Note: The generation of colorscales is handled by \code{\link{RColorBrewer}}.
   }
 
   \item{pch.order}{ A vector of symbol ids (typically the numbers 1 to 24) to used 
@@ -100,7 +100,7 @@ zHandler(z = NULL, expand.outputs = TRUE,
    should outputs be expanded to the same length as \code{ref}? This can be useful if, 
    e.g., coloring points on a scatter plot that may be conditioned and therefore may 
    require \code{subscript} handling, in which case \code{ref} could be the x 
-   or y data series, or any other vector of the same length. NOTE: if 
+   or y data series, or any other vector of the same length. Note: if 
    \code{ref} is not supplied \code{expand.outputs} is ignored. 
   }
 
@@ -179,25 +179,23 @@ zHandler(z = NULL, expand.outputs = TRUE,
 }
 
 \note{
-  \code{cexHandler} recently revised.
+  \code{cexHandler} recently revised. Default cex range now smaller, in line 
+  with feedback. 
 
 }
 
 \seealso{
-   Related functions elsewhere: \code{\link{lattice}} function \code{\link{xyplot}} 
-   for the plot framework.
+   In other packages: See \code{\link{xyplot}} in \code{\link{lattice}}. 
 }
 
 \examples{
 
 #some trivial data
 a <- 1:10
-b <- a
-c <- a
 
 
-##example 1
-##plot with cex handling
+##  Example 1
+##  Simple plot with cex handling
 
 myplot1 <- function(x, y, z = NULL, cex = NULL, 
                     cex.range = NULL, ...){
@@ -209,25 +207,21 @@ myplot1 <- function(x, y, z = NULL, cex = NULL,
     xyplot(y~x, cex = cex,...)
 }
 
-#like plot(x, y)
-myplot1(a, b)
+myplot1(a, a, a)
 
-#with z cex setting
-myplot1(a, b, c)
-
-#same as 
-myplot1(a, b, c*100)
-
-#cex rescale
-myplot1(a, b, c, cex.range = c(1,5))
-
-#cex supercedes 
-myplot1(a, b, c, cex.range = c(10,50), cex = 1)
+#  compare
+#  myplot1(a, a)             #like plot(x, y)    
+#  myplot1(a, a, a*100)      #as myplot1(a, a, a)
+#                            #because cex scaled by range
+#  myplot1(a, b, c, 
+#      cex.range = c(1,5))   #cex range reset
+#  myplot1(a, b, c, 
+#      cex.range = c(10,50), 
+#      cex = 1)              #cex supersedes all else if supplied
 
 
-
-##example2
-##plot function using lists/listUpdates
+## Example2
+## plot function using lists/listUpdates
 
 myplot2 <- function(x, y, z = NULL, ...){
 
@@ -244,15 +238,17 @@ myplot2 <- function(x, y, z = NULL, ...){
 }
 
 
-#with colorkey based on z/c
-myplot2(a, b, c) 
+#with colorkey based on z case
+myplot2(a, a, a) 
 
-#with col.regions reset
-myplot2(a, b, c, col.regions = "Blues") 
+#  compare 
+#  myplot2(a, b, c, 
+#      col.regions = "Blues") #col.regions recoloring  
+#  myplot2(a, b, c, 
+#      col = "red")           ##but (again) col supersedes if supplied
 
-#but col supersedes if supplied
-myplot2(a, b, c, col = "red")
-
+#  Note:
+#  See also example in ?listUpdate
 
 }
 

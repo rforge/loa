@@ -69,14 +69,6 @@ loaPlot <- function (x, data = NULL, panel = panel.loaPlot, ...,
                       NULL else extra.args$group.args
 
 
-##################
-#colRegionsHandler add-in
-##################
-
-#    if("col.regions" %in% names(extra.args))
-        extra.args$col.regions <- do.call(colRegionsHandler, extra.args)
-
-#if needed because col expanded to col.regions
 
 ##################
 
@@ -109,12 +101,22 @@ loaPlot <- function (x, data = NULL, panel = panel.loaPlot, ...,
             }
             extra.args <- listUpdate(temp, extra.args)
 
+
 #check next bit 
 #might not be needed any more
         if(is.null(group.args))
             group.args <- loa.settings$group.args
 
     }
+
+##################
+#colRegionsHandler add-in
+##################
+
+#    if("col.regions" %in% names(extra.args))
+        extra.args$col.regions <- do.call(colRegionsHandler, extra.args)
+
+#if needed because col expanded to col.regions
 
     #list.loads
     if(is.character(load.lists)){

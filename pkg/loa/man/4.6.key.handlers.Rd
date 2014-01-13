@@ -85,11 +85,11 @@ draw.zcasePlotKey(key = NULL, draw = FALSE, vp = NULL, ...)
   Visualization with R. Springer, New York. ISBN
   978-0-387-75968-5
 
-  [ref section on adding colorscale to xyplot]
+%  [ref section on adding colorscale to xyplot]
 
-  [ref for RColorBrewer to add]
+%  [ref for RColorBrewer to add]
 
-  [ref for grid, draw and vp]
+%  [ref for grid, draw and vp]
 
 }
 
@@ -98,23 +98,19 @@ draw.zcasePlotKey(key = NULL, draw = FALSE, vp = NULL, ...)
 }
 
 \note{
-  IN DEVELOPMENT: Function structures may change in future 
+  In Development: Function structures may change in future 
   package updates.
 }
 
 \seealso{
-   \code{\link{lattice}}, \code{\link{xyplot}}, 
+   In other packages: See \code{\link{xyplot}} in \code{\link{lattice}}. 
 }
 
-\examples{
-
-##example 1
-##general
-
-#TO DO
-
-
-}
+%\examples{
+%##example 1
+%##general
+%#TO DO
+%}
 
 
 \keyword{ methods }

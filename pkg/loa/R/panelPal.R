@@ -220,7 +220,7 @@ panelPal <- function(ans, panel = NULL, preprocess = FALSE,
                 "at", "col.regions", "alpha.regions", "cex.range", "pch.order", 
                 "group.elements", "group.ids", "group.args", 
                 "allowed.scales", "disallowed.scales", "panel.scales",
-                "reset.xylims", "load.lists", "lim.borders",
+                "reset.xylims", "load.lists", "lim.borders", "x.elements", 
                 "zcase.ids", "zcase.args", "zcase.zlim", "z.rowsum.lim")
     ignore <- unique(ignore, loa.settings$common.args)
 

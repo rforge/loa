@@ -87,7 +87,8 @@ screenLatticePlot(object = trellis.last.object(), ...)
    with \code{GoogleMap} outputs and other similarly 
    georeferenced plots. See Note below.
 
-  \code{screenLatticePlot} is a crude plot screening function.  
+  \code{screenLatticePlot} is a crude plot screening function. It is 
+   currently in development.  
      
 }
 
@@ -104,13 +105,26 @@ screenLatticePlot(object = trellis.last.object(), ...)
 
 \note{
 
-  INTRO: local scaling
+  \code{getXY} recovers the (x, y) coordinates of points selected 
+  on a previously generated plot.
 
-  Corrections are applied using \code{scale.correction} if it 
-  is supplied. This should therefore be a function that can be 
+  Some plots, use local scaling. For example, when plotting 
+  latitude, longitude data on a map a scale correction may be 
+  used to account for the curvature of the Earth. Similarly, if 
+  different data series are plotted on primary and secondary axes 
+  in a single plot, some or all data may be normalised. In such 
+  cases scaling may be local, i.e. what you actually plot may not be 
+  exactly what the annotation says it is. 
+
+  Using \code{getXY} on such plots would recover the actual (x, y) 
+  coordinates of the points selected.      
+
+  However, corrections can be applied using \code{scale.correction}, 
+  if it is supplied, to convert these to the same scale as the axes 
+  annotation. The correction should be a function that can be 
   applied directly to a standard \code{getXY} output (a list of 
-  \code{x} and \code{y} values) and that rescales these to give 
-  their corrected values.
+  \code{x} and \code{y} values) and rescale x and y to give 
+  their 'corrected' values.
 
   \code{getLatLon} provides an example of the mechanism, and is 
   for use with georeferenced plots that have been locally scaled 
@@ -142,27 +156,19 @@ screenLatticePlot(object = trellis.last.object(), ...)
 }
 
 \seealso{
-   For related functions in other packages, see
-
-   \code{\link{lattice}}: \code{\link{grid.locator}}; 
-   \code{\link{trellis.focus}} and \code{\link{lpoints}} 
-
-   \code{RgoogleMap}: \code{\link{LatLon2XY}}, etc.  
+   In other packages: See \code{\link{grid.locator}}; 
+   \code{\link{trellis.focus}} and \code{\link{lpoints}} in \code{\link{lattice}}.   
+   See \code{\link{LatLon2XY}} in \code{RgoogleMap}.  
 }
 
-\examples{
 
-##example 1
-##to be confirmed
-
-##getXY on xyplot
-
-##example 2
-
-##Move getLatLon code to examples
-
-
-}
+%\examples{
+%##
+%##to be confirmed
+%##getXY on xyplot
+%##example 2
+%##Move getLatLon code to examples
+%}
 
 
 \keyword{ methods }

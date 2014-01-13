@@ -126,19 +126,46 @@ draw.loaColorKey <- function (key = NULL, draw = FALSE, vp = NULL, ...){
     if (!"at" %in% names(key)) 
         key$at <- seq(min(key$zlim), max(key$zlim), length.out = 100)
 
-    if(!"col" %in% names(key)){
-        key$col <- do.call(colHandler, listUpdate(key, list(z = key$zlim, 
-        output = "all")))$col.regions
-    }
+######################
+#catch col and alpha 
+#in draw.loaColorKey
+######################
 
-    if(!"alpha" %in% names(key)){
-        key$alpha <- do.call(colHandler, listUpdate(key, list(z = key$zlim, 
-        output = "all")))$alpha.regions
-    }
+#    if(!"col" %in% names(key)){
+
+        temp <- listUpdate(list(...), key)
+
+#new bit testing
+
+        if("isolate.col.regions" %in% names(key))
+            key$col <- NULL
+
+
+        key$col <- do.call(colHandler, listUpdate(key, 
+                                       list(z=temp$at, ref=temp$at)))
+#    }
+
+#####################
+#simplified 
+#testing
+#####################
+
+#    if("alpha.regions" %in%names(key)){
+        key$alpha <- NULL
+        key$alpha.regions <- NULL
+#    }
+
+#    if(!"alpha" %in% names(key)){
+#        key$alpha <- do.call(colHandler, listUpdate(key, list(z = key$zlim, 
+#        output = "all")))$alpha.regions
+#        key$alpha <- key$alpha.regions
+#        key$alpha.regions <- NULL
+#    }
 
     draw.colorkey(key, draw, vp)
 
 }
+
 
 
 
@@ -151,31 +178,31 @@ draw.loaColorKey <- function (key = NULL, draw = FALSE, vp = NULL, ...){
 ##############################
 
 
-draw.loaColorRegionsKey <- function (key = NULL, draw = FALSE, vp = NULL, ...){
-
+draw.loaColorRegionsKey <- function (key = NULL, draw = FALSE, vp = NULL, ...) 
+{
     if (!"at" %in% names(key)) 
-        key$at <- pretty(c(min(key$zlim), max(key$zlim)), 7)
+        key$at <- pretty(c(min(key$zlim), max(key$zlim)))
 
-    if(!"col" %in% names(key)){
+    if ("isolate.col.regions" %in% names(key)) 
+        key$col <- NULL
+
+    if (!"col" %in% names(key)) {
         temp <- listUpdate(list(...), key)
-        key$col <- colHandler(1:(length(key$at)-1), col.regions=temp$col.regions, output="col")
+        key$col <- colHandler(1:(length(key$at) - 1), col.regions = temp$col.regions, 
+            output = "col")
     }
-
-    key <- listUpdate(key, list(labels=list(at=key$at)))
-
-    if(!"col" %in% names(key)){
+    key <- listUpdate(key, list(labels = list(at = key$at)))
+    if (!"col" %in% names(key)) {
         key$col <- do.call(colHandler, listUpdate(key, list(z = key$zlim, 
-        output = "all")))$col.regions
+            output = "all")))$col.regions
     }
-
-    if(!"alpha" %in% names(key)){
+    if (!"alpha" %in% names(key)) {
         key$alpha <- do.call(colHandler, listUpdate(key, list(z = key$zlim, 
-        output = "all")))$alpha.regions
+            output = "all")))$alpha.regions
     }
-
     draw.colorkey(key, draw, vp)
-
 }
+
 
 
 
@@ -676,9 +703,11 @@ if(is.list(groups) && length(groups) > 0){
 
     if(!"col" %in% names(groups)) 
          groups$col <- if("col" %in% key$group.args) 
-                           key$col else if(is.null(z$col))
-                               do.call(colHandler, listUpdate(key, list(z=NULL, ref=1:length(groups$labels)))) else
-                                   z$col[1]
+                           do.call(colHandler, listUpdate(key, list(z = NULL, 
+                                                          ref = 1:length(key$col)))) 
+                               else if(is.null(z$col))
+                                   do.call(colHandler, listUpdate(key, list(z=NULL, ref=1:length(groups$labels)))) else
+                                       z$col[1]
     if(!"cex" %in% names(groups)) 
          groups$cex <- if("cex" %in% key$group.args) 
                            key$cex else if(is.null(z$cex))
@@ -802,9 +831,11 @@ if(is.list(zcases) && length(zcases) > 0){
 
     if(!"col" %in% names(zcases)) 
          zcases$col <- if("col" %in% key$zcase.args) 
-                           key$col else if(is.null(z$col))
-                               do.call(colHandler, listUpdate(key, list(z=NULL, ref=1:length(zcases$labels)))) else
-                                   z$col[1]
+                           do.call(colHandler, listUpdate(key, list(z = NULL, 
+                                                          ref = 1:length(key$col)))) 
+                               else if(is.null(z$col))
+                                   do.call(colHandler, listUpdate(key, list(z=NULL, ref=1:length(zcases$labels)))) else
+                                       z$col[1]
     if(!"cex" %in% names(zcases)) 
          zcases$cex <- if("cex" %in% key$zcase.args) 
                            key$cex else if(is.null(z$cex))

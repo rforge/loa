@@ -259,23 +259,6 @@ loaPlot(~a*a|ref, col=ref, pch=19)
 # loaPlot(~a*a|ref, col=ref, pch=1:10)
 # etc
 
-
-
-#####################################
-#to do
-#####################################
-
-##example 3 
-
-#plot and process
-
-
-## example 4
-
-#making loa-friendly panels 
-
-
-
 }
 
 

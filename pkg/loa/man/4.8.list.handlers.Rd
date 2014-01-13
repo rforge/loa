@@ -73,7 +73,7 @@ listLoad(..., load = NULL)
   \code{listExpand} is a list handler that expands vectors to 
    a given reference length, intended for use for data wrapping. 
 
-  \code{listLoad} is an IN-DEVELOPMENT list generator. See Note below.
+  \code{listLoad} is a list generator. See Note below.
      
 }
 
@@ -100,7 +100,7 @@ listLoad(..., load = NULL)
 }
 
 \note{
-  IN DEVELOPMENT: \code{listLoad} is an in-development workhorse function 
+  \code{listLoad} is an in-development workhorse function 
   that generates lists based on the supplied \code{load} argument. 
 
   It assumes each element of \code{load} is the name of an expected list 
@@ -121,26 +121,25 @@ listLoad(..., load = NULL)
 
 \examples{
 
-##example 1
-##general
+## Example 1
+## general
 
-#two lists
+#  two lists
 list1 <- list(a = 1:10, b = FALSE)
 list2 <- list(b = TRUE, c = "new")
 
-#updating a with b
-#keeps unchanged list1 entry, a
-#updates changed list1 entry, b
-#adds new (list2) entry, c
+#  updating a with b
+#  keeps unchanged list1 entry, a
+#  updates changed list1 entry, b
+#  adds new (list2) entry, c
 listUpdate(list1, list2)
 
 
-##example2
-##use in plot functions
-##to simplify formals
+## Example2
+## use in plot functions
+## to simplify formals
 
-#some data
-
+#  some data
 a <- 1:10
 b <- rnorm(10,5,2)
 
@@ -157,14 +156,15 @@ badplot <- function(x, ...){
                    }, ...)
 }
 
-badplot(a~b) #OK
-badplot(a~b, xlim=c(0,10)) #OK
+#  badplot(a~b)               #OK
 
-#BUT would fail on
-#badplot(a~b, col= "blue") 
-#because col hardcoded into badplot function
-#AND duplicated in call and '...'
-#so user cannot update col 
+#  compare with 
+#  badplot(a~b, xlim=c(0,10)) #OK
+#  badplot(a~b, col= "blue")  #not OK
+
+#  (because col hardcoded into badplot function
+#  AND duplicated in call and '...'
+#  so user cannot update col 
 
 
 #a standard correction
@@ -180,13 +180,14 @@ stdplot <- function(x, pch = 20, col = "red", ...){
                    }, ...)
 }
 
-stdplot(a~b)
-stdplot(a~b, col = "blue", xlim=c(1:20))
+#  stdplot(a~b)                  #OK
+#  stdplot(a~b, col = "blue", 
+#          xlim=c(1:20))         #also OK
  
 
-#an alternative correction using lists and 
-#listUpdate that removes the need for formal 
-#definition of all modified plot arguments 
+#  An alternative correction using lists and 
+#  listUpdate that removes the need for formal 
+#  definition of all modified plot arguments 
 
 myplot <- function(x, ...){
 
@@ -202,8 +203,9 @@ myplot <- function(x, ...){
 }
 
 
-myplot(a~b)
-myplot(a~b, col = "blue", xlim=c(1:20)) 
+#  myplot(a~b)                 #OK
+#  myplot(a~b, col = "blue", 
+#         xlim=c(1:20))        #also OK
 
 
 }

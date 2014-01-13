@@ -239,22 +239,25 @@
    functions \code{\link{LatLon2XY}}, \code{\link{LatLon2XY.centered}} 
    and \code{\link{XY2LatLon}} to locally scale both axis and data.  
 
-  IMPORTANT: Users wishing to add data to these plots, e.g. using 
+  Important: Users wanting to add data to these plots, e.g. using 
    \code{update} or \code{layers} in \code{latticeExtra}, 
-   should first rescale the data. See Example below.
+   should first rescale the data. Likewise, users wanting to add 
+   maps to other plots will need to rescale plotted data to use these 
+   maps. See Example 1 below.
 
-  IMPORTANT: The Google API returns a map based from a 
-  limited number of panel sizes. This means where your data range 
-  and the available panel sizes may not alway align well. 
-  So, you may not always get the range you asked for! As \code{xlim} 
-  and \code{ylim} are passed to the API reseting with these 
-  can produce similar effects. \code{RgoogleMaps} includes a range of 
-  parameters, e.g. \code{size} and \code{zoom}, which can be used to 
-  tweak things. \code{makeMapArg} tries to guess these but it 
-  can some times be a little conservative. So, if you want to manually 
-  optimise the map ranges, the best option is currently to start with 
-  \code{GoogleMap(..., size=c(640,640)} and then reduce either or 
-  both of these values until you generate an appropriate map size.  
+  Important: The Google API returns a map panel larger than the 
+  data (latitude, longitude) range requested. However, it does this 
+  using a limited number of panel sizes. This means you may get back 
+  a map that is large than necessary. As \code{xlim} and \code{ylim} 
+  are passed to the API when they are called reseting these can 
+  produce similar effects (so you may not get exactly the map range 
+  you ask for! If you want to manually optimise the map ranges, the 
+  best option is currently to start with: 
+
+  \code{GoogleMap(..., size=c(640,640)} 
+
+  ...and then reduce either or both of these values until you generate 
+  an appropriate map size.  
        
 }
 
@@ -286,7 +289,7 @@
 
 \seealso{  
 
-   For information of related functions in other packages, see
+   In other packages, see
 
    \code{RgoogleMaps}: \code{\link{GetMap}}; \code{\link{LatLon2XY}}; 
    \code{\link{LatLon2XY.centered}}; and, \code{\link{XY2LatLon}}.
@@ -297,8 +300,9 @@
 
 \examples{
 
-#quickMap code
-#as example of third-party use of functions
+## Example 1
+## quickMap code
+## as example of third-party use of functions
 
 quickMap <- function(lat, lon, show.data = FALSE, ...){
 
@@ -311,6 +315,7 @@ quickMap <- function(lat, lon, show.data = FALSE, ...){
                    axis.default(components = map.axis.comps, ...)
 
     #scale data for map projection
+    #see ?Rgooglemaps:::LatLon2XY
     temp <- LatLon2XY.centered(map, lat, lon)
     lat <- temp$newY
     lon <- temp$newX
@@ -327,6 +332,42 @@ quickMap <- function(lat, lon, show.data = FALSE, ...){
            }, ...)
 }
 
+## Example 2
+## Off-line GoogleMap examples
+
+GoogleMap(zinc~latitude*longitude, col.regions=c("grey", "darkred"), 
+          data=lat.lon.meuse, map=roadmap.meuse)
+
+GoogleMap(zinc~latitude*longitude, col.regions=c("grey", "darkred"),
+          panel=panel.binPlot, alpha.regions=0.5,
+          data=lat.lon.meuse, map=roadmap.meuse)
+
+GoogleMap(cadmium*50+copper*10+lead*2+zinc~latitude*longitude, 
+          col.regions=c("grey", "darkred"), 
+          key.z.main="Concentrations", panel.zcases = TRUE,
+          data=lat.lon.meuse, map=roadmap.meuse)
+
+GoogleMap(cadmium*50+copper*10+lead*2+zinc~latitude*longitude, 
+          col.regions=c("grey", "darkred"), panel=panel.zcasePiePlot,
+          data=lat.lon.meuse, map=roadmap.meuse)
+
+#  Note 1:
+#  Here, the map argument is supplied so example works off-line. 
+#  If not supplied and R is on-line, GoogleMap will (try to) get map 
+#  from the Google API. Repeat any of above without map argument 
+#  to see. For example:
+#  GoogleMap(zinc~latitude*longitude, col.regions=c("grey", "darkred"), 
+#            data=lat.lon.meuse)
+#  (The map will appear slightly different because non-default 
+#  size and maptype settings were used to make roadmap.meuse. See 
+#  ?roadmap.meuse for details.)  
+
+#  Note 2:
+#  To make a map for use with panel.GoogleMaps or panel.GoogleMapsRaster 
+#  without plotting use markMapArg(). To recover a map from a previously 
+#  plotted loa GoogleMap use getMapArg().
+
 }
+
 
 \keyword{ methods }
