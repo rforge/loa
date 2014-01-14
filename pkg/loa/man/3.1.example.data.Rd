@@ -97,26 +97,30 @@ data in R. R News 5 (2), http://cran.r-project.org/doc/Rnews/.
 
 head(lat.lon.meuse)
 
+##  Use a subsample of lat.lon.meuse
+
+temp <- lat.lon.meuse[sample(1:155, 15),]
+
 
 ## various loaPlot examples 
 ## using lat.lon.meuse
 
-loaPlot(~longitude*latitude, data=lat.lon.meuse)
+loaPlot(~longitude*latitude, data=temp)
 
-loaPlot(cadmium~longitude*latitude, data=lat.lon.meuse)
+loaPlot(cadmium~longitude*latitude, data=temp)
 
 loaPlot(cadmium~longitude*latitude, col.regions=c("lightblue", "darkblue"), 
-        data=lat.lon.meuse)
+        data=temp)
 
 loaPlot(cadmium*50+copper*10+lead*2+zinc~longitude*latitude, panel.zcases = TRUE, 
         col.regions=c("lightblue", "darkblue"), 
-        key.z.main="Concentrations", data=lat.lon.meuse)
+        key.z.main="Concentrations", data=temp)
 
 
 ## (off line) GoogleMap example
 ## using lat.lon.meuse and roadmap.meuse
 
-GoogleMap(zinc~latitude*longitude, data=lat.lon.meuse, 
+GoogleMap(zinc~latitude*longitude, data=temp, 
           map=roadmap.meuse, col.regions=c("grey", "darkred"))
 
 #  Note 1:

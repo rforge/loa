@@ -335,21 +335,25 @@ quickMap <- function(lat, lon, show.data = FALSE, ...){
 ## Example 2
 ## Off-line GoogleMap examples
 
+#  Use a subsample of lat.lon.meuse
+temp <- lat.lon.meuse[sample(1:155, 15),]
+
+
 GoogleMap(zinc~latitude*longitude, col.regions=c("grey", "darkred"), 
-          data=lat.lon.meuse, map=roadmap.meuse)
+          data=temp, map=roadmap.meuse)
 
 GoogleMap(zinc~latitude*longitude, col.regions=c("grey", "darkred"),
           panel=panel.binPlot, alpha.regions=0.5,
-          data=lat.lon.meuse, map=roadmap.meuse)
+          data=temp, map=roadmap.meuse)
 
 GoogleMap(cadmium*50+copper*10+lead*2+zinc~latitude*longitude, 
           col.regions=c("grey", "darkred"), 
           key.z.main="Concentrations", panel.zcases = TRUE,
-          data=lat.lon.meuse, map=roadmap.meuse)
+          data=temp, map=roadmap.meuse)
 
 GoogleMap(cadmium*50+copper*10+lead*2+zinc~latitude*longitude, 
           col.regions=c("grey", "darkred"), panel=panel.zcasePiePlot,
-          data=lat.lon.meuse, map=roadmap.meuse)
+          data=temp, map=roadmap.meuse)
 
 #  Note 1:
 #  Here, the map argument is supplied so example works off-line. 
