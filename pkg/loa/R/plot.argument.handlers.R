@@ -194,9 +194,9 @@ colHandler <- function(z = NULL, col = NULL,
             }
         }
 #test fix
-#        zrng <- lattice:::extend.limits(range(as.numeric(zlim), finite = TRUE))
+#        zrng <- lattice.extend.limits(range(as.numeric(zlim), finite = TRUE))
         zrng <- range(as.numeric(zlim), finite = TRUE)
-        if(length(unique(zrng))<2) zrng <- lattice:::extend.limits(zrng) 
+        if(length(unique(zrng))<2) zrng <- lattice.extend.limits(zrng) 
         if(is.null(at)) 
             at <- if(pretty) 
                       pretty(zrng, cuts) else 
@@ -210,9 +210,9 @@ colHandler <- function(z = NULL, col = NULL,
         #using col
         z <- if(is.numeric(col)) col else as.factor(col)
 #test fix
-#        zrng <- lattice:::extend.limits(range(as.numeric(z), finite = TRUE))
+#        zrng <- lattice.extend.limits(range(as.numeric(z), finite = TRUE))
         zrng <- range(as.numeric(z), finite = TRUE)
-        if(length(unique(zrng))<2) zrng <- lattice:::extend.limits(zrng) 
+        if(length(unique(zrng))<2) zrng <- lattice.extend.limits(zrng) 
 
         if(is.null(at)) 
             at <- if(pretty) 
@@ -433,4 +433,50 @@ zHandler <- function(z = NULL, expand.outputs = TRUE,
             z[1:length(ref)]
 }
 
+
+
+
+#######################
+######################
+##lattice.extend.limits
+######################
+#######################
+
+
+lattice.extend.limits <- function (lim, length = 1, axs = "r", prop = if (axs == "i") 0 else lattice.getOption("axis.padding")$numeric) 
+{
+    if (all(is.na(lim))) 
+        NA_real_
+    else if (is.character(lim)) {
+        c(1, length(lim)) + c(-1, 1) * if (axs == "i") 
+            0.5
+        else lattice.getOption("axis.padding")$factor
+    }
+    else if (length(lim) == 2) {
+        if (lim[1] > lim[2]) {
+            ccall <- match.call()
+            ccall$lim <- rev(lim)
+            ans <- eval.parent(ccall)
+            return(rev(ans))
+        }
+        if (!missing(length) && !missing(prop)) 
+            stop("'length' and 'prop' cannot both be specified")
+        if (length <= 0) 
+            stop("'length' must be positive")
+        if (!missing(length)) {
+            prop <- (as.numeric(length) - as.numeric(diff(lim)))/(2 * 
+                as.numeric(diff(lim)))
+        }
+        if (lim[1] == lim[2]) 
+            lim + 0.5 * c(-length, length)
+        else {
+            d <- diff(as.numeric(lim))
+            lim + prop * d * c(-1, 1)
+        }
+    }
+    else {
+        print(lim)
+        stop("improper length of 'lim'")
+    }
+}
 

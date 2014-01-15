@@ -181,7 +181,6 @@ zHandler(z = NULL, expand.outputs = TRUE,
 \note{
   \code{cexHandler} recently revised. Default cex range now smaller, in line 
   with feedback. 
-
 }
 
 \seealso{
