@@ -45,6 +45,15 @@ panel.zcasePiePlot <- function (..., zcase.rescale = TRUE,
 
     extra.args <- list(...)
 
+#temp col fix
+#needs work so borders and segment fill 
+#transparency sepearated
+
+    if("alpha" %in% names(extra.args)){
+        extra.args$alpha.regions <- extra.args$alpha
+        extra.args$alpha <- NULL
+    }
+
 #compare these with getZcaseDimensions
 #could do this as a make defaults option?
 
@@ -192,6 +201,15 @@ panel.zcasePieSegmentPlot <- function (..., zcase.rescale = TRUE,
                 grid = FALSE)))
 
     extra.args <- list(...)
+
+#temp col fix
+#needs work so borders and segment fill 
+#transparency sepearated
+
+    if("alpha" %in% names(extra.args)){
+        extra.args$alpha.regions <- extra.args$alpha
+        extra.args$alpha <- NULL
+    }
 
     if(!"z" %in% names(extra.args))
         extra.args$z <- rep(1, length(extra.args$x))

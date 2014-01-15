@@ -343,7 +343,7 @@ GoogleMap(zinc~latitude*longitude, col.regions=c("grey", "darkred"),
           data=temp, map=roadmap.meuse)
 
 GoogleMap(zinc~latitude*longitude, col.regions=c("grey", "darkred"),
-          panel=panel.binPlot, alpha.regions=0.5,
+          panel=panel.binPlot, 
           data=temp, map=roadmap.meuse)
 
 GoogleMap(cadmium*50+copper*10+lead*2+zinc~latitude*longitude, 

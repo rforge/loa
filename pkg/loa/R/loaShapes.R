@@ -52,10 +52,12 @@ loaPolygon <- function(x, y, ..., polygon = NULL, loa.scale = NULL){
                                      listUpdate(extra.args, 
                                      list(defaults.as="plot.polygon")))$border
 
-    if(!"col" %in% names(extra.args))
+    if(!"col" %in% names(extra.args)){
         extra.args$col <- do.call(getPlotArgs, 
                                   listUpdate(extra.args, 
                                   list(defaults.as="plot.symbol")))$col
+    }
+
 
     if(is.null(polygon))
         polygon = list(x=c(1, 1, -1, -1), 
@@ -81,9 +83,9 @@ loaPolygon <- function(x, y, ..., polygon = NULL, loa.scale = NULL){
 
         #covert x and y scales to npc
 
-#        x <- as.numeric(grid:::convertX(grid:::unit(x, "native"), 
+#        x <- as.numeric(grid::convertX(grid::unit(x, "native"), 
 #            "npc"))
-#        y <- as.numeric(grid:::convertY(grid:::unit(y, "native"), 
+#        y <- as.numeric(grid::convertY(grid::unit(y, "native"), 
 #            "npc"))
 #        temp.fun <- function(x) x[2] - x[1]
 #        if ("scale" %in% names(loa.scale)) {
@@ -94,9 +96,9 @@ loaPolygon <- function(x, y, ..., polygon = NULL, loa.scale = NULL){
 #        temp <- temp[2]/temp[1]
 #        x <- x + (polygon$x * temp)
 #        y <- y + polygon$y
-#        x <- as.numeric(grid:::convertX(grid:::unit(x, "npc"), 
+#        x <- as.numeric(grid::convertX(grid::unit(x, "npc"), 
 #            "native"))
-#        y <- as.numeric(grid:::convertY(grid:::unit(y, "npc"), 
+#        y <- as.numeric(grid::convertY(grid::unit(y, "npc"), 
 #            "native"))
 
         #tested simplification

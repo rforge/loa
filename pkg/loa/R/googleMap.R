@@ -99,7 +99,7 @@ GoogleMap <- function (x, data = NULL, panel = panel.loaPlot, map = NULL,
 
         for(j in 1:length(ans$panel.args.common$y.elements)){
 
-            temp <- RgoogleMaps:::LatLon2XY.centered(map, 
+            temp <- RgoogleMaps::LatLon2XY.centered(map, 
                 ans$panel.args[[i]][[ans$panel.args.common$y.elements[j]]], 
                 ans$panel.args[[i]][[ans$panel.args.common$x.elements[j]]])
             ans$panel.args[[i]][[ans$panel.args.common$y.elements[j]]] <- temp$newY

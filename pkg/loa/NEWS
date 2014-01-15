@@ -1,4 +1,4 @@
-Changes in loa 0.2.15 [2014-01-10]
+Changes in loa 0.2.15 [2014-01-15]
 =====================================
 
 *       refinements to loaPlot, panel.binPlot,
@@ -13,6 +13,7 @@ Changes in loa 0.2.15 [2014-01-10]
         (for off-line ?GoogleMap examples)
 *       updated help examples for loaPlot, 
         GoogleMap, trianglePlot
+*       fixes for CRAN submission.
 
 
 Changes in loa 0.2.14 [2014-01-04]

@@ -44,6 +44,10 @@ formulaHandler <- function (x, data = NULL, groups = NULL, ...,
 #think about this
 #might be better other way around
 
+#NOTE: all temp.fun are given unique names 
+#      for CRAN submission/rcmd checks
+
+
     if (!"loa.err.message" %in% names(extra.args)) 
         extra.args$loa.err.message <- "problem with x formula/data combination"
 
@@ -141,14 +145,14 @@ formulaHandler <- function (x, data = NULL, groups = NULL, ...,
     #if so warn about all
     #not just the first encountered
 
-    temp.fun <- function(x){
+    temp.fun2 <- function(x){
                     temp <- sapply(x, function(x) class(x)[[1]]=="try-error")
                     names(x)[temp]
                     }
-    test1 <- temp.fun(zcases)
-    test2 <- temp.fun(coords)
-    test3 <- temp.fun(conds)
-#could put this in temp.fun
+    test1 <- temp.fun2(zcases)
+    test2 <- temp.fun2(coords)
+    test3 <- temp.fun2(conds)
+#could put this in temp.fun2
 #further reduce this
     if(length(c(test1, test2, test3))>0){
           reply <- extra.args$loa.err.message
@@ -181,11 +185,11 @@ formulaHandler <- function (x, data = NULL, groups = NULL, ...,
     #pad zcases, coords, conds
     ###########################
     if(expand.plot.args){
-        temp.fun <- function(x) if(is.null(x)) x else 
+        temp.fun3 <- function(x) if(is.null(x)) x else 
                                     max(sapply(x, length))
-        temp <- max(c(temp.fun(zcases), temp.fun(coords), temp.fun(conds)))
+        temp <- max(c(temp.fun3(zcases), temp.fun3(coords), temp.fun3(conds)))
         
-        temp.fun <- function(x){
+        temp.fun4 <- function(x){
                         if(is.list(x))
                             for(i in 1:length(x)){
                                 if(!is.null(x[[i]]))
@@ -193,12 +197,12 @@ formulaHandler <- function (x, data = NULL, groups = NULL, ...,
                             }
                          x} 
 
-        zcases <- temp.fun(zcases)
-        coords <- temp.fun(coords)
-        conds <- temp.fun(conds)
+        zcases <- temp.fun4(zcases)
+        coords <- temp.fun4(coords)
+        conds <- temp.fun4(conds)
 
         if(!is.null(groups))
-                 groups <- temp.fun(list(groups))[[1]]
+                 groups <- temp.fun4(list(groups))[[1]]
 
     }
     
@@ -239,7 +243,7 @@ formulaHandler <- function (x, data = NULL, groups = NULL, ...,
 #factor in previous version
         zcases <- as.factor(as.vector(unlist(temp)))
 
-        temp.fun <- function(x){
+        temp.fun5 <- function(x){
                         if(is.list(x)) {
                             for(i in 1:length(x)){
                                 temp <- lapply(1:length(t2), function(y)
@@ -250,12 +254,12 @@ formulaHandler <- function (x, data = NULL, groups = NULL, ...,
                         } else return(x)
         }
 
-        coords <- temp.fun(coords)
+        coords <- temp.fun5(coords)
 #shingle in previous version
-        conds <- temp.fun(conds)
+        conds <- temp.fun5(conds)
 
         if(!is.null(groups))
-            groups <- temp.fun(list(groups))[[1]]
+            groups <- temp.fun5(list(groups))[[1]]
     }
 
     ###############################

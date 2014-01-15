@@ -34,11 +34,11 @@ panel.kernelDensity <- function (x, y, z = NULL, ...,
     if(!is.function(kernel.fun)){
         kernel.fun <- function(...) {
                           extra.args <- list(...)
-                          ans <- do.call(MASS:::kde2d, extra.args)
+                          ans <- do.call(MASS::kde2d, extra.args)
                           output <- list(x = rep(ans$x, extra.args$n), y = rep(ans$y, 
                           each = extra.args$n), z = as.vector(ans$z))
                       }
-        process.args <- unique(names(formals(MASS:::kde2d)))
+        process.args <- unique(names(formals(MASS::kde2d)))
     } else {
         process.args <- unique(names(formals(kernel.fun)))
     }
@@ -118,7 +118,7 @@ panel.kernelDensity <- function (x, y, z = NULL, ...,
 
         if (!"col" %in% names(extra.args)) 
             extra.args$col <- trellis.par.get("dot.symbol")$col
-        extra.args$col <- colHandler(1, col=extra.args$col, alpha=extra.args$alpha)
+        extra.args$col <- colHandler(1, col=extra.args$col, alpha.regions=extra.args$alpha)
 
         extra.args$alpha <- NULL
 

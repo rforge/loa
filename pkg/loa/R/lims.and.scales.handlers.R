@@ -225,8 +225,8 @@ panel.localScale <- function(x.loc, y.loc, lim, ...,
     ##might want to rethink
     ##might if this out if not offsets
     ##might also make this a function
-    x.loc <- as.numeric(grid:::convertX(grid:::unit(x.loc, "native"), "npc"))
-    y.loc <- as.numeric(grid:::convertY(grid:::unit(y.loc, "native"), "npc"))
+    x.loc <- as.numeric(grid::convertX(grid::unit(x.loc, "native"), "npc"))
+    y.loc <- as.numeric(grid::convertY(grid::unit(y.loc, "native"), "npc"))
 
     #x and y vectors
     x.v <- if(x.loc[1]==x.loc[2])
@@ -271,21 +271,21 @@ panel.localScale <- function(x.loc, y.loc, lim, ...,
             my.y3 <- my.y + (0.05 * panel.scale$tck * x.v * corr)
         }
 
-        my.x <- as.numeric(grid:::convertX(grid:::unit(my.x, "npc"), "native"))
+        my.x <- as.numeric(grid::convertX(grid::unit(my.x, "npc"), "native"))
 
         if(is.null(x.offset)){
-            my.x2 <- as.numeric(grid:::convertX(grid:::unit(my.x2, "npc"), "native"))
-            my.x3 <- as.numeric(grid:::convertX(grid:::unit(my.x3, "npc"), "native"))
+            my.x2 <- as.numeric(grid::convertX(grid::unit(my.x2, "npc"), "native"))
+            my.x3 <- as.numeric(grid::convertX(grid::unit(my.x3, "npc"), "native"))
         } else {
             my.x2 <- my.x + (0.5 * x.offset)
             my.x3 <- my.x + x.offset
         }
 
-        my.y <- as.numeric(grid:::convertY(grid:::unit(my.y, "npc"), "native"))
+        my.y <- as.numeric(grid::convertY(grid::unit(my.y, "npc"), "native"))
 
         if(is.null(y.offset)){
-            my.y2 <- as.numeric(grid:::convertY(grid:::unit(my.y2, "npc"), "native"))
-            my.y3 <- as.numeric(grid:::convertY(grid:::unit(my.y3, "npc"), "native"))
+            my.y2 <- as.numeric(grid::convertY(grid::unit(my.y2, "npc"), "native"))
+            my.y3 <- as.numeric(grid::convertY(grid::unit(my.y3, "npc"), "native"))
         } else {
             my.y2 <- my.y + (0.5 * y.offset)
             my.y3 <- my.y + y.offset
@@ -293,8 +293,8 @@ panel.localScale <- function(x.loc, y.loc, lim, ...,
 
     } #end of tick maker
 
-    x.loc <- as.numeric(grid:::convertX(grid:::unit(x.loc, "npc"), "native"))
-    y.loc <- as.numeric(grid:::convertY(grid:::unit(y.loc, "npc"), "native"))
+    x.loc <- as.numeric(grid::convertX(grid::unit(x.loc, "npc"), "native"))
+    y.loc <- as.numeric(grid::convertY(grid::unit(y.loc, "npc"), "native"))
 
     #get panel.scale bits for line
     axis.pars <- getPlotArgs("axis.line", panel.scale, is.scales=TRUE, user.resets = axis)
