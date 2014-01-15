@@ -10,7 +10,11 @@
 
 #imports
 
-##import(lattice)
+#seem to 
+#need this as well as 
+#lattice in depends
+
+import(lattice)
 
 import(grid)
 import(png)
