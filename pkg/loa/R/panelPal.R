@@ -218,11 +218,11 @@ panelPal <- function(ans, panel = NULL, preprocess = FALSE,
 
     ignore <- c("xlim", "ylim", "zlim", "xlab", "ylab", "zlab", "main",
                 "at", "col.regions", "alpha.regions", "cex.range", "pch.order", 
-                "group.elements", "group.ids", "group.args", 
+                "group.elements", "group.ids", "group.args", "scheme", 
                 "allowed.scales", "disallowed.scales", "panel.scales",
                 "reset.xylims", "load.lists", "lim.borders", "x.elements", 
                 "zcase.ids", "zcase.args", "zcase.zlim", "z.rowsum.lim")
-    ignore <- unique(ignore, loa.settings$common.args)
+    ignore <- unique(c(ignore, loa.settings$common.args))
 
     temp <- listUpdate(ans$panel.args.common, list(loa.settings = loa.settings, 
                                         ignore = ignore))

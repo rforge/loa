@@ -180,9 +180,31 @@ loaPlot <- function (x, data = NULL, panel = panel.loaPlot, ...,
                        extra.args)
 
     #d1 <- do.call(formulaHandler, temp)
-    extra.args <- do.call(formulaHandler, temp)
 
+
+######################
+#the preprocess bit
+######################
+
+#was#    extra.args <- do.call(formulaHandler, temp)
+
+#this could be simplified
+#not documented because not finalised version
+
+    if("loa.preprocess" %in% names(extra.args)){
+
+        lattice.like <- do.call(formulaHandler, listUpdate(temp, list(output="lattice.like")))
+        lattice.like <- do.call(extra.args$loa.preprocess, 
+                                listUpdate(list(lattice.like=lattice.like), temp))
+        extra.args <- do.call(formulaHandler, listUpdate(temp, list(lattice.like=lattice.like$lattice.like, 
+                                                        output="extra.args")))
+        extra.args <- listUpdate(extra.args, lattice.like, ignore="lattice.like")
+        
+    } else extra.args <- do.call(formulaHandler, temp)
     
+#############################
+#ends the new preprocess bit
+#############################
 
 
 #return(d1)

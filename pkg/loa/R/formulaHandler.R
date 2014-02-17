@@ -36,10 +36,19 @@
 
 formulaHandler <- function (x, data = NULL, groups = NULL, ..., 
     expand.plot.args = TRUE, formula.type = "z~x*y|cond", panel.zcases = FALSE, 
-    check.xy.dimensions = TRUE, check.coord.dimensions = TRUE, 
+    lattice.like = NULL, check.xy.dimensions = TRUE, check.coord.dimensions = TRUE, 
     get.zcase.dimensions = TRUE, output = "extra.args") 
 {
+
+#test new#
+
     extra.args <- list(...)
+
+###################
+##new
+###################
+
+    if(is.null(lattice.like)){
 
 #think about this
 #might be better other way around
@@ -48,19 +57,19 @@ formulaHandler <- function (x, data = NULL, groups = NULL, ...,
 #      for CRAN submission/rcmd checks
 
 
-    if (!"loa.err.message" %in% names(extra.args)) 
-        extra.args$loa.err.message <- "problem with x formula/data combination"
+        if (!"loa.err.message" %in% names(extra.args)) 
+            extra.args$loa.err.message <- "problem with x formula/data combination"
 
     #get formula info
 
 #could simplify this?
 
-    temp <- strsplit(as.character(deparse(formula.type)), "~")
-    temp <- temp[[1]][length(temp[[1]])]
-    temp <- strsplit(temp, "[|]")[[1]][1]
-    coord.sep <- if(length(grep("[+]", temp))>0) "[+]" else "[*]"
-    coord.cases <- gsub(" ", "", strsplit(temp, coord.sep)[[1]])
-    coord.cases <- gsub("\"", "", coord.cases)
+        temp <- strsplit(as.character(deparse(formula.type)), "~")
+        temp <- temp[[1]][length(temp[[1]])]
+        temp <- strsplit(temp, "[|]")[[1]][1]
+        coord.sep <- if(length(grep("[+]", temp))>0) "[+]" else "[*]"
+        coord.cases <- gsub(" ", "", strsplit(temp, coord.sep)[[1]])
+        coord.cases <- gsub("\"", "", coord.cases)
 
      
 #length of coord.cases should be length of coords
@@ -72,147 +81,148 @@ formulaHandler <- function (x, data = NULL, groups = NULL, ...,
 
 #err messages need tidying
 
-    if (missing(x)) {
-        if (!missing(data) && inherits(data, "data.frame") && 
-            length(attr(data, "terms"))) 
-            return(data)
-        x <- as.formula(data)
-    }
-    else if (missing(data) && inherits(x, "data.frame")) {
-        if (length(attr(x, "terms"))) 
-            return(x)
-        data <- x
-        x <- as.formula(data)
-    }
-    x <- as.formula(x)
-    if (missing(data)) 
-        data <- environment(x)
-    else if (!is.data.frame(data) && !is.environment(data) && 
-        !is.null(attr(data, "class"))) 
-        data <- as.data.frame(data)
-    else if (is.array(data)) 
-        stop("'data' must be a data.frame, not a matrix or an array")
+        if (missing(x)) {
+            if (!missing(data) && inherits(data, "data.frame") && 
+                length(attr(data, "terms"))) 
+                return(data)
+            x <- as.formula(data)
+        }
+        else if (missing(data) && inherits(x, "data.frame")) {
+            if (length(attr(x, "terms"))) 
+                return(x)
+            data <- x
+            x <- as.formula(data)
+        }
+        x <- as.formula(x)
+        if (missing(data)) 
+            data <- environment(x)
+        else if (!is.data.frame(data) && !is.environment(data) && 
+            !is.null(attr(data, "class"))) 
+            data <- as.data.frame(data)
+        else if (is.array(data)) 
+            stop("'data' must be a data.frame, not a matrix or an array")
 
-    #########################################
-    #knocked out to allow 1:10~1:10*1:10, etc
-    #if (!inherits(x, "terms")) 
-    #    x <- terms(x, data = data)
-    #########################################
+        #########################################
+        #knocked out to allow 1:10~1:10*1:10, etc
+        #if (!inherits(x, "terms")) 
+        #    x <- terms(x, data = data)
+        #########################################
 
-    env <- environment(x)
-    rownames <- .row_names_info(data, 0L)
-    varnames <- all.vars(x)
+        env <- environment(x)
+        rownames <- .row_names_info(data, 0L)
+        varnames <- all.vars(x)
 
 #######################################
 
 
-    ####################
-    #get variables
-    ####################
+        ####################
+        #get variables
+        ####################
 
 #maybe rebuild the next bit
 #case condition
-    temp <- as.character(x)
-    if(length(temp)==3){
-           test1 <- temp[2]
-           test2 <- temp[3]
-    } else {
-           test1 <- NULL
-           test2 <- temp[2]
-    }
-    temp <- strsplit(test2, "[|]")[[1]]
-    if(length(temp)>1){
-        test2 <- temp[1]
-        test3 <- temp[2]
-    } else test3 <- NULL
+        temp <- as.character(x)
+        if(length(temp)==3){
+               test1 <- temp[2]
+               test2 <- temp[3]
+        } else {
+               test1 <- NULL
+               test2 <- temp[2]
+        }
+        temp <- strsplit(test2, "[|]")[[1]]
+        if(length(temp)>1){
+            test2 <- temp[1]
+            test3 <- temp[2]
+        } else test3 <- NULL
 
-    temp.fun <- function(x, str="[+]", unique=TRUE) {
-                    if(is.null(x)) return(x)
-                    x = strsplit(gsub(" ", "", x), str)[[1]]
-                    ans <- lapply(x, function(x){
-                                x <- parse(text=x)
-                                try(eval(x, data, env), silent=TRUE)})
+        temp.fun <- function(x, str="[+]", unique=TRUE) {
+                        if(is.null(x)) return(x)
+                        x = strsplit(gsub(" ", "", x), str)[[1]]
+                        ans <- lapply(x, function(x){
+                                    x <- parse(text=x)
+                                    try(eval(x, data, env), silent=TRUE)})
 #make.names unique
 #BUT allow 1 not x1
-                    names(ans) <- if(unique) make.unique(x) else x
-                    ans
-                    } 
-    zcases <- temp.fun(test1)
-    coords <- temp.fun(test2, str=coord.sep, unique=FALSE)
-    conds <- temp.fun(test3)
+                        names(ans) <- if(unique) make.unique(x) else x
+                        ans
+                        } 
+        zcases <- temp.fun(test1)
+        coords <- temp.fun(test2, str=coord.sep, unique=FALSE)
+        conds <- temp.fun(test3)
 
-    #any missing
-    #if so warn about all
-    #not just the first encountered
+        #any missing
+        #if so warn about all
+        #not just the first encountered
 
-    temp.fun2 <- function(x){
-                    temp <- sapply(x, function(x) class(x)[[1]]=="try-error")
-                    names(x)[temp]
-                    }
-    test1 <- temp.fun2(zcases)
-    test2 <- temp.fun2(coords)
-    test3 <- temp.fun2(conds)
+        temp.fun2 <- function(x){
+                        temp <- sapply(x, function(x) class(x)[[1]]=="try-error")
+                        names(x)[temp]
+                        }
+        test1 <- temp.fun2(zcases)
+        test2 <- temp.fun2(coords)
+        test3 <- temp.fun2(conds)
+
 #could put this in temp.fun2
 #further reduce this
-    if(length(c(test1, test2, test3))>0){
-          reply <- extra.args$loa.err.message
-          if(length(test1)>0) reply <- paste(reply, paste("[unknown z terms: ", paste(test1, collapse=", "), "]", sep=""), sep="\n       ")
-          if(length(test2)>0) reply <- paste(reply, paste("[unknown coord terms: ", paste(test2, collapse=", "), "]", sep=""), sep="\n       ")
-          if(length(test3)>0) reply <- paste(reply, paste("[unknown cond terms: ", paste(test3, collapse=", "), "]", sep=""), sep="\n       ")
-          stop(reply, call.=FALSE)
-    }
+        if(length(c(test1, test2, test3))>0){
+              reply <- extra.args$loa.err.message
+              if(length(test1)>0) reply <- paste(reply, paste("[unknown z terms: ", paste(test1, collapse=", "), "]", sep=""), sep="\n       ")
+              if(length(test2)>0) reply <- paste(reply, paste("[unknown coord terms: ", paste(test2, collapse=", "), "]", sep=""), sep="\n       ")
+              if(length(test3)>0) reply <- paste(reply, paste("[unknown cond terms: ", paste(test3, collapse=", "), "]", sep=""), sep="\n       ")
+              stop(reply, call.=FALSE)
+        }
 
 ###########################
 
-    ############################
-    #check.dimensions
-    ############################
+        ############################
+        #check.dimensions
+        ############################
 
 #might need to move this
 #think about add index
 #if coord.cases is 2 and only one coord    
 #could simply this when check.xy.dimensions droppped
 
-    if(length(coords)!=length(coord.cases)){
-        reply <- "coordinate dimensions do not match assigned formula.type"
-        if(length(coord.cases)==2 && all(check.xy.dimensions, check.coord.dimensions))
-            stop(reply, call.=FALSE)
-        if(length(coord.cases)!=2 && check.coord.dimensions)
-            stop(reply, call.=FALSE)
-    }
+        if(length(coords)!=length(coord.cases)){
+            reply <- "coordinate dimensions do not match assigned formula.type"
+            if(length(coord.cases)==2 && all(check.xy.dimensions, check.coord.dimensions))
+                stop(reply, call.=FALSE)
+            if(length(coord.cases)!=2 && check.coord.dimensions)
+                stop(reply, call.=FALSE)
+        }
     
-    ###########################
-    #pad zcases, coords, conds
-    ###########################
-    if(expand.plot.args){
-        temp.fun3 <- function(x) if(is.null(x)) x else 
-                                    max(sapply(x, length))
-        temp <- max(c(temp.fun3(zcases), temp.fun3(coords), temp.fun3(conds)))
+        ###########################
+        #pad zcases, coords, conds
+        ###########################
+        if(expand.plot.args){
+            temp.fun3 <- function(x) if(is.null(x)) x else 
+                                        max(sapply(x, length))
+            temp <- max(c(temp.fun3(zcases), temp.fun3(coords), temp.fun3(conds)))
         
-        temp.fun4 <- function(x){
-                        if(is.list(x))
-                            for(i in 1:length(x)){
-                                if(!is.null(x[[i]]))
-                                     x[[i]] <- rep(x[[i]], length.out=temp)
-                            }
-                         x} 
+            temp.fun4 <- function(x){
+                            if(is.list(x))
+                                for(i in 1:length(x)){
+                                    if(!is.null(x[[i]]))
+                                         x[[i]] <- rep(x[[i]], length.out=temp)
+                                }
+                             x} 
 
-        zcases <- temp.fun4(zcases)
-        coords <- temp.fun4(coords)
-        conds <- temp.fun4(conds)
+            zcases <- temp.fun4(zcases)
+            coords <- temp.fun4(coords)
+            conds <- temp.fun4(conds)
 
-        if(!is.null(groups))
+            if(!is.null(groups))
                  groups <- temp.fun4(list(groups))[[1]]
 
-    }
+        }
     
 
-    ############################
-    #make zcases
-    ############################
+        ############################
+        #make zcases
+        ############################
 
-    t1 <- length(zcases)
-    t2 <- sapply(zcases, length)
+        t1 <- length(zcases)
+        t2 <- sapply(zcases, length)
 
 #make this case conditioning 
 #z <- as.vector(unlist(zcases)) works for all
@@ -220,82 +230,88 @@ formulaHandler <- function (x, data = NULL, groups = NULL, ...,
 ##think the equivalent is actuall zcase.ids anyway!
 #could simply this
 
-    zlab <- names(zcases)
-    if(!is.null(zlab))
-         zlab <- paste(zlab, collapse=" + ")
+        zlab <- names(zcases)
+        if(!is.null(zlab))
+             zlab <- paste(zlab, collapse=" + ")
 
-    if(t1==0) {
-        z <- zcases
-        zcases <- NULL
-        zcase.args <- NULL
-    }
-    if(t1==1){ 
-        z <- zcases[[1]]
-        zcases <- NULL
-        zcase.args <- NULL
-    }
-    if(t1>1){
-        z <- as.vector(unlist(zcases))
-        zcase.args <- names(zcases)
-        temp <- lapply(1:length(zcases), function(x){
-                             rep(names(zcases[x]), t2[x])
-                       })
+        if(t1==0) {
+            z <- zcases
+            zcases <- NULL
+            zcase.args <- NULL
+        }
+        if(t1==1){ 
+            z <- zcases[[1]]
+            zcases <- NULL
+            zcase.args <- NULL
+        }
+        if(t1>1){
+            z <- as.vector(unlist(zcases))
+            zcase.args <- names(zcases)
+            temp <- lapply(1:length(zcases), function(x){
+                                 rep(names(zcases[x]), t2[x])
+                           })
 #factor in previous version
-        zcases <- as.factor(as.vector(unlist(temp)))
+            zcases <- as.factor(as.vector(unlist(temp)))
 
-        temp.fun5 <- function(x){
-                        if(is.list(x)) {
-                            for(i in 1:length(x)){
-                                temp <- lapply(1:length(t2), function(y)
-                                                    rep(x[[i]], length.out=t2[y]))
-                                x[[i]] <- as.vector(unlist(temp))
-                            }
-                            x
-                        } else return(x)
+            temp.fun5 <- function(x){
+                            if(is.list(x)) {
+                                for(i in 1:length(x)){
+                                    temp <- lapply(1:length(t2), function(y)
+                                                        rep(x[[i]], length.out=t2[y]))
+                                    x[[i]] <- as.vector(unlist(temp))
+                                }
+                                x
+                            } else return(x)
+            }
+
+            coords <- temp.fun5(coords)
+#shingle in previous version
+            conds <- temp.fun5(conds)
+
+            if(!is.null(groups))
+                groups <- temp.fun5(list(groups))[[1]]
         }
 
-        coords <- temp.fun5(coords)
-#shingle in previous version
-        conds <- temp.fun5(conds)
-
-        if(!is.null(groups))
-            groups <- temp.fun5(list(groups))[[1]]
-    }
-
-    ###############################
-    #panel.zcases
-    ###############################
+        ###############################
+        #panel.zcases
+        ###############################
     
-    if(!is.null(zcases) && panel.zcases){
-        conds <- listUpdate(conds, list(zcases = zcases))
-        zcases <- NULL
-    }
+        if(!is.null(zcases) && panel.zcases){
+            conds <- listUpdate(conds, list(zcases = zcases))
+            zcases <- NULL
+        }
 
-    ###############################
-    #make lattice.like output
-    ###############################
+        ###############################
+        #make lattice.like output
+        ###############################
 
 #could simplify this
 #bundle listUpdates
 
-    lattice.like <- coords
-    names(lattice.like) <- coord.cases
-    temp <- as.list(names(coords))
-    names(temp) <- paste(coord.cases, "lab", sep="")
-    lattice.like <- listUpdate(lattice.like, temp)
-    lattice.like <- listUpdate(lattice.like, list(z=z, zlab=zlab, zcases=zcases))
-    lattice.like <- listUpdate(lattice.like, list(groups=groups))
-    lattice.like <- listUpdate(lattice.like, list(panel.condition=conds))
+        lattice.like <- coords
+        names(lattice.like) <- coord.cases
+        temp <- as.list(names(coords))
+        names(temp) <- paste(coord.cases, "lab", sep="")
+        lattice.like <- listUpdate(lattice.like, temp)
+        lattice.like <- listUpdate(lattice.like, list(z=z, zlab=zlab, zcases=zcases))
+        lattice.like <- listUpdate(lattice.like, list(groups=groups))
+        lattice.like <- listUpdate(lattice.like, list(panel.condition=conds))
 
-    if(get.zcase.dimensions)
-         lattice.like <- do.call(getZcaseDimensions, lattice.like)
+        if(get.zcase.dimensions)
+            lattice.like <- do.call(loa:::getZcaseDimensions, lattice.like)
 
     
-    ##################################
-    #return if output lattice.like
-    ##################################
+        ##################################
+        #return if output lattice.like
+        ##################################
 
-    if(output=="lattice.like") return(lattice.like)
+        if(output=="lattice.like") return(lattice.like)
+
+##################
+##new just }
+##################
+
+    }
 
     ##################################
     #extra.args updates
@@ -327,7 +343,6 @@ formulaHandler <- function (x, data = NULL, groups = NULL, ...,
     return(extra.args)
 
 }
-
 
 
 
