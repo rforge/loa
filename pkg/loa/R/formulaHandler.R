@@ -298,7 +298,7 @@ formulaHandler <- function (x, data = NULL, groups = NULL, ...,
         lattice.like <- listUpdate(lattice.like, list(panel.condition=conds))
 
         if(get.zcase.dimensions)
-            lattice.like <- do.call(loa:::getZcaseDimensions, lattice.like)
+            lattice.like <- do.call(getZcaseDimensions, lattice.like)
 
     
         ##################################

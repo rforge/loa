@@ -1,3 +1,13 @@
+Changes in loa 0.2.17 [2014-04-23]
+=====================================
+
+*       limHandler update (now 
+        catches ~0*0, etc) 
+*       draw.zcasePlotKey, draw.loaPlotZKey 
+        (now allow list, vector and 
+        expression as main)
+
+
 Changes in loa 0.2.16 [2014-02-17]
 =====================================
 

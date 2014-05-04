@@ -21,7 +21,6 @@
 #NOTE: much borrowed from lattice 
 
 
-
 ###########################
 ###########################
 #limsHandler
@@ -52,10 +51,25 @@ limsHandler <- function(x=NULL, y=NULL, z=NULL, ..., lim.borders = 0.1){
 #something probably already does this?
 ################
 
+
     fun01 <- function(x, b1, b2 = 0.2){
                  if(all(is.na(x))) return(NULL)
                  temp <- diff(range(x, na.rm=TRUE)) * b1
-                 if(temp==0) temp <- x[1] * b2
+
+##########################
+#temp fix for ~0*0 issue
+#                 if(temp==0) temp <- x[1] * b2
+                 if(temp==0)
+                     temp <- if(x[1]==0) b2 else x[1] * b2
+#consider
+#might be simplier to
+#drop the else 
+#or make mean(x, na.rm=TRUE) * b2
+#border is currently 
+#proportional by default 
+#to first case
+###########################
+
                  x <- range(x)
                  c(x[1]-temp, x[2]+temp)
     }

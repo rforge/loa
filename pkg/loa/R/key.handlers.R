@@ -327,7 +327,19 @@ draw.zcasePlotKey <- function (key = NULL, draw = FALSE, vp = NULL, ...)
          zcases$pch<-15
 
         if (isGood4LOA(zcases$main)) {
-            txt <- zcases$main[[1]][[1]]
+
+##########################
+#temp fix
+#txt <- zcases$main[[1]][[1]]
+
+            txt <- if (is.list(zcases$main)) 
+                       zcases$main[[1]] else zcases$main
+
+#to catch expressions as main
+#could simply/merge 
+#this and next bit
+###########################
+            
             temp <- if (is.list(zcases$main)) 
                 listUpdate(list(cex = 1.1), zcases$main)
             else list(cex = 1.1)
@@ -599,7 +611,13 @@ if(is.list(z) && length(z) > 0){
 
     if(isGood4LOA(z$main)){
     #handle character vector or list
-        txt <- z$main[[1]][[1]]
+##########################
+#temp fix
+#as above
+#        txt <- z$main[[1]][[1]]
+        txt <- if(is.list(z$main)) z$main[[1]] else z$main
+###########################
+
         temp <- if(is.list(z$main))
                 listUpdate(list(cex = 1.1), z$main) else list(cex = 1.1)
         txt.settings <- getPlotArgs("axis.text", user.resets = temp)
