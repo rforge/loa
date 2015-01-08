@@ -370,6 +370,13 @@ panelPal <- function(ans, panel = NULL, preprocess = FALSE,
 #could some of this be done at top?
 #in checks?
 
+##new bit to allow functions
+    if(is.function(reset.xylims)){
+        ans <- reset.xylims(ans)
+        reset.xylims <- "no.action"
+    }
+    
+
 ##new
     if(is.logical(reset.xylims)){
         reset.xylims <- if(reset.xylims) "refit.xylims" else "no.action" 
@@ -428,12 +435,17 @@ panelPal <- function(ans, panel = NULL, preprocess = FALSE,
 #compare this and new bit and see if 
 #complexity is needed
 
+
     #get names of elements in panel.args[[1]] that are numeric
     ranges <- sapply(names(ans$panel.args[[1]]), 
                         function(x) is.numeric(ans$panel.args[[1]][[x]]))
     ranges <- names(ans$panel.args[[1]])[ranges]
 
     #remove common names 
+
+#need to pull out allowed.scales
+#may need to check x/y handling here
+
     ranges <- ranges[!ranges %in% c("x", "y", "subscripts")]
 
     #remove elements for which lims are set in panel.args.common
@@ -456,6 +468,10 @@ panelPal <- function(ans, panel = NULL, preprocess = FALSE,
     ranges <- ans$panel.args.common$group.elements
     temp <- gsub("lim$", "", grep("lim$", names(ans$panel.args.common), value=T))
     ranges <- ranges[!ranges %in% temp]
+
+#need to pull out allowed.scales
+#may need to check x/y handling here
+
     ranges <- ranges[!ranges %in% c("x", "y", "subscripts")]
 
     if(length(ranges)>0){
@@ -465,6 +481,12 @@ panelPal <- function(ans, panel = NULL, preprocess = FALSE,
         names(temp) <- paste(ranges, "unique", sep="")
         ans$panel.args.common <- listUpdate(ans$panel.args.common, temp)    
     }
+
+
+#current allowed.scales fix
+    if("allowed.scales" %in% names(ans$panel.args.common))
+        ans$panel.args.common <- ans$panel.args.common[!names(ans$panel.args.common) %in% ans$panel.args.common$allowed.scales]
+    
 
 ##############
 #new

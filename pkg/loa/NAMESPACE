@@ -51,11 +51,21 @@ export(axis.components.GoogleMaps)
 #trianglePlot
 
 export(trianglePlot) 
-export(panel.triangleFrame) 
-export(panel.triangleAxes) 
-export(panel.triangleGrids) 
+export(panel.trianglePlot)
+export(panel.trianglePlotFrame)
+export(panel.trianglePlotGrid)
+export(panel.trianglePlotAxes)
+export(triLimsReset)
 export(triABC2XY)
 export(triXY2ABC)
+
+#superceded functions
+##export(trianglePlot) 
+##export(panel.triangleFrame) 
+##export(panel.triangleAxes) 
+##export(panel.triangleGrids) 
+##export(triABC2XY)
+##export(triXY2ABC)
 
 #special panels
 export(panel.kernelDensity)
@@ -97,6 +107,12 @@ export(zcasesHandler)
 export(groupsAndZcasesHandler)
 export(stepwiseZcasesGlyphHandler)
 
+#list.handlers
+export(listHandler)
+export(listUpdate)
+export(listExpand)
+export(listLoad)
+
 #scales.handlers
 export(limsHandler)
 export(localScalesHandler)
@@ -119,13 +135,6 @@ export(draw.loaPlotZKey)
 export(draw.loaColorKey)
 export(draw.loaColorRegionsKey)
 export(draw.zcasePlotKey)
-
-#list.handlers
-export(listHandler)
-export(listUpdate)
-export(listExpand)
-export(listLoad)
-
 
 #loa.shapes/glyphs
 export(loaPolygon)

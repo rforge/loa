@@ -198,7 +198,8 @@ loaPlot(Ozone~Solar.R*Temp|Wind>8,
 # reworking, e.g. here colHandler handles color scales 
 # using col.region to generate a color range. 
 # (Here, arguments like "Blues" and c("green", "red") are 
-# allowed handled using functions in the RColorBrewer package.)
+# allowed and handled using functions in the RColorBrewer 
+# package.)
 
 # Formula stuctures:
 # ~ x * y                like xyplot y ~ x

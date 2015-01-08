@@ -254,7 +254,7 @@
   you ask for! If you want to manually optimise the map ranges, the 
   best option is currently to start with: 
 
-  \code{GoogleMap(..., size=c(640,640)} 
+  \code{GoogleMap(..., size=c(640,640))} 
 
   ...and then reduce either or both of these values until you generate 
   an appropriate map size.  

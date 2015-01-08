@@ -2,602 +2,420 @@
 #[TBC - NUMBER] functions 
 
 #trianglePlot 
-#panel.triangleAxes
-#panel.triangleFrame
-#panel.triangleGrids
+#panel.trianglePlot
+#panel.trianglePlotFrame
+#panel.trianglePlotGrid
+#panel.trianglePlotAxes
+#triLimsReset
 #triABC2XY
 #triXY2ABC
 
 
+#others now 
+#removed
 
 
 
+###############################
+#new trianglePlot
+###############################
+
+#this uses panelPal
+#allows conditioning like in standard lattice
 
 
-##################################
-#################################
-#################################
+trianglePlot <- function(x, data = NULL, ..., ref.cols = TRUE){
 
+#trianglePlot ver 0.2
+#panelPal update
 
-#args orders messed up in doc
-
-#need to add in getPlotArgs
-
-#################################
-##################################
-##
-#############################
-
-
-#to do
-####################
-#tweak label positioning
-#triABC2Xy tidy 
-#triABCLims dedicated function
-#triXY2ABC tidy
-#getTriABC function for interactives
-#arrow in panel.scaleHandler
-#
-
-#like to do better
-####################
-#axis annotation/lab size handling
-#
-
-#to think about
-##################
-#move the label handling 
-#into panelscale
-#add a scaling factor
-#based on number of panels?
-####################
-#allowing tck, at, etc 
-#access via getPlotArgs
-#so they can do everything???
-#
-####################
-#migth want to remove the following 
-#by default but allow if supplied:
-#xlab, ylab,
-#(Currently can't override)
-#####################
-#maybe needed plot prop need 
-#more rigorous setting?
-#                 col = add.line$col, fill = col, alpha = add.line$alpha,
-#                 lty = add.line$lty, lwd = add.line$lwd,
-#                 col.text = add.text$col, alpha.text = add.text$alpha
-#####################
-
-#CITE: much borrowed from lattice 
-#CITE: triangle plot methods
-
-#get from help
-
-
-##############################
-##############################
-##trianglePlot
-##############################
-##############################
-
-#notes 
-##########################
-#localScalesHandler and panel.localScale 
-#to generate triangle axis
-###
-
-
-trianglePlot <- function(x, data = NULL, panel = panel.xyplot, ref.grids = TRUE, 
-                         ..., axes = TRUE, ticks = TRUE, grids = TRUE, annotation = TRUE
-                         ){
-
-    ########
-    #setup
-    ########
-
-    #extra.args
     extra.args <- list(...)
 
-    #kill x/ylabs
-    #user can use these
-    extra.args$xlab <- ""
-    extra.args$ylab <- ""
-    
-    ##################
-    #see make plot later 
-    #for plot defaults
-    ##################
-    #aspect, etc.
+    if (is.logical(ref.cols)) 
+        ref.cols <- if (all(ref.cols)) 
+            c("darkgreen", "darkred", "darkblue")
+        else "black"
+    ref.cols <- rep(ref.cols, length.out=3)
 
-    #update scales
-    temp <- listUpdate(extra.args, list(allowed.scales = c("a", "b", "c"), 
-                                        disallowed.scales = c("x", "y"), 
-                                        remove.box = TRUE))
-    #this might need rethinking
-    extra.args <- listUpdate(extra.args, do.call(localScalesHandler, temp), 
-                             ignore.a = "scales")
-
-    #################
-    #ref.grids, grids, etc.
-    #################
-
-    #ref.grids handling
-    if(is.null(ref.grids)) 
-        ref.grids <- FALSE
-
-    if(is.logical(ref.grids))
-        ref.grids <- if(all(ref.grids))
-                        c("darkgreen", "darkred", "darkblue") else "black" 
-    ref.grids <- zHandler(ref.grids, TRUE, 1:3)
-
-    #for grid, annotation slightly different 
-
-    local.axis <- list(lty = 1, alpha = 0.5, col = "black") 
-
-    local.ticks <- list(lty = 1, 
-                        a = list(col = ref.grids[1]),
-                        b = list(col = ref.grids[2]),
-                        c = list(col = ref.grids[3]))
-
-    local.grids <- list(lty = 2, alpha = 0.5, 
-                        a = list(col = ref.grids[1]),
-                        b = list(col = ref.grids[2]),
-                        c = list(col = ref.grids[3]))
-
-    local.ann <- list(cex = 0.8, 
-                      a = list(col = ref.grids[1]),
-                      b = list(col = ref.grids[2]),
-                      c = list(col = ref.grids[3]))
-
-    #add grids to plot
-    extra.args$grids <- getPlotArgs("axis.line", extra.args$panel.scales, 
-                                    local.resets = local.grids, user.resets = grids, 
-                                    is.scales = TRUE, elements = c("a", "b", "c"))
-
-    #add axes to plot
-    extra.args$axes <- getPlotArgs("axis.line", extra.args$panel.scales, 
-                                   local.resets = local.axis, user.resets = axes, 
-                                   is.scales = TRUE, elements = c("a", "b", "c"))
-    #add ticks to plot
-    extra.args$ticks <- getPlotArgs("axis.line", extra.args$panel.scales, 
-                                    local.resets = local.ticks, user.resets = ticks, 
-                                    is.scales = TRUE, elements = c("a", "b", "c"))
-    
-    #add annotation to plot
-    extra.args$annotation <- getPlotArgs("axis.text", extra.args$panel.scales, 
-                                         local.resets = local.ann, user.resets = annotation, 
-                                         is.scales = TRUE, elements = c("a", "b", "c"))
-
-    #############
-    #get z if set
-    #############
-     
-    d1 <- try(latticeParseFormula(x, data, dimension = 3, 
-                                  multiple = TRUE),
-              silent = TRUE)
-    if(is(d1)[1] == "try-error")
-        stop("problem with z/data combination", call. = FALSE)
-
-    my.z <- d1$left
-
-    #and update names
-    my.z.name <- d1$left.name 
-
-    #################
-    #possition in  code?
-    #need to set these?
-    ##################
-    #this name could be '0' characters
-    #could set zlab in call?
-    #################
-    
-    ########
-    #get a,b,c
-    ########
-
-    #a+b+c from x
-    temp <- as.character(x)
-    temp <- temp[length(temp)]
-    x2 <- strsplit(temp,"[|]")[[1]]
-    temp <- x2[1]
-    temp <- strsplit(temp, "[+]")[[1]]
-
-    #check enough there or error
-    if(length(temp) < 3)
-        stop("problem with 'a', 'b' and/or 'c' terms", call. = FALSE)
-
-    temp <- as.formula(paste(temp[1], "~", temp[2], "*", temp[3], sep=""))    
-
-    #get a,b,c from temp
-    #and update names 
-    d1 <- try(latticeParseFormula(temp, data, dimension = 3, 
-                                  multiple = TRUE),
-              silent = TRUE)
-    if(is(d1)[1] == "try-error")
-        stop("problem with x/data combination", call. = FALSE)
-
-    #update a,b,c names
-    #(note: these are taken from a ~ b * c) 
-    if(is.null(extra.args$alab))
-        extra.args$alab <- d1$left.name 
-    if(is.null(extra.args$blab))
-        extra.args$blab <- d1$right.x.name 
-    if(is.null(extra.args$clab))
-        extra.args$clab <- d1$right.y.name 
-
-    #convert a,b,c to xy 
-    ans <- triABC2XY(a=d1$left, b=d1$right.x, c=d1$right.y, 
-                     ..., verbose=TRUE)
-    ..my.x <- ans$x
-    ..my.y <- ans$y
-
-    #################################
-    #NOTE:
-    #################################
-    #don't put a,b,c into xyplot
-    #they match as multiple arguments
-    #could put a,b,c in report in triABC2XY?
-    #as a make safe/keep
-    #################################
-
-    ############
-    #handle lims
-    ############
-
-    #get a/b/clims
-    extra.args$alim <- ans$alim
-    extra.args$blim <- ans$blim
-    extra.args$clim <- ans$clim
-
-    #get triangle xy dimensions
-    #for x/ylims setting
-    temp <- triABC2XY(a=c(ans$alim[1], ans$alim[1], ans$alim[2]), 
-                      b=c(ans$blim[1], ans$blim[2], ans$blim[1]),
-                      c=c(ans$clim[2], ans$clim[1], ans$clim[1]),  
-                      verbose=FALSE)
-
-####################################
-#this next bit needs better handling
-#needs to allow for label/no label
-####################################
-
-    #get lims
-    extra.args$xlim <- range(temp$x, na.rm=TRUE)
-    extra.args$ylim <- range(temp$y, na.rm=TRUE)
-
-    #tidy lims
-    temp <- function(lim, q1, q2){
-                    if(diff(lim)==0) lim + q1 else
-                                 lim + c(-(diff(lim)/q2[1]), (diff(lim)/q2[2])) 
-    }
-    if(is.null(extra.args$clab)){
-        extra.args$xlim <- temp(extra.args$xlim, c(-0.5, 0.5), c(5,5))
-        extra.args$ylim <- temp(extra.args$ylim, c(-0.5, 0.5), c(5,5))
-    } else if(is.character(extra.args$clab) && extra.args$clab == ""){
-            extra.args$xlim <- temp(extra.args$xlim, c(-0.5, 0.5), c(5,5))
-            extra.args$ylim <- temp(extra.args$ylim, c(-0.5, 0.5), c(5,5))
-        } else {
-            extra.args$xlim <- temp(extra.args$xlim, c(-0.5, 0.5), c(5,5))
-            extra.args$ylim <- temp(extra.args$ylim, c(-0.4, 0.5), c(4,5))
-        }
-
-    
-    
-    #make x xyplot formula
-    #(put conditioning back in)
-    x <- "..my.y~..my.x"
-    if(length(x2)>1)
-        x <- paste(x, x2[2], sep ="|")
-    x <- as.formula(x)
-
-    #############
-    #z, col, cex handling
-    #############
-
-    extra.args <- listUpdate(list(z = my.z, ref = ..my.x), 
+    extra.args <- listUpdate(list(x=x, data=data, formula.type="z~a0+b0+c0|cond", 
+                                  coord.conversion=triABC2XY, panel=panel.trianglePlot, ref.cols=ref.cols), 
                              extra.args)
 
-    extra.args$cex <- do.call(cexHandler, extra.args)
-
-    extra.args <- listUpdate(extra.args, 
-                             do.call(colHandler, listUpdate(extra.args, list(output = "all"))))
-
-    #############
-    #scale up vectors
-    #############
-    extra.args <- listUpdate(extra.args, 
-                      listExpand(extra.args, ignore=c("alim", "blim", "clim", "xlim", "ylim",
-                                                      "alab", "blab", "clab", "panel.scales",
-                                                      "at", "col.regions", "aspect", "ref", 
-                                                      "layout", "a.grid", "b.grid", "c.grid",
-                                                      "grids", "axes", "ticks", "annotation"), 
-                          ref = extra.args$ref)
-                  )
-
-    #############
-    #make and plot
-    #############
-    temp <- list(x=x, data=data, pch=20, aspect = 1, 
-                 panel = function(..., subscripts){
-                                  panel = panelPal.old(..., ignore=c("alim", "blim", "clim", "panel.scales", 
-                                                   "grids", "axes", "ticks", "annotation", "layout", 
-                                                   "a.grid", "b.grid", "c.grid"), subscripts = subscripts, 
-                                                    panel = function(..., user.panel = panel) 
-                                                                panel.triangleFrame(..., user.panel = user.panel))
-                         }
-            )
-    extra.args <- listUpdate(temp, extra.args)
-    ans <- do.call(xyplot, extra.args)
-
-    #any add-ins?
-    ##possibly add the report?   
-    ##ans$panel.args.common$whatever <- whatever
-
-    #messy but means <-... still updates
-    #might rethink
-    plot(ans)
-    invisible(ans) 
+    do.call(loaPlot, extra.args)
 
 }
 
 
+##############################
+#new panel.trianglePlot
+##############################
 
-############################
-############################
-##panel...
-############################
-############################
+#uses local.scales methods to handle axes
+#local.scales.panel = panel.trianglePlotFrame
+#data.panel = panel.loaPlot
 
-########################
-########################
-##panel.triangleFrame
-########################
-########################
+#think about getting and adding to default settings in default data.panel?
+#this would turn off key of key not set in data.panel?
 
 
-panel.triangleFrame <- function(x = NULL, y = NULL, a = NULL, b = NULL, c = NULL, 
-                                ..., grids = grids, user.panel = panel.xyplot){
 
-    #this currently assumes panel.scales output as from localScalesHandler
+panel.trianglePlot <- 
 
-    #if x and y missing
-    #try to make them using a, b and c
-    extra.args <- list(...)
+function(x = NULL, y = NULL, a0 = NULL, b0 = NULL, c0 = NULL, ..., 
+         loa.settings = FALSE, plot = TRUE, process = TRUE){
 
-    if(is.null(x) & is.null(y)){
+################
+#this is based on panel.polarPlot
+################
 
-     #   a <- extra.args$a
-     #   b <- extra.args$b
-     #   c <- extra.args$c
+    if(loa.settings)
+        return(list(group.args= c("col"),
+                    zcase.args= c("pch"),
+                    common.args = c("alim", "blim", "clim", "grid", "axes", "ticks", "annotation", "ref.cols"),
+                    default.settings = list(local.scales = TRUE, local.scales.panel = panel.trianglePlotFrame,
+                                            data.panel = panel.loaPlot, grid = TRUE, axes = TRUE, 
+                                            allowed.scales =c("a0", "b0", "c0"), disallowed.scales = c("x", "y"), 
+                                            aspect = "loa.iso", reset.xylims = triLimsReset, 
+                                            load.lists = c("grid", "axes", "ticks", "annotation"),                                            
+                                            key.fun = "draw.loaPlotZKey")))
 
-        if(!is.null(a) & !is.null(b) & !is.null(c)){
-            ans <- triABC2XY(a, b, c, ...)
-            x <- ans$x
-            y <- ans$y
-        } else stop("missing x and y or a, b and c", call. = FALSE)
+    if(process){
+
+###################
+#to think about
+###################
+
+#make if missing
+#x, y, a0, b0, c0,
+
+#see below re polarplot code
+
+           if(!plot) return(list(x = x, y = y, a0=a0, b0=b0, c0=c0))
+
     }
 
-    if(isGood4LOA(grids))
-        panel.triangleGrids(..., grids = grids)
-    panel.triangleAxes(...)
-    user.panel(x=x, y=y, ...)
+##
+#######################
+## the if missing would 
+## be like in polarPlot
+#######################
+##        
+##        r <- x
+##        theta <- y
+##        x <- r * sin(pi * theta/180)
+##        y <- r * cos(pi * theta/180) 
+##        if(!plot) return(list(x = x, y = y, r = r, theta = theta))
+##    }
+
+    if(plot){
+
+        extra.args <- listUpdate(list(...), 
+                                 list(x = x, y = y, a0 = a0, b0=b0, c0=c0, 
+                                      plot = plot, process = process))
+
+###################
+#might want to allow user to set this
+#might want to be able to turn this off
+#so not local.scales.panels
+###################
+
+###################
+#might want to tidy
+#the do.call 
+#data.panel does not 
+#need to be sent to
+#data.panel...
+###################
+
+        if(extra.args$local.scales)
+            if(is.function(extra.args$local.scales.panel)){
+                do.call(extra.args$local.scales.panel, extra.args)
+                extra.args$grid <- NULL
+            }
+        do.call(extra.args$data.panel, extra.args)
+    }
+}
+
+
+
+
+##############################
+#panel.trianglePlotFrame
+##############################
+
+panel.trianglePlotFrame <- 
+
+function (...,  grid = NULL, axes = NULL) 
+{
+    extra.args <- list(...)
+
+#could tidy this?
+
+    if (isGood4LOA(grid)){
+        if(is.list(grid) && is.function(grid$panel))
+            do.call(grid$panel, listUpdate(extra.args, list(grid=grid), ignore="panel")) else
+            do.call(panel.trianglePlotGrid, listUpdate(extra.args, list(grid=grid), ignore="panel"))
+    }
+    if (isGood4LOA(axes)){
+        if(is.list(axes) && is.function(axes$panel))
+            do.call(axes$panel, listUpdate(extra.args, list(axes=axes), ignore="panel")) else
+            do.call(panel.trianglePlotAxes, listUpdate(extra.args, list(axes=axes), ignore="panel"))
+    }
 
 }
 
-###########################
-###########################
-##panel.triangleAxes
-###########################
-###########################
 
-#NOTES:
+############################
+#panel.trianglePlotGrid
+############################
 
-#axis temp is half way along axis, 
-#             half way along and 0.1% perpendicular (to give offset)
-#             then the min and max for the axis
+panel.trianglePlotGrid <- 
 
-#this might seem long winded 
-#but allows use of any method of ABC -> XY scaling in 
-#i.e. fixed scale/variable size (as in leic tri method) and variable scale/fixed size
-#if ade4 method adopted then this could be simplified 
-#        because all of these terms would be fixed but recovery of values would be harder
-
-
-
-
-panel.triangleAxes <- function(alim = NULL, blim = NULL, clim = NULL, ..., 
-                               panel.scales = panel.scales, axes = TRUE, 
-                               ticks = TRUE, annotation = TRUE){
-
-##############
-##############
-#rewrite for a,b,clab
-#rethink panel.scales
-##############
-##############
-
-
-
-    #extra.args
+function (alim = NULL, blim = NULL, clim = NULL, 
+          ..., grid = TRUE, panel.scales = NULL) 
+{
     extra.args <- list(...)
 
-    #note currently the panel access is crude
-    #if has to be in a, b or c elements of panel.scales, axes, ticks, annotation.
-    #could add an axes id in panel.scale to handle this
-    #or use getPlotArgs to check for general here?
+    if (!is.list(panel.scales)) 
+        panel.scales <- list()
+    if (!is.list(grid)) 
+        grid <- list()
+    panel.scales <- listUpdate(list(draw = TRUE, arrows = FALSE, 
+        lty=3,
+        tick.number = 5, abbreviate = FALSE, minlength = 4, tck = 1, 
+        col= "lightgrey", cex = 0.8), panel.scales)
 
-    #prior 'correct' axis label placement and direction perpendicular to axis
-    #looked silly
-    #all:
-    #ltext(x = temp$x[1] + (3*(temp$x[2] - temp$x[1])), y =temp$y[1] + (3*(y.offset = temp$y[2] - temp$y[1])),
-    #      #[axis]#lab, adj = c(0.5,0.5))
+    grid <- do.call(listLoad, listUpdate(grid, list(load="a0")))
+    grid <- do.call(listLoad, listUpdate(grid, list(load="b0")))
+    grid <- do.call(listLoad, listUpdate(grid, list(load="c0")))
+    temp <- list(a0=list(col=extra.args$ref.cols[1]),
+                 b0=list(col=extra.args$ref.cols[2]),
+                 c0=list(col=extra.args$ref.cols[3]))
+    if(is.null(grid$col)) grid <- listUpdate(temp, grid)
 
+    grid.pars <- getPlotArgs("axis.line", local.resets = panel.scales, 
+                             user.resets = grid, elements = c("a0", "b0", "c0"), 
+                             is.scale=TRUE, defaults.only = FALSE)
 
-    #make safe
-    #to formals? 
-    #or find better way to get a/b/clim
-    if(is.null(alim)) alim <- c(0,1)
-    if(is.null(blim)) blim <- c(0,1)
-    if(is.null(clim)) clim <- c(0,1)
-
-    alab <- if(is.null(extra.args$alab)) "" else extra.args$alab
-    blab <- if(is.null(extra.args$blab)) "" else extra.args$blab
-    clab <- if(is.null(extra.args$clab)) "" else extra.args$clab
-
-    ##locate a point on an axis
-    axis.loc <- function(n, lim)
-                    (n * (max(lim, na.rm=TRUE) - min(lim, na.rm=TRUE))) + min(lim, na.rm=TRUE)
-    
-#######################
-#rationalise next bit 
-#calc done once
-######################
+    at.loc <- function(par, lim){
+        temp <- listUpdate(list(tick.number=5), par, use=c("at", "tick.number"))
+        temp <- if (!is.null(temp$at)) temp$at else
+                                       pretty(lim, temp$tick.number)
+#remove any out of range 
+#if range too big 
+        temp[temp >= min(lim, na.rm=T) & temp <= max(lim, na.rm=T)]
+    }
 
     #a axis
-    axes.pars <- getPlotArgs(default.as = "axis.line", source = panel.scales, elements = c("a", "b", "c"), 
-                             is.scales=TRUE, user.resets = axes)  
-    tick.pars <- getPlotArgs(default.as = "axis.line", source = panel.scales, elements = c("a", "b", "c"), 
-                             is.scales=TRUE, user.resets = ticks)  
-    ann.pars <- getPlotArgs(default.as = "axis.text", source = panel.scales, elements = c("a", "b", "c"), 
-                             is.scales=TRUE, user.resets = annotation)  
+    a.at <- at.loc(grid.pars$a, alim)
+    temp <- function(x) {
+        a1 <- triABC2XY(c(x, x), c(blim[1], blim[2] - (x - alim[1])), 
+            c(clim[2] - (x - alim[1]), clim[1]))
+        if (isGood4LOA(grid.pars$a)){
+            grid.pars$a$x <- a1$x
+            grid.pars$a$y <- a1$y
+            do.call(llines, grid.pars$a)
+        } 
+    }
+    for (i in a.at) temp(i)
 
-    temp <- triABC2XY(c(axis.loc(0.5, alim), axis.loc(0.5, alim), axis.loc(0, alim), axis.loc(1, alim)),  
-                      c(axis.loc(0.1, blim), axis.loc(0, blim), axis.loc(0, blim), axis.loc(0, blim)), 
-                      c(axis.loc(0.4, clim), axis.loc(0.5, clim), axis.loc(1, clim), axis.loc(0, clim)))
-    panel.localScale(panel.scale = panel.scales$a, x.loc = temp$x[3:4], y.loc = temp$y[3:4], lim = alim,
-                     x.offset = temp$x[2] - temp$x[1], y.offset = temp$y[2] - temp$y[1], 
-                     axis = axes.pars$a, ticks = tick.pars$a, annotation = ann.pars$a)
 
     #b axis
-    temp <- triABC2XY(c(axis.loc(0.4, alim), axis.loc(0.5, alim), axis.loc(1, alim), axis.loc(0, alim)),
-                      c(axis.loc(0.5, blim), axis.loc(0.5, blim), axis.loc(0, blim), axis.loc(1, blim)),  
-                      c(axis.loc(0.1, clim), axis.loc(0, clim), axis.loc(0, clim), axis.loc(0, clim)))
-    panel.localScale(panel.scale = panel.scales$b, x.loc = temp$x[3:4], y.loc = temp$y[3:4], lim = blim,
-                     x.offset = temp$x[2] - temp$x[1], y.offset = temp$y[2] - temp$y[1], 
-                     axis = axes.pars$b, ticks = tick.pars$b, annotation = ann.pars$b)
+    b.at <- at.loc(grid.pars$b, blim)
+    temp <- function(x) {
+        b1 <- triABC2XY(c(alim[1], alim[2] - (x - blim[1])), 
+            c(x, x), c(clim[2] - (x - blim[1]), clim[1]))
+        if (isGood4LOA(grid.pars$b)){
+            grid.pars$b$x <- b1$x
+            grid.pars$b$y <- b1$y
+            do.call(llines, grid.pars$b)
+        } 
+    }
+    for (i in b.at) temp(i)
 
-
-    #a,blabs
-    #do a and b at same ht 'cos they look messy if you don't
-    #likewise drop the standard perpendicular to axis cos one up/one down looks messy
-    
-    ltext(x = temp$x[1] - (3*(temp$x[2] - temp$x[1])) - (2 * (temp$x[1] - temp$x[3])), 
-          y = temp$y[1] + (3*(y.offset = temp$y[2] - temp$y[1])),
-          alab, adj = c(1,0.5))
-    ltext(x = temp$x[1] + (3*(temp$x[2] - temp$x[1])), y = temp$y[1] + (3*(y.offset = temp$y[2] - temp$y[1])),
-          blab, adj = c(0,0.5))
-
-    #c axis 
-    temp <- triABC2XY(c(axis.loc(0.1, alim), axis.loc(0, alim), axis.loc(0, alim), axis.loc(0, alim)),
-                      c(axis.loc(0.4, blim), axis.loc(0.5, blim), axis.loc(1, blim), axis.loc(0, blim)),
-                      c(axis.loc(0.5, clim), axis.loc(0.5, clim), axis.loc(0, clim), axis.loc(1, clim)))
-    panel.localScale(panel.scale = panel.scales$c, x.loc = temp$x[3:4], y.loc = temp$y[3:4], lim = clim,
-                     x.offset = temp$x[2] - temp$x[1], y.offset = temp$y[2] - temp$y[1], 
-                     axis = axes.pars$c, ticks = tick.pars$c, annotation = ann.pars$c)
-
-
-    #clab
-    ltext(x = temp$x[2], y = temp$y[1] + (3*(y.offset = temp$y[2] - temp$y[1])), clab, adj = c(0.5, 0.5))
-
+    #c axis
+    c.at <- at.loc(grid.pars$c, clim)
+    temp <- function(x) {
+        c1 <- triABC2XY(c(alim[1], alim[2] - (x - clim[1])), 
+            c(blim[2] - (x - clim[1]), blim[1]), c(x, x))
+        if (isGood4LOA(grid.pars$c)){
+            grid.pars$c$x <- c1$x
+            grid.pars$c$y <- c1$y
+            do.call(llines, grid.pars$c)
+        } 
+    }
+    for (i in c.at) temp(i)
 
 }
 
 
-########################
-########################
-##panel.triangleGrids
-########################
-########################
 
-#see notes in panel.triangleFrame
 
-panel.triangleGrids <- function(a.grid = NULL, b.grid = NULL, c.grid = NULL, 
-                                ..., alim = NULL, blim = NULL, clim = NULL,  
-                                panel.scales = NULL, grids = TRUE){
+############################
+#panel.trianglePlotAxes
+############################
 
-    #to do
-    #rationalise code 
-    #rethink arguments/inputs
+panel.trianglePlotAxes <- 
 
-    #setup
+function (alim = NULL, blim = NULL, clim = NULL, ..., 
+          axes = TRUE, ticks=TRUE, annotation=TRUE, 
+          panel.scales = NULL) 
+{
+
+#reposition a and b labs so parallel to axes
+#look and management of font size in local labels handler
+#
+
     extra.args <- list(...)
 
-    #make safe
-    #to formals? better way?
-    #also in ...Frame above
-    if(is.null(alim)) alim <- c(0,1)
-    if(is.null(blim)) blim <- c(0,1)
-    if(is.null(clim)) clim <- c(0,1)
+    alab <- if(is.null(extra.args$alab)) extra.args$a0lab else extra.args$alab
+    blab <- if(is.null(extra.args$blab)) extra.args$b0lab else extra.args$blab
+    clab <- if(is.null(extra.args$clab)) extra.args$c0lab else extra.args$clab
 
-    #check for existing function in lattice?
-    #could move into general list functions?
-    getArg <- function(target = "at", source = NULL, element = "a", default = NULL){
-                   if(is.null(source) || !is.list(source)) return(default)
-                   if(!is.null(source[[element]][[target]])) return(source[[element]][[target]])
-                   if(!is.null(source[[target]])) return(source[[target]])
-                   default
+    if (!is.list(panel.scales)) 
+        panel.scales <- list()
+
+    if (!is.list(axes)) 
+        axes <- list()
+#    if (!is.list(ticks)) 
+#        ticks <- list()
+#    if (!is.list(annotation)) 
+#        annotation <- list()
+
+    temp <- prod(dim(trellis.currentLayout()),na.rm=T)
+    text.cex <- 1
+    if(temp>1) text.cex <- 0.8 
+    if(temp>3) text.cex <- 0.7
+    if(temp>3) text.cex <- 0.6
+    if(temp>9) text.cex <- 0.5 
+
+    temp <- list(a0=list(col=extra.args$ref.cols[1]),
+                 b0=list(col=extra.args$ref.cols[2]),
+                 c0=list(col=extra.args$ref.cols[3]))
+
+
+
+    axes <- do.call(listLoad, listUpdate(axes, list(load="a0")))
+    axes <- do.call(listLoad, listUpdate(axes, list(load="b0")))
+    axes <- do.call(listLoad, listUpdate(axes, list(load="c0")))
+
+    if(isGood4LOA(ticks)){
+       if(!is.list(ticks)) ticks <- list()
+       ticks <- do.call(listLoad, listUpdate(ticks, list(load="a0")))
+       ticks <- do.call(listLoad, listUpdate(ticks, list(load="b0")))
+       ticks <- do.call(listLoad, listUpdate(ticks, list(load="c0")))
+       if(is.null(ticks$col)) ticks <- listUpdate(temp, ticks)
+    } else ticks <- list(col=NA)
+
+    if(isGood4LOA(annotation)){
+       if(!is.list(annotation)) annotation <- list()
+       annotation <- do.call(listLoad, listUpdate(annotation, list(load="a0")))
+       annotation <- do.call(listLoad, listUpdate(annotation, list(load="b0")))
+       annotation <- do.call(listLoad, listUpdate(annotation, list(load="c0")))
+       if(is.null(annotation$cex)) annotation$cex <- (text.cex*0.8)
+       if(is.null(annotation$col)) annotation <- listUpdate(temp, annotation)
+       
+    } else annotation <- list(col=NA)
+
+#    panel.scales <- listUpdate(list(draw = TRUE, arrows = FALSE, 
+#        tick.number = 5, abbreviate = FALSE, minlength = 4, tck = 1, 
+#        col = "red", col.line = 1, cex = 0.8), panel.scales)
+
+
+    axis.loc <- function(n, lim) (n * (max(lim, na.rm = TRUE) - 
+        min(lim, na.rm = TRUE))) + min(lim, na.rm = TRUE)
+    at.loc <- function(par, axes, ticks, lim){
+        temp <- listUpdate(par, axes, use=c("at", "tick.number"))
+        temp <- listUpdate(temp, ticks, use=c("at", "tick.number"))
+        if(!is.null(temp$at)) temp$at else pretty(lim, temp$tick.number)
     }
+    axes.pars <- getPlotArgs(default.as = "axis.line", source = panel.scales, 
+        elements = c("a0", "b0", "c0"), is.scales = TRUE, user.resets = axes)
+    tick.pars <- getPlotArgs(default.as = "axis.line", source = panel.scales, 
+        elements = c("a0", "b0", "c0"), is.scales = TRUE, user.resets = ticks)
 
-    #a axis
+    ann.pars <- getPlotArgs(default.as = "axis.text", source = panel.scales, 
+        elements = c("a0", "b0", "c0"), is.scales = TRUE, user.resets = annotation)
 
-    #get safe settings
-    if(is.null(a.grid))
-        a.grid <- getArg("at", panel.scales, "a", NULL)
-    if(is.null(a.grid))
-        a.grid <- pretty(alim, getArg("tick.number", panel.scales, "a", 5))
+#this fixes the current issue with getPlotArgs
+    ann.pars$a0 <- listUpdate(annotation, ann.pars$a0, ignore.a=c("a0", "b0", "c0"))
+    ann.pars$b0 <- listUpdate(annotation, ann.pars$b0, ignore.a=c("a0", "b0", "c0"))
+    ann.pars$c0 <- listUpdate(annotation, ann.pars$c0, ignore.a=c("a0", "b0", "c0"))
 
-    #confirm in range
-    a.grid <- a.grid[a.grid<alim[2] & a.grid>alim[1]]
+#need to fix this
 
-    #get grid pars
-    grid.pars <- getPlotArgs(default.as = "axis.line", source = panel.scales, elements = "a", 
-                             is.scales=TRUE, user.resets = grids)  
+###currently changes to ticks but not others
+###this gives us full axes control but 
+###using n0 axis name not n 
+###print(tick.pars)
 
-    temp <- function(x){
-               a1 <- triABC2XY(c(x,x), c(blim[1], blim[2]-(x-alim[1])), c(clim[2]-(x-alim[1]), clim[1]))
-                  if(isGood4LOA(grid.pars))
-                      do.call(llines, listUpdate(list(x = a1$x, y = a1$y), grid.pars))
-    }
-    for(i in a.grid)
-        temp(i)
+    panel.scales$a <- listUpdate(list(at = at.loc(list(tick.number=5), axes.pars$a, tick.pars$a, alim)),
+                                 panel.scales$a)
+ #   tick.pars$a$isGood4LOA <- TRUE
+ #   ann.pars$a$isGood4LOA <- TRUE
+    temp <- triABC2XY(c(axis.loc(0.5, alim), axis.loc(0.5, alim), 
+        axis.loc(0, alim), axis.loc(1, alim)), c(axis.loc(0.1, 
+        blim), axis.loc(0, blim), axis.loc(0, blim), axis.loc(0, 
+        blim)), c(axis.loc(0.4, clim), axis.loc(0.5, clim), axis.loc(1, 
+        clim), axis.loc(0, clim)))
+    panel.localScale(panel.scale = panel.scales$a, x.loc = temp$x[3:4], 
+        y.loc = temp$y[3:4], lim = alim, x.offset = temp$x[2] - 
+            temp$x[1], y.offset = temp$y[2] - temp$y[1], axis = axes.pars$a0, 
+            ticks=tick.pars$a0, annotation=ann.pars$a0)
+#    ltext(x = temp$x[1] - (3 * (temp$x[2] - temp$x[1])) - (3 * 
+#        (temp$x[1] - temp$x[3])), y = temp$y[1] + (2 * (y.offset = temp$y[2] - 
+#        temp$y[1])), alab, adj = c(1, 0.5), srt=60)
 
-    #b axis - as a but b
+    ltext(x = temp$x[1] + (4 * (temp$x[2] - temp$x[1])), y = temp$y[1] + 
+        (3 * (y.offset = temp$y[2] - temp$y[1])), alab, adj = c(0.5, 
+        0.5), srt=60, cex = text.cex)
 
-    if(is.null(b.grid))
-        b.grid <- getArg("at", panel.scales, "b", NULL)
-    if(is.null(b.grid))
-        b.grid <- pretty(blim, getArg("tick.number", panel.scales, "b", 5))
-    b.grid <- b.grid[b.grid<blim[2] & b.grid>blim[1]]
-    grid.pars <- getPlotArgs(default.as = "axis.line", source = panel.scales, elements = "b", 
-                             is.scales=TRUE, user.resets = grids) 
-    temp <- function(x){
-               b1 <- triABC2XY(c(alim[1], alim[2]-(x-blim[1])), c(x, x), c(clim[2]-(x-blim[1]), clim[1]))
-                  if(isGood4LOA(grid.pars))
-                      do.call(llines, listUpdate(list(x = b1$x, y = b1$y), grid.pars))
-    }
-    for(i in b.grid)
-        temp(i)
 
-    #c axis - as a but c
 
-    if(is.null(c.grid))
-        c.grid <- getArg("at", panel.scales, "c", NULL)
-    if(is.null(c.grid))
-        c.grid <- pretty(clim, getArg("tick.number", panel.scales, "c", 5))
-    c.grid <- c.grid[c.grid<clim[2] & c.grid>clim[1]]
-    grid.pars <- getPlotArgs(default.as = "axis.line", source = panel.scales, elements = "c", 
-                             is.scales=TRUE, user.resets = grids)   
-    temp <- function(x){
-                c1 <- triABC2XY(c(alim[1], alim[2]-(x-clim[1])), c(blim[2]-(x-clim[1]), blim[1]), c(x, x))
-                    if(isGood4LOA(grid.pars))
-                        do.call(llines, listUpdate(list(x = c1$x, y = c1$y), grid.pars))
-    }
-    for(i in c.grid)
-        temp(i)
+    panel.scales$b <- listUpdate(list(at = at.loc(list(tick.number=5), axes.pars$b, tick.pars$b, blim)),
+                                 panel.scales$b)
+
+#    tick.pars$b$isGood4LOA <- TRUE
+#    ann.pars$b$isGood4LOA <- TRUE
+
+    temp <- triABC2XY(c(axis.loc(0.4, alim), axis.loc(0.5, alim), 
+        axis.loc(1, alim), axis.loc(0, alim)), c(axis.loc(0.5, 
+        blim), axis.loc(0.5, blim), axis.loc(0, blim), axis.loc(1, 
+        blim)), c(axis.loc(0.1, clim), axis.loc(0, clim), axis.loc(0, 
+        clim), axis.loc(0, clim)))
+    panel.localScale(panel.scale = panel.scales$b, x.loc = temp$x[3:4], 
+        y.loc = temp$y[3:4], lim = blim, x.offset = temp$x[2] - 
+            temp$x[1], y.offset = temp$y[2] - temp$y[1], axis = axes.pars$b0, 
+        ticks = tick.pars$b0, annotation = ann.pars$b0)
+
+    ltext(x = temp$x[1] + (4 * (temp$x[2] - temp$x[1])), y = temp$y[1] + 
+        (3 * (y.offset = temp$y[2] - temp$y[1])), blab, adj = c(0.5, 
+        0.5), srt=300, cex = text.cex)
+
+
+    panel.scales$c <- listUpdate(list(at = at.loc(list(tick.number=5), axes.pars$c, tick.pars$c, clim)),
+                                 panel.scales$c)
+
+ #   tick.pars$c$isGood4LOA <- TRUE
+ #   ann.pars$c$isGood4LOA <- TRUE
+
+    temp <- triABC2XY(c(axis.loc(0.1, alim), axis.loc(0, alim), 
+        axis.loc(0, alim), axis.loc(0, alim)), c(axis.loc(0.4, 
+        blim), axis.loc(0.5, blim), axis.loc(1, blim), axis.loc(0, 
+        blim)), c(axis.loc(0.5, clim), axis.loc(0.5, clim), axis.loc(0, 
+        clim), axis.loc(1, clim)))
+    panel.localScale(panel.scale = panel.scales$c, x.loc = temp$x[3:4], 
+        y.loc = temp$y[3:4], lim = clim, x.offset = temp$x[2] - 
+            temp$x[1], y.offset = temp$y[2] - temp$y[1], axis = axes.pars$c0, 
+        ticks = tick.pars$c0, annotation = ann.pars$c0)
+
+    ltext(x = temp$x[2], y = temp$y[1] + (3 * (y.offset = temp$y[2] - 
+        temp$y[1])), clab, adj = c(0.5, 0.5), cex=text.cex)
+
+
+
+
 }
-
-
-
 
 
 
@@ -607,6 +425,134 @@ panel.triangleGrids <- function(a.grid = NULL, b.grid = NULL, c.grid = NULL,
 ##data handlers
 #############################
 #############################
+
+
+
+
+###############################
+#triLimsReset
+###############################
+
+triLimsReset <- 
+
+function(ans){
+
+    #what is not a, b, clim values
+    #does function in preprocess make them?
+
+#messy 
+
+    temp <- ans$panel.args.common
+    temp <- triABC2XY(a = c(temp$alim[1], temp$alim[1], temp$alim[2]), 
+        b = c(temp$blim[1], temp$blim[2], temp$blim[1]), c = c(temp$clim[2], 
+            temp$clim[1], temp$clim[1]), verbose = FALSE)
+    xlim <- range(temp$x, na.rm = TRUE)
+    ylim <- range(temp$y, na.rm = TRUE)
+
+    ans$panel.args.common$xlim <- xlim
+        ans$x.limits <- xlim
+        ans$panel.args.common$ylim <- ylim
+        ans$y.limits <- ylim
+
+    temp <- function(lim, q1, q2) {
+        if (diff(lim) == 0) 
+            lim + q1
+        else lim + c(-(diff(lim)/q2[1]), (diff(lim)/q2[2]))
+    }
+
+#messy
+
+   extra.args <- ans$panel.args.common
+
+    alab <- if(is.null(extra.args$alab)) extra.args$a0lab else extra.args$alab
+    blab <- if(is.null(extra.args$blab)) extra.args$b0lab else extra.args$blab
+    clab <- if(is.null(extra.args$clab)) extra.args$c0lab else extra.args$clab
+
+
+   if (is.null(clab)) {
+        extra.args$xlim <- temp(extra.args$xlim, c(-0.5, 0.5), 
+            c(5, 5))
+        extra.args$ylim <- temp(extra.args$ylim, c(-0.5, 0.5), 
+            c(5, 5))
+    }
+    else if (is.character(clab) && clab == "") {
+        extra.args$xlim <- temp(extra.args$xlim, c(-0.5, 0.5), 
+            c(5, 5))
+        extra.args$ylim <- temp(extra.args$ylim, c(-0.5, 0.5), 
+            c(5, 5))
+    }
+    else {
+        extra.args$xlim <- temp(extra.args$xlim, c(-0.5, 0.5), 
+            c(5, 5))
+        extra.args$ylim <- temp(extra.args$ylim, c(-0.3, 0.5), 
+            c(3, 5))
+    }
+
+    ans$panel.args.common <- extra.args
+
+  
+        ans$x.limits <- ans$panel.args.common$xlim
+        ans$y.limits <- ans$panel.args.common$ylim 
+
+
+return(ans)
+
+
+#dead from here
+
+    if ("max.xylims" %in% reset.xylims) {
+        temp <- sqrt(c(ans$x.limits, ans$y.limits)^2)
+        temp <- c(-max(temp), max(temp))
+        ans$panel.args.common$xlim <- temp
+        ans$x.limits <- temp
+        ans$panel.args.common$ylim <- temp
+        ans$y.limits <- temp
+    }
+
+#
+
+    extra.args$alim <- ans$alim
+    extra.args$blim <- ans$blim
+    extra.args$clim <- ans$clim
+    temp <- triABC2XY(a = c(ans$alim[1], ans$alim[1], ans$alim[2]), 
+        b = c(ans$blim[1], ans$blim[2], ans$blim[1]), c = c(ans$clim[2], 
+            ans$clim[1], ans$clim[1]), verbose = FALSE)
+    extra.args$xlim <- range(temp$x, na.rm = TRUE)
+    extra.args$ylim <- range(temp$y, na.rm = TRUE)
+    temp <- function(lim, q1, q2) {
+        if (diff(lim) == 0) 
+            lim + q1
+        else lim + c(-(diff(lim)/q2[1]), (diff(lim)/q2[2]))
+    }
+
+#bit below next 
+#
+
+    if (is.null(extra.args$clab)) {
+        extra.args$xlim <- temp(extra.args$xlim, c(-0.5, 0.5), 
+            c(5, 5))
+        extra.args$ylim <- temp(extra.args$ylim, c(-0.5, 0.5), 
+            c(5, 5))
+    }
+    else if (is.character(extra.args$clab) && extra.args$clab == 
+        "") {
+        extra.args$xlim <- temp(extra.args$xlim, c(-0.5, 0.5), 
+            c(5, 5))
+        extra.args$ylim <- temp(extra.args$ylim, c(-0.5, 0.5), 
+            c(5, 5))
+    }
+    else {
+        extra.args$xlim <- temp(extra.args$xlim, c(-0.5, 0.5), 
+            c(5, 5))
+        extra.args$ylim <- temp(extra.args$ylim, c(-0.4, 0.5), 
+            c(4, 5))
+    }
+
+
+
+
+
+}
 
 
 
@@ -626,6 +572,20 @@ triABC2XY <- function(a, b=NULL, c=NULL, ..., force.abc=TRUE,
 
     #extra.args
     extra.args <- list(...)
+
+#############
+#new
+#############
+
+#if a,b,c not there 
+#use a0, b0, and c0 if there 
+
+    if(missing(a) && "a0" %in% names(extra.args)) a <- extra.args$a0
+    if(is.null(b) && "b0" %in% names(extra.args)) b <- extra.args$b0
+    if(is.null(c) && "c0" %in% names(extra.args)) c <- extra.args$c0
+
+#############
+#
 
     #make a,b,c a data.frame
 
@@ -832,6 +792,9 @@ triABC2XY <- function(a, b=NULL, c=NULL, ..., force.abc=TRUE,
                       data.abc[,2] > max(lims[,2], na.rm=TRUE), TRUE, oor.log)
     oor.log <- ifelse(data.abc[,3] < min(lims[,3], na.rm=TRUE) |  
                       data.abc[,3] > max(lims[,3], na.rm=TRUE), TRUE, oor.log)
+#catch na's
+    oor.log[is.na(oor.log)]<- FALSE
+
     data.abc[oor.log, 1:3] <- c(NA,NA,NA)
 
     #################

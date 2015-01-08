@@ -1,3 +1,25 @@
+Changes in loa 0.2.19 [2015-01-05]
+=====================================
+
+*       major revision of trianglePlot 
+        (now uses panelPal, conditions, 
+        etc
+*       added resetTriLims 
+*       removed previous trianglePlot 
+        code functions
+
+
+Changes in loa 0.2.18 [2014-11-18]
+=====================================
+
+*       panelPal update (reset.xylims 
+        now accepts function)
+*       formulaHandler update (added 
+        coord.conversion option)
+*       triABC2XY update (work-around 
+        a,b,c to a0,b0,c0)
+
+
 Changes in loa 0.2.17 [2014-04-23]
 =====================================
 

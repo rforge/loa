@@ -36,8 +36,8 @@
 
 formulaHandler <- function (x, data = NULL, groups = NULL, ..., 
     expand.plot.args = TRUE, formula.type = "z~x*y|cond", panel.zcases = FALSE, 
-    lattice.like = NULL, check.xy.dimensions = TRUE, check.coord.dimensions = TRUE, 
-    get.zcase.dimensions = TRUE, output = "extra.args") 
+    coord.conversion = NULL, lattice.like = NULL, check.xy.dimensions = TRUE, 
+    check.coord.dimensions = TRUE, get.zcase.dimensions = TRUE, output = "extra.args") 
 {
 
 #test new#
@@ -45,7 +45,7 @@ formulaHandler <- function (x, data = NULL, groups = NULL, ...,
     extra.args <- list(...)
 
 ###################
-##new
+##new  1
 ###################
 
     if(is.null(lattice.like)){
@@ -207,6 +207,17 @@ formulaHandler <- function (x, data = NULL, groups = NULL, ...,
                                 }
                              x} 
 
+
+#this is the bit that gives you the current wrapping numbers behaviour
+#this is where the alternatives would go in
+#1:10 ~ 1 -> 1:10~ rep(1,10)
+#         -> 1:10~ c(1, rep(NA, 9))
+#         -> 1 ~ 1
+
+#I think this only reworks x, y, etc for z1 ~ y * x
+#NOT z1+z2~y (y1 +y2, wrapped) + x (x1 + x2, wrapped)
+#I think that is done below when zcases are made
+
             zcases <- temp.fun4(zcases)
             coords <- temp.fun4(coords)
             conds <- temp.fun4(conds)
@@ -308,7 +319,8 @@ formulaHandler <- function (x, data = NULL, groups = NULL, ...,
         if(output=="lattice.like") return(lattice.like)
 
 ##################
-##new just }
+##new 1
+##just }
 ##################
 
     }
@@ -316,6 +328,30 @@ formulaHandler <- function (x, data = NULL, groups = NULL, ...,
     ##################################
     #extra.args updates
     ##################################
+
+
+#################
+###new 2
+#################
+
+#allow for coord.conversion
+#others >> x,y
+#before plot call
+
+    if(!is.null(coord.conversion)){
+        lattice.like <- listUpdate(lattice.like, do.call(coord.conversion, lattice.like))
+    }
+    extra.args <- listUpdate(extra.args, lattice.like, 
+                          ignore.b = c("panel.condition", "x", "y"))
+
+
+
+#################
+#this makes some of 
+#below redundant
+################
+
+#############
 
     extra.args <- do.call(stripHandler, listUpdate(list(striplab = names(lattice.like$panel.condition)), 
         extra.args))
@@ -343,6 +379,56 @@ formulaHandler <- function (x, data = NULL, groups = NULL, ...,
     return(extra.args)
 
 }
+
+
+
+
+
+
+
+
+
+##########################
+##########################
+##triFormulaHandler
+##########################
+##########################
+
+#triABCFormulaHandler <- function(x, data = NULL, ..., formula.type="z~a+b+c|cond"){
+
+#    extra.args <- list(...)
+#    extra.args$output <- "lattice.like"
+
+#    temp <- formulaHandler(x=x, data=data, formula.type=formula.type, output="lattice.like")
+    
+#    temp
+
+
+#}
+
+
+
+
+#triABCFormulaHandler(1~1:2+3:4+5:7|8:9)
+
+
+####see notes in formulaHandler for what makes this wrap? and should it???
+
+###see expand.plot.args
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

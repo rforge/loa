@@ -1,122 +1,108 @@
 \name{1.3.trianglePlot}
 \alias{1.3.triangle.plots}
 \alias{trianglePlot}
-\alias{panel.triangleFrame}
-\alias{panel.triangleAxes}
-\alias{panel.triangleGrids}
+\alias{panel.trianglePlot}
+\alias{panel.trianglePlotFrame}
+\alias{panel.trianglePlotAxes}
+\alias{panel.trianglePlotGrid}
+\alias{triLimsReset}
 \alias{triABC2XY}
 \alias{triXY2ABC}
 
 
 \title{
-  Triangle plots for lattice
+  Triangle plots
 }
 
 \description{
-  Triangle plot functions for lattice
+  Triangle plot functions for Lattice. 
 }
 
 \usage{
 
-trianglePlot(x, data = NULL, panel = panel.xyplot, 
-          ref.grids = TRUE, ..., axes = TRUE, ticks = TRUE, 
-          grids = TRUE, annotation = TRUE)
+   trianglePlot(x, data = NULL, ..., ref.cols = TRUE)
 
-#associated panels
-panel.triangleFrame(x = NULL, y = NULL, a = NULL, b = NULL, 
-          c = NULL, ..., grids = grids, user.panel = panel.xyplot)
-panel.triangleAxes(alim = NULL, blim = NULL, clim = NULL, ..., 
-          panel.scales = panel.scales, axes = TRUE, 
-          ticks = TRUE, annotation = TRUE)
-panel.triangleGrids(a.grid = NULL, b.grid = NULL, c.grid = NULL, 
-          ..., alim = NULL, blim = NULL, clim = NULL,  
-          panel.scales = NULL, grids = TRUE)
+   #standard panels
 
-#data handlers
-triABC2XY(a, b = NULL, c = NULL, ..., force.abc = TRUE, 
-          if.na = "remove.row", if.neg = "remove.row", 
-          verbose = FALSE)
-triXY2ABC(x, y = NULL, ..., force.xy = TRUE, 
-          verbose = FALSE)
+   panel.trianglePlot(x = NULL, y = NULL, a0 = NULL, b0 = NULL, 
+            c0 = NULL, ..., loa.settings = FALSE, plot = TRUE, 
+            process = TRUE)
+   panel.trianglePlotFrame(...,  grid = NULL, axes = NULL)
+   panel.trianglePlotGrid(alim = NULL, blim = NULL, clim = NULL, 
+            ..., grid = TRUE, panel.scales = NULL)
+   panel.trianglePlotAxes(alim = NULL, blim = NULL, clim = NULL, 
+            ..., axes = TRUE, ticks=TRUE, annotation=TRUE, 
+            panel.scales = NULL)  
+
+   #data handlers
+
+   triABC2XY(a, b = NULL, c = NULL, ..., force.abc = TRUE, 
+            if.na = "remove.row", if.neg = "remove.row", 
+            verbose = FALSE)
+   triXY2ABC(x, y = NULL, ..., force.xy = TRUE, 
+            verbose = FALSE)
+   triLimsReset(ans)
 }
 
 \arguments{
 
-  \item{x}{ For \code{trianglePlot}, a formula with the general structure 
-   \code{z ~ a + b + c | cond}. The elements a, b and c, the inputs for 
+  \item{x}{ For \code{trianglePlot} only, a formula with the general structure 
+   \code{z ~ a0 + b0 + c0 | cond}. The elements a0, b0 and c0, the inputs for 
    the three axis on the triangle plot, are required, while \code{z} 
-   and conditioning \code{cond} are optional. For other functions, 
-   \code{x} is also used as the pair to \code{y} for a/b/c to x/y 
-   conversion and conventional x/y plotting of rescaled a/b/c 
-   data. (See \code{y} below.)  
+   and conditioning (\code{cond}) are optional. (For other functions, \code{x} 
+   may be used as the pair to \code{y}. See \code{y} below.)  
    }
 
-  \item{data}{ (\code{trianglePlot} only) If supplied, the assumed source 
+  \item{data}{ For \code{trianglePlot} only, if supplied, the assumed source 
    of the elements of formula \code{x}, typically a \code{data.frame}.
    }
 
-  \item{panel, user.panel}{ \code{panel} is the panel to use when plotting the 
-   data layer of \code{trianglePlot} outputs. By default this is the 
-   \code{lattice} function \code{panel.xyplot}. To handle the a/b/c to 
-   x/y conversion (and allow similar handling of other \code{lattice} panels like 
-   \code{panel.lines} and \code{panel.polygon}) and axes generation, \code{trianglePlot} 
-   passes this to \code{panel.triangeFrame} as \code{user.panel}.  
+  \item{...}{ Additional arguments. 
    }
 
-  \item{ref.grids}{ Either a logical to turn off/on grid reference colors or a 
-   vector of colors to be applied to a, b and c axes, respectively. These are 
+  \item{ref.cols}{ Either a logical to turn off/on grid color-coding or a 
+   vector of colors to be applied to a0, b0 and c0 axes and grids. These are 
    applied to the grid lines and axes tick and annotation components. Some users, 
    particularly those less familiar with triangle plots, can find such color 
    referencing helpful when analyzing such plots. By default, the colorings are 
    quite subtle, so users can see the effect if them look for it but it does not 
-   take over the plot if it is not wanted. Finer control can be achieved using 
-   \code{axes}, \code{ticks}, \code{grids} and \code{annotation}. (See below).  
+   take over the plot when it is not focused on. Finer control can be achieved using 
+   \code{axes}, \code{ticks}, \code{grid}, etc. (See below).  
    }
 
-  \item{...}{ Additional arguments. 
-
-   For \code{trianglePlot}, these are passed to associated data handlers 
-   (\code{\link{triABC2XY}}, \code{\link{cexHandler}}, \code{\link{colHandler}}, 
-   etc), the axis handler \code{\link{localScalesHandler}} and the 
-   \code{\link{lattice}} plot function \code{\link{xyplot}}. Arguments are  
-   also passed via \code{\link{xyplot}} a panel function (by 
-   default \code{panel.triangleFrame} which manages the data, axes and 
-   grid components of the plot appearance.
-
-   With other functions these are generally passed on but ignored.
-   } 
-
-  \item{axes, ticks, grids, annotation}{ user resets for the axes, axis tick marks, grid lines 
-   axis annotation, respectively. These can be \code{NULL} or \code{FALSE} to turn off, 
-   \code{TRUE} to show, a vector (in which case they are assumed to be color assignments) or 
-   a list of standard plot parameters, e.g. \code{col}, \code{lty}, \code{lwd}, etc. for color, 
-   line type and line thickness, etc. Plot parameter assignments are applied to all axes unless 
-   specific axes are identified. For example, \code{trianglePlot} calls including \code{grids = 1} 
-   or \code{grids = list(col = 1)} make all axes black, while calls including 
-   \code{grids = list(a = list(col = 1)} only recolor the a-axis.
+  \item{y, a, a0, b, b0, c, c0}{(and \code{x} in relevant functions). \code{a/a0} , \code{b/b0} and 
+   \code{c/c0} are the three scales of the triangle plot, and \code{x} and \code{y} 
+   are the equivalent 2-D projections. The arguments are typically options in panel functions 
+   (\code{panel...} functions), conversion functions (\code{triABC2XY} and \code{triXY2ABC}) and 
+   the scaling function \code{triLimsReset}. 
    }
 
-  \item{y, a, b, c}{(and \code{x} in relevant functions). \code{a}, \code{b} and 
-   \code{c} are the three scales of the triangle plot, and \code{x} and \code{y} 
-   are the equivalent 2-D projections. 
+  \item{loa.settings, plot, process}{\code{\link{loaPlot}} arguments used to manage 
+   \code{\link{panelPal}} activity.
+   }  
+
+  \item{grid, axes, ticks, annotation}{ User-resets for the axes, grid, tick and annotation 
+   elements of the plots. These can be \code{NULL} or \code{FALSE} to turn off, \code{TRUE} to show, 
+   a vector (in which case they are assumed to be color assignments) or a list of standard plot 
+   parameters, e.g. \code{col}, \code{lty}, \code{lwd}, etc. for color, line type and line thickness, 
+   etc. Plot parameter assignments are applied to all axes unless specific axes are identified. For 
+   example, \code{trianglePlot} calls including \code{grid.col = 2} or \code{grids = list(col = 2)} make 
+   all axes red, while calls including \code{grid.a0.col = 2} or \code{grid = list(a0 = list(col = 2)} only 
+   recolor the first (a0) axis.
    }
 
-  \item{panel.scales}{ A local argument, typically a list, that controls the 
-    appearance of the a/b/c axes. This is roughly equivalent to the \code{scales} 
+  \item{alim, blim, clim}{ Delimiters for a, b and c scales, equivalent to \code{xlim} 
+    and \code{ylim} in conventional plots, but less flexible. See Details below for 
+    more information.
+   }
+
+   \item{panel.scales}{ A local argument, typically a list, that controls the 
+    appearance of the a0/b0/c0 axes. This is roughly equivalent to the \code{scales} 
     argument used by conventional \code{lattice} plots to handle x and y axis, 
     but intended for non-standard scales, such as the triangle axes used here. 
     It can be set directly or used in combination with the local scale(s) handler 
     function \code{\link{localScalesHandler}} to override/hijack standard scales 
     operations. (See note below).
-   }
-
-  \item{alim, blim, clim}{ delimiters for a, b and c scales, equivalent to \code{xlim} 
-    and \code{ylim} in conventional plots, but less flexible. See Details below for 
-    more information.
-   }
-
-  \item{a.grid, b.grid, c.grid}{ If supplied the positions of the a, b and c grid lines, 
-    respectively.
    }
 
   \item{force.abc, force.xy}{Logicals. If a list or data.frame is supplied 
@@ -144,6 +130,11 @@ triXY2ABC(x, y = NULL, ..., force.xy = TRUE,
    The alternative \code{FALSE} generates a minimal report. 
   } 
 
+  \item{ans}{For \code{triLimsReset} only, a trellis ouput, e.g. a \code{lattice} plot, 
+   to be scaled and plotted based on the assumption that it is a \code{trianglePlot}.
+  }
+
+  
 }
 
 
@@ -151,16 +142,19 @@ triXY2ABC(x, y = NULL, ..., force.xy = TRUE,
 
    \code{trianglePlot} generates a triangle plot using the lattice framework.
 
-   \code{panel.triangle...} functions handle the appearance of triangle plot
-    outputs. \code{panel.triangleAxes} and \code{panel.triangleGrids} generate 
-    a/b/c axes and grids, and \code{panel.triangleFrame} is a wrapper for these 
-    and the \code{panel} function supplied by the user. \code{panel.triangleFrame} also 
-    handles data scaling, so either (a, b, c) or appropriately rescaled (x, y) 
-    combinations can be supplied. 
+   \code{panel.trianglePlot...} functions handle the appearance of triangle plot
+    outputs. \code{panel.trianglePlot}, which is assigned as the default \code{panel} 
+    manages both the data layer of the plot and the plot frame (axes, grid, annotation, 
+    etc). \code{panel.trianglePlotAxes} and \code{panel.trianglePlotGrid} generate 
+    axes and grid componets of the plot, and \code{panel.trianglePlotFrame} is 
+    a wrapper for these. The data layer, which by default is \code{panel.loaPlot}, 
+    can be accessed separately using the \code{data.panel} argument. 
 
    \code{triABC2XY} converts supplied (a, b, c) coordinates to an (x, y) scale suitable 
-    for use with \code{panel.triangleFrame}, etc. \code{triXY2ABC} converts supplied (x,y) 
-    coordinates from triangle plots to the associated proportional (a, b, c) scale. 
+    for use with \code{panel.trianglePlotFrame}, etc. 
+
+    \code{triXY2ABC} converts supplied (x,y) coordinates from triangle plots to the associated 
+    proportional (a, b, c) scale. 
 
     There are various options for range limiting with \code{triABC2XY} and \code{triXY2ABC}, 
     and therefore \code{trianglePlot} as well. Firstly, limits can be set individually with 
@@ -173,10 +167,10 @@ triXY2ABC(x, y = NULL, ..., force.xy = TRUE,
     \code{lattice} handling of \code{scales}. This allows parameters for axes other 
     than \code{'x'} and \code{'y'} to be passed via the \code{scales} argument for 
     axis generation within the plot panel itself. The function does this by recovering 
-    the information for each of the local axes (here \code{a}, \code{b} and \code{c}) 
+    the information for each of the local axes (here \code{a0}, \code{b0} and \code{c0}) 
     from \code{scales}, and passing this on to the plot as the argument 
     \code{panel.scales} which can then be evaluated by an appropriate \code{panel...} 
-    function like \code{panel.triangleAxes}. At the same time it also resets 
+    function like \code{panel.trianglePlotAxes}. At the same time it also resets 
     \code{scales} to stop the standard axes being generated. The intention here is two-fold. 
     Firstly, to provide plot users with an axes control mechanism like the standard 
     \code{scales} control of \code{x} and \code{y} that they already know. And, secondly, 
@@ -185,7 +179,7 @@ triXY2ABC(x, y = NULL, ..., force.xy = TRUE,
     further details.
      
     \code{trianglePlot} uses \code{\link{getPlotArgs}} to manage \code{lattice} defaults and 
-    plot developer and user resets for the different plot components (axes, ticks, grids, 
+    plot developer and user resets for the different plot components (axes, ticks, grid, 
     annotation). As with \code{localScalesHandler}, the intention here is to provide more 
     routine access to higher level plot control.    
 
@@ -197,21 +191,23 @@ triXY2ABC(x, y = NULL, ..., force.xy = TRUE,
    \code{trianglePlot} returns trellis objects, much like 
    conventional \code{lattice} plot functions.
 
-   \code{panel.triangle...} functions are intended for use 
-   within a \code{trianglePlot} function call. With careful 
-   handling, they may also be used in conventional \code{lattice} 
-   plot calls. 
+   \code{panel.trianglePlot...} functions are intended for use 
+   within a \code{trianglePlot} function call. 
 
    \code{triABC2XY} returns a list containing the named 
-   components \code{x} and \code{y}, which are the 2-D (x,y) equivalents 
+   components \code{x} and \code{y}, which are the 2-D (x,y) transformations 
    of supplied (a,b,c) \code{trianglePlot} elements.
 
    \code{triXY2ABC} returns a list containing the named 
    components \code{a}, \code{b} and \code{c}, which are the (a,b,c) 
-   \code{trianglePlot} coordinates associated with supplied 2-D equivalents 
-   (x, y).
+   \code{trianglePlot} coordinates associated with supplied 2-D (x, y) that 
+   \code{trianglePlot} would generate.
+
+   \code{resetTriLims} returns a supplied trellis object, rescaled 
+   based on the assumption that it is a \code{trianglePlot}.
 
 }
+
 \references{
   These function makes extensive use of code developed by others.  
 
@@ -237,14 +233,14 @@ triXY2ABC(x, y = NULL, ..., force.xy = TRUE,
 
   And the trilinear plot of Allen as reported by Zhu:
   
-  Zhu, M. (2008). How to draw a trilinear Plot. Statistical computing & Graphics, 19(1), 
+  Zhu, M. (2008). How to draw a trilinear Plot. Statistical Computing & Graphics, 19(1), 
   June, 2008.  
 
   In this version of the package tri-plot methods are used for the \code{triABC2XY} and 
   \code{triXY2ABC} transforms and a modification \code{triangle.param} methods is used 
   to calculate suitable values for \code{alim}, \code{blim} and \code{clim}.
 
-  And as elsewhere, the use of \code{lattice} is gratefully acknowledged
+  As elsewhere, the use of \code{lattice} is also gratefully acknowledged:
 
   lattice:
   Sarkar, Deepayan (2008). Lattice: Multivariate Data
@@ -260,45 +256,52 @@ triXY2ABC(x, y = NULL, ..., force.xy = TRUE,
 
    General: 
 
-   With triangle plots, the (a, b, c) scales are proportional. So regardless of the 
+   With triangle plots, the (a0, b0, c0) scales are proportional. So regardless of the 
    absolute sizes of a coordinate set (a,b,c), values are plotted and handled 
    as proportions, i.e. a/(a+b+c), b/(a+b+c) and c/(a+b+c), respectively. This means 
    that absolute values of \code{a}, \code{b} and \code{c} are lost when points are 
-   plotted on these axes. So, the function \code{triXY2ABC} give the relative proportions 
+   plotted on these axes. So, the function \code{triXY2ABC} returns the relative proportions 
    of \code{a}, \code{b} and \code{c}, not the absolute amounts, when translating a 2-D 
-   (x,y) point into the associated (a, b, c) coordinate.  
+   (x,y) coordinates into the associated (a, b, c) coordinates.  
 
    Development:
 
-   This is an in-development plot, and 'best handling' strategies has not been decided for 
+   This is an in-development plot, and 'best handling' strategies have not been decided for 
    several elements. So, future versions of these functions may differ significantly from the 
    current version. 
 
    In particular:
 
-   Currently, \code{trianglePlot} provides scale adjustment options by \code{alim}, 
-   \code{blim}, \code{clim} setting. Other options are also being evaluated, e.g. 
-   \code{lims} to set all axes ranges the same, \code{maxs} to setting all axes range 
-   maximums, \code{mins} to set all axes range minimums, etc. One of the issues here is 
-   that the axes ranges are all inter-linked. The range of one axes is a function of the 
-   other two axes ranges. So, setting these can generate contradictions. For example, 
-   \code{lims=c(0,0.1)} should in theory set all ranges to (0, 0.1). But, the triangle 
+   Current axes assignments, e.g. (a, b, c) versus (a0, b0, c0), etc., have not be finalised. 
+   So, these may change in future versions of the function. 
+   
+   Currently, \code{trianglePlot} scale adjustment options have been limited. Options under 
+   evaluation include: (1) by \code{alim}, \code{blim}, \code{clim} setting, equivalent to 
+   \code{xlim} and \code{ylim}, (2) by \code{lims} to set all axes ranges the same, and 
+   (3) by \code{maxs} to setting all axes range maximums and \code{mins} to set all axes 
+   range minimums, etc. 
+
+   These options are currently only avialable via the data converters. 
+
+   One of the issues here is that the axes ranges are all inter-linked. The range of one axes 
+   is a function of the other two axes ranges. So, setting these can generate contradictions. 
+   For example, \code{lims=c(0,0.1)} should in theory set all ranges to (0, 0.1). But, the triangle 
    \code{a = b = c = c(0, 0.1)} cannot exist. Therefore, the plot would attempt to recover 
    the extended range that includes all the requested ranges (\code{a = c(0, 0.1)}, 
    \code{b = c(0, 0.1)}  and \code{c = c(0, 0.1)}), which in this case is the full 
-   range: \code{a = b = c = c(0, 1)}. Any suggestions on this topic are very welcome. 
+   range: \code{a = b = c = c(0, 1)}. Suggestions on this topic are very welcome. 
 
    \code{trianglePlot}:
 
-   The \code{\link{panelPal}} function was extensively revised as part of the 0.1 -> 0.2 
-   package version update. The current version of \code{trianglePlot} still uses the old version 
-   of \code{panelPal} (\code{panelPal.old}). The migration of \code{trianglePlot} to the latest 
-   version of \code{panelPal} is on the current package 'to-do'. 
+   As part of the \code{loa} version 0.2.19 update, \code{trianglePlot} was rewritten to run 
+   with the most recent version of \code{\link{panelPal}} function. This means all plot 
+   functions in \code{loa} now use the most recent version of \code{\link{panelPal}}. 
 
-   This update should provide improved plot handling similar to the current versions of \code{\link{loaPlot}} 
-   and \code{\link{GoogleMap}} which both already use the new version of \code{panelPal}.
+   This update should provide improved plot handling similar to recent versions of \code{\link{loaPlot}} 
+   and \code{\link{GoogleMap}} functions which both already (from versions 0.2.0 onwards) use the latest 
+   version of \code{panelPal}.
 
-   \code{panel.triangleAxes}: 
+   \code{panel.trianglePlotAxes}: 
 
    Code currently in revision. Please handle with care.
    
@@ -310,8 +313,8 @@ triXY2ABC(x, y = NULL, ..., force.xy = TRUE,
 
 \seealso{
 
-   In \code{loa}: For in-panel axis/scale generation, see \code{\link{localScalesHandler}} and 
-   \code{\link{panel.localScale}}. 
+   In \code{loa}: For in-panel axis/scale generation, see \code{\link{loaPlot}}, \code{\link{panelPal}}, 
+   \code{\link{localScalesHandler}} and \code{\link{panel.localScale}}. 
 
    In other packages: \code{\link{xyplot}} in \code{\link{lattice}}. 
 
@@ -320,80 +323,56 @@ triXY2ABC(x, y = NULL, ..., force.xy = TRUE,
 \examples{
 
 ## Example 1
-## trianglePlot Examples
+## Basic triangle plot usage
 
-#  lat.lon.meuse plots
+trianglePlot(cadmium~copper+lead+zinc|lime, 
+             data=lat.lon.meuse)
 
-#  Cu/Pb/Zn triangle plot
-trianglePlot(~copper+lead+zinc, data=lat.lon.meuse)   
+# Notes:
+# Formula structure z ~ a0 + b0 + c0 |cond, where a0, b0 and 
+# c0 are the three axes of the triangle plot 
+# Data (and groups) assignment like in standard lattice plots.
+# By default z is linked to col and cex. 
+# Unless overridden by user inputs or group or zcase setting. 
+# Plot handling is similar to loaPlot 
+# (So, see ?loaPlot and ?panelPal for further details.)
 
-#  ... with Cd as zcase 
-#  (bubble plot, col and cex scaling)
-trianglePlot(cadmium~copper+lead+zinc, data=lat.lon.meuse)
-
-#  ... and conditioning by lime
-trianglePlot(cadmium~copper+lead+zinc|lime, data=lat.lon.meuse)
-
-
-##  Example 2
-##  Local scales/axis control in trianglePlot
-
-#  tri.frame - a 'standalone' function to demonstrate the
-#  axes, ticks, grids, annotation handling in trianglePlot
-
-tri.frame <- function(panel=panel.triangleGrids, axes = TRUE, ticks = TRUE, 
-                      grids = TRUE, annotation = TRUE, ...){
-
-    #default plot
-    #blank canvas
-    my.plot <- list(x=1~1, xlim=c(-0.2,1.1), ylim=c(-0.2,1.1), type = "n", 
-                    xlab = "", ylab ="", panel = panel)
-
-    #what you add
-    extra.args <- list(...)
-
-    #made local scale for a, b c axes
-    #with localScalesHandler
-    temp <- listUpdate(extra.args, list(allowed.scales = c("a", "b", "c"), 
-                                        disallowed.scales = c("x", "y"), 
-                                        remove.box = TRUE))
-    extra.args <- listUpdate(extra.args, do.call(localScalesHandler, temp), 
-                             ignore.a = "scales")
-
-    #get sensible setting for axes, grids, ticks, annotation
-    extra.args$axes <- getPlotArgs("axis.line", user.resets=axes, 
-                                   elements = c("a", "b", "c"))
-    extra.args$grids <- getPlotArgs("axis.line", user.resets=grids, 
-                                    elements = c("a", "b", "c"))
-    extra.args$ticks <- getPlotArgs("axis.line", user.resets=ticks, 
-                                    elements = c("a", "b", "c"))
-    extra.args$annotation <- getPlotArgs("axis.text", user.resets=annotation, 
-                                    elements = c("a", "b", "c"))
-
-    #update my.plot
-    my.plot <- listUpdate(my.plot, extra.args)
-
-    do.call(xyplot, my.plot)
-
-}
-
-#  You can send this any of the above panels
-#  (works like x,y scales in lattice but for 
-#  a,b,c scales of trianglePlot) 
-
-tri.frame(panel.triangleGrids) #just the triangle plot grids
-tri.frame(panel.triangleAxes)  #just the triangle plot axes
-tri.frame(panel.triangleFrame)  #triangle plot 'frame' of both
-
-tri.frame(panel.triangleAxes, axes = 1:3) #modify appearances
-tri.frame(panel.triangleGrids, grids = list(a = list(lty=1, col = "green"),
-                                            b = list(lty=2, col = "blue"),
-                                            c = list(lty=3, col = "purple")))
-
-tri.frame(panel.triangleFrame, scales = list(tick.number = 2)) #modify scales
+# Formula variations:
+# basic triangle plot without z values assignment
+# trianglePlot(~copper+lead+zinc, data=lat.lon.meuse) 
+# ... with z values set
+# trianglePlot(cadmium~copper+lead+zinc, data=lat.lon.meuse)
+# ... with grouping 
+# trianglePlot(cadmium~copper+lead+zinc, groups = lat.lon.meuse$lime, 
+#              data=lat.lon.meuse)
 
 
+## Example 2 
+## Basic frame (axes, grid, tick, annotation) management 
 
+# trianglePlot(~1+1+1, type="n")          ## empty frame
+                                          ## make using type="n"    
+# trianglePlot(~1+1+1, type="n", 
+#              grid = FALSE)              ## turn off grid 
+# trianglePlot(~1+1+1, type="n", 
+#              grid.col = 2)              ## or change plot settings
+# trianglePlot(~1+1+1, type="n", 
+#              grid.a0.lty = 1)
+# trianglePlot(~1+1+1, type="n", 
+#              grid = list(a0 = list(lty = 1)))
+
+  trianglePlot(~1+1+1, type="n", 
+               grid.alpha = 0.2, 
+               ticks.alpha = 0.2)         ## grid and tick alpha reset
+
+# notes:
+# Here, grid and ticks arguments are used to remove or modify these 
+# elements of the plot frame individually.  
+# Setting can be management in list form like in normal lattice or 
+# in a loa shorthand where e.g. the argument grid.a0.lty = 1 is equivalent 
+# to grid = list(a0 = list(lty = 1))
+# (So, quicker if you are only changing a small number of elements.)
+ 
 }
 
 
