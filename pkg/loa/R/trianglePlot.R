@@ -494,63 +494,7 @@ function(ans){
         ans$x.limits <- ans$panel.args.common$xlim
         ans$y.limits <- ans$panel.args.common$ylim 
 
-
-return(ans)
-
-
-#dead from here
-
-    if ("max.xylims" %in% reset.xylims) {
-        temp <- sqrt(c(ans$x.limits, ans$y.limits)^2)
-        temp <- c(-max(temp), max(temp))
-        ans$panel.args.common$xlim <- temp
-        ans$x.limits <- temp
-        ans$panel.args.common$ylim <- temp
-        ans$y.limits <- temp
-    }
-
-#
-
-    extra.args$alim <- ans$alim
-    extra.args$blim <- ans$blim
-    extra.args$clim <- ans$clim
-    temp <- triABC2XY(a = c(ans$alim[1], ans$alim[1], ans$alim[2]), 
-        b = c(ans$blim[1], ans$blim[2], ans$blim[1]), c = c(ans$clim[2], 
-            ans$clim[1], ans$clim[1]), verbose = FALSE)
-    extra.args$xlim <- range(temp$x, na.rm = TRUE)
-    extra.args$ylim <- range(temp$y, na.rm = TRUE)
-    temp <- function(lim, q1, q2) {
-        if (diff(lim) == 0) 
-            lim + q1
-        else lim + c(-(diff(lim)/q2[1]), (diff(lim)/q2[2]))
-    }
-
-#bit below next 
-#
-
-    if (is.null(extra.args$clab)) {
-        extra.args$xlim <- temp(extra.args$xlim, c(-0.5, 0.5), 
-            c(5, 5))
-        extra.args$ylim <- temp(extra.args$ylim, c(-0.5, 0.5), 
-            c(5, 5))
-    }
-    else if (is.character(extra.args$clab) && extra.args$clab == 
-        "") {
-        extra.args$xlim <- temp(extra.args$xlim, c(-0.5, 0.5), 
-            c(5, 5))
-        extra.args$ylim <- temp(extra.args$ylim, c(-0.5, 0.5), 
-            c(5, 5))
-    }
-    else {
-        extra.args$xlim <- temp(extra.args$xlim, c(-0.5, 0.5), 
-            c(5, 5))
-        extra.args$ylim <- temp(extra.args$ylim, c(-0.4, 0.5), 
-            c(4, 5))
-    }
-
-
-
-
+    ans
 
 }
 
