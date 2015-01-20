@@ -1,18 +1,20 @@
 citHeader("To cite 'loa' package in publications use:")
 
+year <- sub("-.*", "", meta$Date) 
+version <- meta$Version
+note <- sprintf("R package version %s", version) 
+
+
 citEntry(entry="Manual",
          title = "loa: various plots, options and add-ins for use with lattice.",
          author = personList(as.person("Karl Ropkins")),
-         year = format(as.Date(packageDescription("loa", fields = c("Date"))), "%Y"),
-         note = paste("R package version ", packageDescription("loa", fields = c("Version"))[1], sep=""),
+         year = year,
+         note = note,
 
          textVersion =
-         paste("Karl Ropkins (",
-               format(as.Date(packageDescription("loa", fields = c("Date"))), "%Y"),
+         paste("Karl Ropkins (", year,
                "). loa: various plots, options and add-ins for use with lattice. ",
-               "R package version ",
-               packageDescription("loa", fields = c("Version"))[1],
-               ".", sep=""))
+               "R package version ", version, ".", sep=""))
 
 citEntry(entry="proceedings",
          title = "R, lattice and RgoogleMaps: A practical framework for the development of new geovisualizations.",
