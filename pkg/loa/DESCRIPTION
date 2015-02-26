@@ -2,7 +2,7 @@ Package: loa
 Type: Package
 Title: Various Options and Add-ins for Lattice 
 Version: 0.2.22
-Date: 2015-01-20
+Date: 2015-01-21
 Author: Karl Ropkins
 Maintainer: Karl Ropkins <k.ropkins@its.leeds.ac.uk>
 Description: This package, Lattice Options and Add-ins (or loa), contains various plots and 

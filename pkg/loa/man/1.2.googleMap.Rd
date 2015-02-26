@@ -368,7 +368,7 @@ GoogleMap(cadmium*50+copper*10+lead*2+zinc~latitude*longitude,
 
 #  Note 2:
 #  To make a map for use with panel.GoogleMaps or panel.GoogleMapsRaster 
-#  without plotting use markMapArg(). To recover a map from a previously 
+#  without plotting use makeMapArg(). To recover a map from a previously 
 #  plotted loa GoogleMap use getMapArg().
 
 }

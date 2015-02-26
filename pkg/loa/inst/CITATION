@@ -4,7 +4,6 @@ year <- sub("-.*", "", meta$Date)
 version <- meta$Version
 note <- sprintf("R package version %s", version) 
 
-
 citEntry(entry="Manual",
          title = "loa: various plots, options and add-ins for use with lattice.",
          author = personList(as.person("Karl Ropkins")),
@@ -15,6 +14,24 @@ citEntry(entry="Manual",
          paste("Karl Ropkins (", year,
                "). loa: various plots, options and add-ins for use with lattice. ",
                "R package version ", version, ".", sep=""))
+
+citEntry(entry = "Article",
+  title        = "{RgoogleMaps} and {loa}: Unleashing {R} Graphics Power on Map Tiles",
+  author       = personList(as.person("Markus Loecher"),
+                   as.person("Karl Ropkins")),
+  journal      = "Journal of Statistical Software",
+  year         = "2015",
+  volume       = "63",
+  number       = "4",
+  pages        = "1--18",
+  url          = "http://www.jstatsoft.org/v63/i04/",
+
+  textVersion  =
+  paste("Markus Loecher, Karl Ropkins (2015).",
+        "RgoogleMaps and loa: Unleashing R Graphics Power on Map Tiles.",
+        "Journal of Statistical Software, 63(4), 1-18.",
+        "URL http://www.jstatsoft.org/v63/i04/.")
+        )
 
 citEntry(entry="proceedings",
          title = "R, lattice and RgoogleMaps: A practical framework for the development of new geovisualizations.",

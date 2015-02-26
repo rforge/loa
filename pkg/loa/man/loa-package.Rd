@@ -15,7 +15,7 @@
 Package: \tab loa\cr
 Type: \tab Package\cr
 Version: \tab 0.2.22\cr
-Date: \tab 2014-01-20\cr
+Date: \tab 2014-01-21\cr
 License: \tab GPL (>= 2)\cr
 LazyLoad: \tab yes\cr
 }
