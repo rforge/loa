@@ -1,3 +1,10 @@
+Changes in loa 0.2.23 [2015-03-05]
+
+*       xlab, ylab fix for 0.2.21 
+*       formulaHandler update to allow default 
+        trianglePlot normalisation  
+ 
+
 Changes in loa 0.2.21-2 [2015-01-21]
 =====================================
 

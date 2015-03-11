@@ -338,9 +338,28 @@ formulaHandler <- function (x, data = NULL, groups = NULL, ...,
 #others >> x,y
 #before plot call
 
-    if(!is.null(coord.conversion)){
-        lattice.like <- listUpdate(lattice.like, do.call(coord.conversion, lattice.like))
+#    if(!is.null(coord.conversion)){
+#        lattice.like <- listUpdate(lattice.like, do.call(coord.conversion, lattice.like))
+#    }
+
+#new fix BUT this needs revisiting
+
+
+    if (!is.null(coord.conversion)) {
+        temp <- extra.args[names(extra.args) %in% names(formals(coord.conversion))]
+        lattice.like <- listUpdate(listUpdate(lattice.like, temp), do.call(coord.conversion, 
+            lattice.like))
     }
+
+
+###############
+#testing return labels
+###############
+
+     temp <- listUpdate(lattice.like, extra.args, use=c("xlab", "ylab", "zlab"))
+     lattice.like <- listUpdate(lattice.like, temp)
+
+
     extra.args <- listUpdate(extra.args, lattice.like, 
                           ignore.b = c("panel.condition", "x", "y"))
 
