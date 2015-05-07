@@ -3,13 +3,283 @@
 
 #panel.kernelDensity
 #panel.binPlot
+#panel.surfaceSmooth
 
 
 #NOTE: much borrowed from lattice 
 
-#to do
-#callWithThis document or drop
-#very minor
+
+###################################
+###################################
+##panel.loaLevelPlot
+###################################
+###################################
+
+panel.loaLevelPlot <- function (x = NULL, y = NULL, z = NULL, 
+    ..., loa.settings = FALSE) {
+
+
+###################
+#setup
+###################
+
+    extra.args <- list(...)
+    if (loa.settings) 
+        return(list(group.args = c("col"), 
+                    zcase.args = c("pch"), 
+                    ##common.args = c(), 
+                    default.settings = list(key.fun = "draw.loaColorKey", 
+                                            region = TRUE, contour = TRUE, 
+                                            lim.borders = 0.05, 
+                                            isolate.col.regions = TRUE)
+                    ))
+
+
+
+##################
+#plotting
+##################
+
+     #grid
+     if(isGood4LOA(extra.args$grid)) 
+         panel.loaGrid(panel.scales = extra.args$panel.scales, 
+                       grid = extra.args$grid)
+
+     #region
+     temp <- do.call(listLoad, listUpdate(extra.args, list(load = "region")))$region
+     if (isGood4LOA(temp)) {
+         temp <- if(is.list(temp)) 
+                     listUpdate(extra.args, temp) else 
+                        extra.args
+         if(!"at" %in% names(temp)) 
+            temp$at <- seq(min(temp$zlim), max(temp$zlim), 
+                           length.out = 100)
+         temp <- listUpdate(temp, list(x = x, y = y, z = z, 
+                            interpolate = T, subscripts = T, region = TRUE, 
+                            contour = FALSE))
+         if("groups" %in% names(temp) || "zcases" %in% names(temp)) 
+             do.call(groupsAndZcasesPanelHandler, listUpdate(temp, 
+                list(panel = panel.levelplot)))
+             else do.call(panel.levelplot, temp)
+     }
+
+     #contour
+     temp <- do.call(listLoad, listUpdate(extra.args, list(load = "contour")))$contour
+     temp.fun <- function(...) {
+                   extra.args <- list(...)
+                   if (!"labels" %in% names(extra.args)) 
+                       extra.args$labels <- if ("col" %in% names(extra.args)) 
+                                                list(col = extra.args$col)
+                                                else TRUE
+                   do.call(panel.levelplot, extra.args)
+                 }
+      if(isGood4LOA(temp)) {
+           temp <- if(is.list(temp)) 
+                       listUpdate(extra.args, temp)
+                       else extra.args
+           if(!"at" %in% names(temp)) 
+                   temp$at <- pretty(temp$zlim, 10)
+           temp <- listUpdate(temp, list(x = x, y = y, z = z, 
+                interpolate = T, subscripts = T, region = FALSE, 
+                contour = TRUE))
+           if ("groups" %in% names(temp) || "zcases" %in% names(temp)) 
+                do.call(groupsAndZcasesPanelHandler, listUpdate(temp, 
+                     list(panel = temp.fun)))
+                else do.call(temp.fun, temp)
+       }
+
+}
+
+
+
+
+
+
+
+
+
+#######################################
+#######################################
+##panel.surfaceSmooth
+#######################################
+#######################################
+
+panel.surfaceSmooth <- function (x = NULL, y = NULL, z = NULL, 
+    breaks = 200, x.breaks = breaks, y.breaks = breaks, 
+    smooth.fun = NULL, too.far=0, ..., 
+    plot = TRUE, process = TRUE,
+    loa.settings = FALSE){
+
+
+    ####################
+    #setup
+    ####################
+
+    extra.args <- list(...)
+
+#want better way to handle process.args
+#when modelling function is buried
+#
+
+    if(!is.function(smooth.fun)){
+        smooth.fun <- function(x, y, z, ...) loess(z~x*y, ...)
+        process.args <- unique(names(formals(loess)))
+    } else {
+        process.args <- unique(names(formals(smooth.fun)))
+    }
+    plot.args <- unique(names(formals(panel.levelplot)))
+
+############################
+
+    if (loa.settings)
+       return(list(process.args = process.args, plot.args = plot.args,
+                   group.args = c("col"), zcase.args = c("pch"),
+                   common.args = c("breaks", "x.breaks", "y.breaks", "smooth.fun"), 
+                   default.settings = list(key.fun = "draw.loaColorKey",
+                   region=TRUE, contour=TRUE, lim.borders=0.05,
+                   isolate.col.regions = TRUE)))
+
+#    if(is.null(z))
+#        stop("no z values supplied; this function requires z",
+#              call. = FALSE)
+
+    if (process) {
+
+        #############################
+        # keeping original data as ghosts
+        #############################
+
+#########################
+#ghosts have to go
+
+###########################
+#this need to only use
+#process args
+# 
+
+############################
+#this needs to not overwrite 
+#x when doing that
+
+
+#this need to be redone/redesigned
+
+        ghosts <- list(x=x,y=y,z=z)
+
+        temp <- c("x", "y", "z")[c("x", "y", "z") %in% process.args]
+        temp <- if(!"z" %in% temp && length(temp)==2)  
+                      temp else c("x", "y", "z")
+        mod <- list(x=x, y=y, z=z)
+        mod <- mod[temp]
+
+        mod <- listUpdate(mod, extra.args, use.b=process.args)
+
+
+
+        mod <- do.call(smooth.fun, mod)
+
+##        mod <- smooth.fun(x,y,z) 
+
+        ########################
+        #next bit as before
+        #just makes a regular grid
+        ########################
+
+        ###############################
+        #handling if not list of new (x,y,z)
+        ###############################
+
+
+        ################################
+        #handling if mod output 
+        ################################
+
+        if("call" %in% names(mod)){
+
+            temp <- if ("xlim" %in% names(extra.args))
+                extra.args$xlim else range(x, na.rm=TRUE)
+            x <- seq(min(temp), max(temp), length.out = (x.breaks))
+            temp <- if ("ylim" %in% names(extra.args))
+                extra.args$ylim else range(y, na.rm=TRUE)
+            y <- seq(min(temp), max(temp), length.out = (y.breaks))
+    
+            d <- data.frame(x = rep(x, each= y.breaks), y = rep(y, times=x.breaks))
+            temp <- try(predict(mod, newdata = d, se.fit = TRUE))
+            
+            if(!class(try)[1]=="try-error"){
+                mod <- cbind(temp,d)
+                names(mod)[1] <- "z" 
+            }
+        }
+
+        ################################
+        #handling if x, y and matrix
+        ################################
+
+        if("z" %in% names(mod) && is.matrix(mod$z)){
+              mod <- list(x = rep(mod$x, length(mod$y)), 
+                          y = rep(mod$y, each = length(mod$x)), 
+                          z = as.vector(mod$z))
+        }
+
+
+        ################################
+        #next this bit added
+        #to make the surface
+        ################################
+
+
+
+        if (too.far > 0) {
+            ex.tf <- exclude.too.far(mod$x, mod$y, ghosts$x, 
+                ghosts$y, dist = too.far)
+            mod$z[ex.tf] <- NA
+        }
+
+        if("na.rm" %in% names(extra.args) && extra.args$na.omit)
+            mod <- na.omit(mod)
+
+################################
+#could just return mod as list at this stage???
+###############################
+
+        if (!plot)
+            return(list(x = mod$x, y = mod$y, z = mod$z))
+
+#       
+#        if (!plot)
+#            return(list(x = mod.out$x, y = mod.out$y, z = mod.out$z, 
+#                        ghosts=ghosts))
+    }
+    if (plot) {
+              extra.args <- listUpdate(extra.args, list(x=x, y=y, z=z, subscripts=T, 
+                                                        plot=plot, process=process))
+              do.call(panel.loaLevelPlot, extra.args)
+
+        ##################
+        #show original points
+        #size linked to z
+        ##################
+
+#       #if(isGood4LOA(show.ghosts)){
+#       #       extra.args<-listUpdate(extra.args, ghosts)
+#       #       extra.args$col<-"blue"
+#       #       extra.args$pch<-1
+#       #       extra.args$cex<-NULL
+#       #       do.call(panel.loaPlot, extra.args)
+#       #}
+    }
+}
+
+
+
+
+
+
+
+
+
+
 
 
 ##############################
@@ -61,6 +331,9 @@ panel.kernelDensity <- function (x, y, z = NULL, ...,
 
     if(process){
 
+        if(!is.null(z))
+            warning("z values supplied but ignored (frequency plot)", call. = FALSE)                        
+       
         temp <- length(x)
         mylist <- list(x = x, y = y, n = n)
         mylist <- listUpdate(mylist, extra.args, use = process.args)
@@ -374,3 +647,11 @@ panel.binPlot <- function(x = NULL, y = NULL, z = NULL,
 
     }
 }
+
+
+
+
+
+
+
+

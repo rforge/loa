@@ -11,6 +11,9 @@
 
 #formulaHandler - handles the x formula
 #formulaHandler.old - previous version 
+
+#matrixHandler - converts matrx to x formula
+
 #####not exported
 #stripHandler   - handles strips
 #getZcaseDimensions
@@ -398,6 +401,76 @@ formulaHandler <- function (x, data = NULL, groups = NULL, ...,
     return(extra.args)
 
 }
+
+
+
+
+
+
+
+#############################
+#############################
+##matrixHandler
+#############################
+#############################
+
+
+#this is based on levelplot.matrix in lattice
+
+#started 
+#kr 26/04/2015
+
+matrixHandler <- function (x, data = NULL, row.values=NULL, 
+                           column.values=NULL, ...){
+
+    extra.args <- list(...)
+
+    if(is.null(row.values)) row.values <- seq_len(nrow(x))
+    if(is.null(column.values)) column.values <- seq_len(ncol(x))
+
+###tidy
+    stopifnot(length(row.values) == nrow(x), length(column.values) == 
+        ncol(x))
+    
+##tidy 
+    if (!is.null(data)) 
+        warning("supplied 'data' ignored; x matrix content used")
+
+
+    form <- z ~ row * column
+    data <- expand.grid(row = row.values, column = column.values)
+    data$z <- as.vector(as.numeric(x))
+
+
+#    if (!"xlim" %in% names(extra.args)) 
+#        extra.args$xlim <- if (!is.null(rownames(x))) 
+#            rownames(x)
+#        else range(row.values, finite = TRUE) + c(-0.5, 0.5)
+#    if (!"ylim" %in% names(extra.args)) 
+#        extra.args$ylim <- if (!is.null(colnames(x))) 
+#            colnames(x)
+#        else range(column.values, finite = TRUE) + c(-0.5, 0.5)
+
+    if (!"xlim" %in% names(extra.args)) 
+        extra.args$xlim <- range(row.values, finite = TRUE) + c(-0.5, 0.5)
+    if (!"ylim" %in% names(extra.args)) 
+        extra.args$ylim <- range(column.values, finite = TRUE) + c(-0.5, 0.5)
+
+     listUpdate(list(x=form, data=data), extra.args)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -3,6 +3,9 @@
 \alias{limsHandler}
 \alias{localScalesHandler}
 \alias{panel.localScale}
+\alias{yscale.component.log10}
+\alias{xscale.component.log10}
+
 
 \title{
   Plot lims and scales handlers
@@ -21,6 +24,11 @@ localScalesHandler(scales = NULL, ..., allowed.scales =c("x", "y"),
 panel.localScale(x.loc, y.loc, lim, ..., panel.scale = NULL, 
          label.before = TRUE, x.offset = NULL, y.offset = NULL, 
          axis = TRUE, ticks = TRUE, annotation = TRUE)
+
+yscale.component.log10(...)
+
+xscale.component.log10(...)
+
 }
 
 
@@ -127,7 +135,11 @@ panel.localScale(x.loc, y.loc, lim, ..., panel.scale = NULL,
    \code{panel.localScale} is a local axis/scale plotter. It can be used 
     in combination with \code{localScalesHandler}, and should called 
     once for each axis that is required, or it can be used 'stand alone' 
-    panel to add a local scale to a lattice plot. 
+    panel to add a local scale to a lattice plot.
+
+   \code{yscale.component.log10} and \code{xscale.component.log10} are 
+   simple axis transforms for use with log to the base 10 transformed 
+   plot axes.
 
 }
 

@@ -1,6 +1,7 @@
 \name{4.2.plot.structure.handlers}
 \alias{4.2.plot.structure.handlers}
 \alias{formulaHandler}
+\alias{matrixHandler}
 \alias{stripHandler}
 \alias{getZcaseDimensions}
 
@@ -20,6 +21,9 @@
         check.coord.dimensions = TRUE, get.zcase.dimensions = TRUE, 
         output = "extra.args")
 
+  matrixHandler(x, data = NULL, row.values=NULL, column.values=NULL, 
+                ...)
+
   stripHandler(..., striplab=NULL)
 
   getZcaseDimensions(...)
@@ -28,7 +32,8 @@
 
 \arguments{
 
-  \item{x}{ A formula to used to generate a lattice plot. See Below.
+  \item{x}{ (For \code{formulaHandler}) A formula or matrix (\code{matrixHandler}) 
+   intended to be used to generate a lattice plot. See Below.
    }
 
   \item{data}{ If supplied, the assumed source of the elements of formula 
@@ -77,6 +82,11 @@
    function output in.
    }
 
+   \item{row.values, column.values}{For \code{matrixHandler} only, row and column 
+    values to be assigned to supplied matrix \code{x}.
+   }
+
+
    \item{striplab}{For \code{stripHandler} only, character vector. If supplied, the 
    label to add to the panel strip when conditioning is applied. By default, it applies 
    the standard \code{lattice} convention, i.e., show for numerics.   
@@ -100,16 +110,29 @@
    \code{y}, are required elements; \code{z} and \code{cond} are typically 
    optional.) 
 
+   \code{matrixHandler} converts a matrix supplied as \code{x} element of a 
+   loa plot to a formula and associated \code{data}. If \code{row.values} and 
+   \code{column.values} are supplied, these are used as \code{(x,y)}  
+   values for the supplied matrix. 
+
    \code{stripHandler} manages the strip component of loa plot functions.
 
    \code{getZcaseDimensions} tracks the dimensions of multiple \code{z} 
      
 }
 
+
 \value{
 
   \code{formulaHandler} returns a list, containing the plot elements 
    defined in the supplied formula.
+
+
+  \code{matrixHandler} returns a list containing all supplied arguments, 
+   subject to the following modifications: matrix \code{x} converted to formula 
+   (\code{z~x*y}); \code{data}, replaced with supplied matrix content; 
+   \code{xlim} and \code{ylim}, added is not suppied.
+
 
   \code{stripHandler} returns a list containing all supplied arguments, 
    subject to the following modifications: \code{strip}, Updated or generated 
@@ -125,6 +148,7 @@
   the call.  
     
 }
+
 
 \note{
 
@@ -149,7 +173,12 @@
 
   The latest version of \code{formulaHandler} uses \code{getZcaseDimensions} 
   to calculate the dimensions of \code{z} if it is multi-part, e.g. 
-  \code{z1 + z2 + etc ~ x * y} rather than \code{z ~ x * y}.    
+  \code{z1 + z2 + etc ~ x * y} rather than \code{z ~ x * y}.
+
+  The current version of \code{matrixHandler} is based on code from 
+  levelplot.matrix in \code{\link{lattice}}. If used with \code{x} and 
+  \code{data} arguments it will overwrite \code{data} with the matrix 
+  content.     
      
 }
 

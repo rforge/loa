@@ -135,6 +135,11 @@ colHandler <- function(z = NULL, col = NULL,
     #temp update test
     extra.args <- list(...)
 
+###############
+#test
+    #cuts <- length(z)
+###############
+
     #scheme check
     if("scheme" %in% names(extra.args) & !"par.settings" %in% names(extra.args))
         extra.args$par.settings <- do.call(parHandler, extra.args)
@@ -200,7 +205,7 @@ colHandler <- function(z = NULL, col = NULL,
         if(is.null(at)) 
             at <- if(pretty) 
                       pretty(zrng, cuts) else 
-                          seq(zrng[1], zrng[2], length.out = cuts + 2)
+                          seq(zrng[1], zrng[2], length.out = cuts + 2)   
         if(is.null(col.regions)){
             col <- level.colors(z, at)
             col.regions <- colorRampPalette(level.colors(at, at))(100)
@@ -217,7 +222,7 @@ colHandler <- function(z = NULL, col = NULL,
         if(is.null(at)) 
             at <- if(pretty) 
                      pretty(zrng, cuts) else 
-                          seq(zrng[1], zrng[2], length.out = cuts + 2)
+                          seq(zrng[1], zrng[2], length.out = cuts + 2)   
    }
 
    #creat col.regions if still missing
@@ -347,7 +352,7 @@ colRegionsHandler <- function(...){
 #   do.call(colHandler, extra.args)    
    
    do.call(colHandler, listUpdate(extra.args, 
-                                  list(z=1:100, zlim=c(1,100), ref=1:100)))
+                                  list(z=1:100, zlim=c(1,100), cuts=99, ref=1:100)))
 
 
 }

@@ -5,6 +5,8 @@
 \alias{draw.loaColorKey}
 \alias{draw.loaColorRegionsKey}
 \alias{draw.zcasePlotKey}
+\alias{draw.key.log10}
+
 
 \title{
   Key handling
@@ -26,6 +28,8 @@ draw.loaColorKey(key = NULL, draw = FALSE, vp = NULL, ...)
 draw.loaColorRegionsKey(key = NULL, draw = FALSE, vp = NULL, ...)
 
 draw.zcasePlotKey(key = NULL, draw = FALSE, vp = NULL, ...)
+
+draw.key.log10(key = NULL, draw = FALSE, vp = NULL, ...)
 
 }
 
@@ -65,6 +69,10 @@ draw.zcasePlotKey(key = NULL, draw = FALSE, vp = NULL, ...)
 
   \code{draw.zcasePlotKey} is a simple legend based on \code{zcase} 
   annotation.
+
+  \code{draw.key.log10} is a simple legend for use with log to the base 
+  10 transformed \code{z} scale.
+
      
 }
 

@@ -137,8 +137,12 @@ draw.loaColorKey <- function (key = NULL, draw = FALSE, vp = NULL, ...){
 
 #new bit testing
 
-        if("isolate.col.regions" %in% names(key))
+        if ("isolate.col.regions" %in% names(key)){
+
             key$col <- NULL
+            key$alpha <- NULL
+        }
+
 
 
         key$col <- do.call(colHandler, listUpdate(key, 
@@ -1004,6 +1008,26 @@ if(is.list(zcases) && length(zcases) > 0){
 
 }
 
+
+
+######################################
+#temp keys
+######################################
+
+
+draw.key.log10 <- function (key = NULL, draw = FALSE, vp = NULL, ...) {
+    if (!"at" %in% names(key))
+        key$at <- seq(min(key$zlim), max(key$zlim), length.out = 100)
+   ticks <- if("tick.number" %in% names(key))
+                     key$tick.number else 5
+    if(!"labels" %in% names(key)){
+        temp <- logTicks(10^c(min(key$zlim), max(key$zlim)), 1:9)
+        temp <- temp[log10(temp)>=min(key$at) & log10(temp)<=max(key$at)]
+        key$labels$at <- log10(temp)
+        temp2 <- logTicks(10^c(min(key$zlim), max(key$zlim)), 1)
+        key$labels$labels <- ifelse(temp %in% temp2, temp, "")
+    }
+   draw.loaColorKey(key = key, draw = draw, vp = vp, ...) }
 
 
 

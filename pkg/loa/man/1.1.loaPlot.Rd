@@ -152,7 +152,7 @@
 
 
 \references{
-  This function makes extensive use of code developed by others.  
+  These functions make extensive use of code developed by others.  
 
   lattice:
   Sarkar, Deepayan (2008) Lattice: Multivariate Data
@@ -163,6 +163,8 @@
   Erich Neuwirth <erich.neuwirth@univie.ac.at> (2011). RColorBrewer:
   ColorBrewer palettes. R package version 1.0-5.
   http://CRAN.R-project.org/package=RColorBrewer
+
+
 
 }
 

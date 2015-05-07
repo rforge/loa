@@ -1,4 +1,17 @@
+Changes in loa 0.2.24 [2015-04-22]
+=====================================
+
+*       smoother col gradient for 
+        colRegionsHandler
+*       added panel.loaLevelPlot 
+*       added panel.surfaceSmooth
+*       added matrixHandler function
+*       update to loaPlot, now also 
+        accepts matrix as x input
+
+
 Changes in loa 0.2.23 [2015-03-05]
+=====================================
 
 *       xlab, ylab fix for 0.2.21 
 *       formulaHandler update to allow default 

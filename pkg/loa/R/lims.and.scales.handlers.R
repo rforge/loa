@@ -335,4 +335,43 @@ panel.localScale <- function(x.loc, y.loc, lim, ...,
 
 
 
+################################
+#test scalers
+################################
+
+
+logTicks <- function (lim, loc = c(1, 5)) {
+    ii <- floor(log10(range(lim))) + c(-1, 2)
+    main <- 10^(ii[1]:ii[2])
+    r <- as.numeric(outer(loc, main, "*"))
+    r[lim[1] <= r & r <= lim[2]]
+}
+
+yscale.component.log10 <- function(...) {
+    ans <- yscale.components.default(...)
+    ans$right <- ans$left
+    temp <- logTicks(10^ans$num.limit, 1:9)
+    ans$left$ticks$at <- log10(temp)
+    temp <- logTicks(10^ans$num.limit, c(1,3,5))
+    ans$left$labels$at <- log10(temp)
+    ans$left$labels$labels <- temp
+    ans$right <- ans$left
+    ans
+}
+
+xscale.component.log10 <- function(...) {
+    ans <- xscale.components.default(...)
+    ans$bottom <- ans$top
+    temp <- logTicks(10^ans$num.limit, 1:9)
+    ans$bottom$ticks$at <- log10(temp)
+    temp <- logTicks(10^ans$num.limit, c(1,3,5))
+    ans$bottom$labels$at <- log10(temp)
+    ans$bottom$labels$labels <- temp
+    ans$top <- ans$bottom
+    ans
+}
+
+
+
+
 
