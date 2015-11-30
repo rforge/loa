@@ -212,7 +212,7 @@
   These function makes extensive use of code developed by others.  
 
   Currently, several triangle plotting methods are under evaluation for use within 
-  this pacakge. These are: 
+  this package. These are: 
 
   The tri-plot method of Graham and Mudgley:
 

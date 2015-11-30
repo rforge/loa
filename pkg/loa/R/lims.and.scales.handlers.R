@@ -71,8 +71,17 @@ limsHandler <- function(x=NULL, y=NULL, z=NULL, ..., lim.borders = 0.1){
 ###########################
 
                  x <- range(x)
-                 c(x[1]-temp, x[2]+temp)
-    }
+##################
+#0.2.28
+##################
+#track tzone if posixct
+
+                 temp <- c(x[1] - temp, x[2] + temp)
+                 if("tzone" %in% names(attributes(x)))
+                     attributes(temp)$tzone <- attributes(x)$tzone
+                 temp
+###################
+              }
    
     ####################################
     #check for x, y and z and their lims

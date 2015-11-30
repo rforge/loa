@@ -68,6 +68,10 @@ export(triXY2ABC)
 ##export(triABC2XY)
 ##export(triXY2ABC)
 
+#stackPlot
+export(stackPlot) 
+export(panel.stackPlot)
+
 #special panels
 export(panel.loaLevelPlot)
 export(panel.surfaceSmooth)
@@ -141,6 +145,7 @@ export(draw.loaPlotZKey)
 export(draw.loaColorKey)
 export(draw.loaColorRegionsKey)
 export(draw.zcasePlotKey)
+export(draw.ycasePlotKey)
 export(draw.key.log10)
 
 #loa.shapes/glyphs

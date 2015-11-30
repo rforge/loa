@@ -5,6 +5,7 @@
 \alias{draw.loaColorKey}
 \alias{draw.loaColorRegionsKey}
 \alias{draw.zcasePlotKey}
+\alias{draw.ycasePlotKey}
 \alias{draw.key.log10}
 
 
@@ -28,6 +29,8 @@ draw.loaColorKey(key = NULL, draw = FALSE, vp = NULL, ...)
 draw.loaColorRegionsKey(key = NULL, draw = FALSE, vp = NULL, ...)
 
 draw.zcasePlotKey(key = NULL, draw = FALSE, vp = NULL, ...)
+
+draw.ycasePlotKey(key = NULL, draw = FALSE, vp = NULL, ...)
 
 draw.key.log10(key = NULL, draw = FALSE, vp = NULL, ...)
 
@@ -68,6 +71,9 @@ draw.key.log10(key = NULL, draw = FALSE, vp = NULL, ...)
   on the \code{draw.colorkey} function in \code{\link{lattice}}.
 
   \code{draw.zcasePlotKey} is a simple legend based on \code{zcase} 
+  annotation.
+
+  \code{draw.ycasePlotKey} is a simple legend based on \code{ycase} 
   annotation.
 
   \code{draw.key.log10} is a simple legend for use with log to the base 

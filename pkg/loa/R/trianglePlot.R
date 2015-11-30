@@ -706,6 +706,17 @@ triABC2XY <- function(a, b=NULL, c=NULL, ..., force.abc=TRUE,
         lims[1,] <- round(lims[1,], digits = 4)
         lims[2,] <- apply(cal, 2, max)
         lims[2,] <- round(lims[2,], digits = 4)
+
+###################
+#new bit
+#bad lims
+
+        temp <- lims[2,] -lims[1,]
+        if(length(unique(temp))>1)
+           lims[2,] <- lims[1,] + max(temp, na.rm=TRUE)
+
+#####################
+
         #stop the bad
         lims[1,][lims[1,] < 0] <- 0
         lims[2,][lims[2,] > 1] <- 1

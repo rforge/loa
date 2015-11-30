@@ -257,9 +257,9 @@ parHandler <- function (scheme = NULL, ...) {
         }
 
         if (scheme == "kr.web") {
-            symbol <- colHandler(1:8, col.regions="Blues", output = "col")
+            symbol <- colHandler(1:10, col.regions="Blues", output = "col")[3:10]
             fill <- "white"
-            region <- colHandler(1:11, col.regions="Blues", output = "col")
+            region <- colHandler(1:14, col.regions="Blues", output = "col")[3:14]
             reference <- "white"
             bg <- "black"
             fg <- "white"
@@ -281,9 +281,9 @@ parHandler <- function (scheme = NULL, ...) {
         }
 
         if (scheme == "kr.blues") {
-            symbol <- colHandler(1:8, col.regions="Blues", output = "col")
+            symbol <- colHandler(1:10, col.regions="Blues", output = "col")[3:10]
             fill <- "darkblue"
-            region <- colHandler(1:11, col.regions="Blues", output = "col")
+            region <- colHandler(1:14, col.regions="Blues", output = "col")[3:14]
             reference <- "darkblue"
             bg <- "white"
             fg <- "darkblue"

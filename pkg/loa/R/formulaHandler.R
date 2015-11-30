@@ -264,15 +264,30 @@ formulaHandler <- function (x, data = NULL, groups = NULL, ...,
             temp <- lapply(1:length(zcases), function(x){
                                  rep(names(zcases[x]), t2[x])
                            })
-#factor in previous version
-            zcases <- as.factor(as.vector(unlist(temp)))
+
+
+#############################
+#new bit 0.2.26
+#############################
+#self ordering factor in previous version
+#level added to order based on supplied order
+#############################
+            zcases <- factor(as.vector(unlist(temp)), levels = unique(as.vector(unlist(temp))))
 
             temp.fun5 <- function(x){
                             if(is.list(x)) {
                                 for(i in 1:length(x)){
                                     temp <- lapply(1:length(t2), function(y)
                                                         rep(x[[i]], length.out=t2[y]))
-                                    x[[i]] <- as.vector(unlist(temp))
+###############################
+#new bit 0.20.28
+###############################
+#handle posixct better
+#                                    x[[i]] <- as.vector(unlist(temp))
+                                     x[[i]] <- do.call(c, temp)
+                                     if("tzone" %in% names(attributes(temp[[1]])))
+                                          attributes(x[[i]])$tzone <- attributes(temp[[1]])$tzone
+###############################
                                 }
                                 x
                             } else return(x)
@@ -347,11 +362,20 @@ formulaHandler <- function (x, data = NULL, groups = NULL, ...,
 
 #new fix BUT this needs revisiting
 
+#    if (!is.null(coord.conversion)) {
+#        temp <- extra.args[names(extra.args) %in% names(formals(coord.conversion))]
+#        lattice.like <- listUpdate(listUpdate(lattice.like, temp), do.call(coord.conversion, 
+#            lattice.like))
+#    }
+
+
+#new fix from version 0.2.28
+#(stackPlot introduction)
+#this made still need revisiting
 
     if (!is.null(coord.conversion)) {
         temp <- extra.args[names(extra.args) %in% names(formals(coord.conversion))]
-        lattice.like <- listUpdate(listUpdate(lattice.like, temp), do.call(coord.conversion, 
-            lattice.like))
+        lattice.like <- do.call(coord.conversion, listUpdate(lattice.like, temp))
     }
 
 

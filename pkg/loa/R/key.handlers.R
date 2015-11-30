@@ -226,6 +226,16 @@ draw.zcasePlotKey <- function (key = NULL, draw = FALSE, vp = NULL, ...)
         return(nullGrob())
     }
 
+#new version 0.2.28
+#test for turning off zcase key if only one colour set
+#only currently applied by stackPlot as a ycases argument
+#overridden there using force.key = TRUE
+
+    if("zcases.key.method2" %in% names(key) && key$zcases.key.method2)
+        if("col" %in% names(key) && length(key$col)<2)
+            return(nullGrob())
+
+    
     if(!"zcase.ids" %in% names(key)){
         key$zcase.ids <- if("zlab" %in% names(key))
                              key$zlab else " "
@@ -428,6 +438,45 @@ draw.zcasePlotKey <- function (key = NULL, draw = FALSE, vp = NULL, ...)
     key.gf <- placeGrob(key.gf, zcases.labels, row = 2, col = 2)
     key.gf
 }
+
+
+
+
+######################################
+######################################
+##draw.ycasePlotKey
+######################################
+######################################
+
+
+draw.ycasePlotKey <- function (key = NULL, draw = FALSE, vp = NULL, ...) 
+{
+    extra.args <- list(...)
+
+    if (!is.list(key)) {
+        warning("suspect key ignored", call. = FALSE)
+        return(nullGrob())
+    }
+
+#new to version 0.2.28
+#test for turning off key if only one colour set
+#only currently applied by stackPlot 
+#overridden there using force.key = TRUE
+
+    if("ycase.key.method2" %in% names(key) && key$ycase.key.method2)
+        if("col" %in% names(key) && length(key$col)<2)
+            return(nullGrob())
+
+    if(!"ycases.main" %in% names(key))
+        key$ycases.main <- "ycases"
+
+    #cheat to use zcasePlot for ycases
+    names(key) <- gsub("ycases", "zcases", names(key))
+    names(extra.args) <- gsub("ycases", "zcases", names(extra.args))
+    do.call(draw.zcasePlotKey, listUpdate(list(key = key, draw = draw, vp = vp), extra.args))  
+    
+}   
+
 
 
 

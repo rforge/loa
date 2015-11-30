@@ -388,19 +388,40 @@ panelPal <- function(ans, panel = NULL, preprocess = FALSE,
 
     if("refit.xylims" %in% reset.xylims){
         if(!"xlim" %in% panel.checks){
-            temp <- range(lapply(ans$panel.args, 
-                              function(x) range(x$x, na.rm=TRUE, finite=TRUE))
-                    , na.rm=TRUE, finite=TRUE)
 
-            temp <- limsHandler(x=temp, lim.borders=if(is.null(ans$panel.args.common$lim.borders)) 0.2 else ans$panel.args.common$lim.borders)$xlim
+####################
+#testing POSIXct handling
+#            temp <- range(lapply(ans$panel.args, 
+#                              function(x) range(x$x, na.rm=TRUE, finite=TRUE))
+#                    , na.rm=TRUE, finite=TRUE)
+            temp <- lapply(ans$panel.args, 
+                              function(x) range(x$x, na.rm=TRUE, finite=TRUE))
+            temp2 <- do.call(c, temp)
+            if("tzone" %in% names(attributes(temp[[1]])))
+                attributes(temp2)$tzone <- attributes(temp[[1]])$tzone
+            temp <- range(temp2, na.rm=TRUE, finite=TRUE)
+#######################
+
+            temp <- limsHandler(x=temp, lim.borders=if(is.null(ans$panel.args.common$lim.borders)) 0.1 else ans$panel.args.common$lim.borders)$xlim
             ans$panel.args.common$xlim <- temp
             ans$x.limits <- temp
         }
         if(!"ylim" %in% panel.checks){
-            temp <- range(lapply(ans$panel.args, 
+
+########################
+#see above
+#            temp <- range(lapply(ans$panel.args, 
+#                              function(x) range(x$y, na.rm=TRUE, finite=TRUE))
+#                    , na.rm=TRUE, finite=TRUE)
+            temp <- lapply(ans$panel.args, 
                               function(x) range(x$y, na.rm=TRUE, finite=TRUE))
-                    , na.rm=TRUE, finite=TRUE)
-            temp <- limsHandler(y=temp, lim.borders=if(is.null(ans$panel.args.common$lim.borders)) 0.2 else ans$panel.args.common$lim.borders)$ylim
+            temp2 <- do.call(c, temp)
+            if("tzone" %in% names(attributes(temp[[1]])))
+                attributes(temp2)$tzone <- attributes(temp[[1]])$tzone
+            temp <- range(temp2, na.rm=TRUE, finite=TRUE)
+#########################
+
+            temp <- limsHandler(y=temp, lim.borders=if(is.null(ans$panel.args.common$lim.borders)) 0.1 else ans$panel.args.common$lim.borders)$ylim
             ans$panel.args.common$ylim <- temp
             ans$y.limits <- temp
         }
@@ -531,18 +552,53 @@ panelPal <- function(ans, panel = NULL, preprocess = FALSE,
 ##############################
 
 
+#old version
+
+#loaHandler <- function(panel = NULL,...){
+
+#    if(is.function(panel)){
+#        if("loa.settings" %in% names(formals(panel)))
+#            return(panel(loa.settings=TRUE)) else return(FALSE)
+#    }
+
+#    return(NULL)
+
+#}
+
+#to test
+#new more complex loaHandler
 
 loaHandler <- function(panel = NULL,...){
 
     if(is.function(panel)){
-        if("loa.settings" %in% names(formals(panel)))
-            return(panel(loa.settings=TRUE)) else return(FALSE)
+
+        if(!"loa.settings" %in% names(formals(panel))) return(FALSE)
+        out <- panel(loa.settings=TRUE)
+        
+        if("data.panel" %in% names(out$default.settings)){
+
+            #if data.panel present
+            #update data.panel then panel
+            temp <- out$default.settings$data.panel(loa.settings=TRUE)
+            out$group.args <- unique(c(out$group.args, temp$group.args))
+            out$zcase.args <- unique(c(out$zcase.args, temp$zcase.args))
+            out$common.args <- unique(c(out$common.args, temp$common.args))
+            if("load.lists" %in% names(out$default.settings) & 
+               "load.lists" %in% names(temp$default.settings))            
+                   out$default.settings$load.lists <- 
+                      unique(c(out$default.settings$load.lists, 
+                               temp$default.settings$load.lists))
+            out$default.settings <- listUpdate(temp$default.settings, 
+                                               out$default.settings)
+
+        }
+
+        return(out) 
     }
 
     return(NULL)
 
 }
-
 
 
 

@@ -1,3 +1,39 @@
+Changes in loa 0.2.28 [2015-11-18]
+=====================================
+
+*       formulaHandler, draw.zcasePlotKey
+        updates, now tracks zcases better
+*       added stackPlot, panel.stackPlot 
+        and associated data handler 
+        stackXZ2XYZ(not export)
+*       added draw.ycasePlotKey 
+        
+
+Changes in loa 0.2.27 [2015-08-06]
+=====================================
+
+*       panelPal, formulaHandler and 
+        limsHandler updates, improved 
+        POSIXct handling 
+
+
+Changes in loa 0.2.26 [2015-07-25]
+=====================================
+
+*       loaPlot/formulaHandler update, 
+        zcase now factor when panelled
+*       parHandler update, raised lower
+        end of default col.regions
+
+
+Changes in loa 0.2.25 [2015-06-03]
+=====================================
+
+*       loaHandler update, improved 
+        third party data.panel tracking
+*       triABC2XY update
+
+
 Changes in loa 0.2.24 [2015-04-22]
 =====================================
 
