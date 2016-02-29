@@ -196,11 +196,16 @@ panel.surfaceSmooth <- function (x = NULL, y = NULL, z = NULL,
 
         if("call" %in% names(mod)){
 
-            temp <- if ("xlim" %in% names(extra.args))
-                extra.args$xlim else range(x, na.rm=TRUE)
+##############################
+#testing
+#this stops the big white space border
+#            temp <- if ("xlim" %in% names(extra.args))
+#                extra.args$xlim else range(x, na.rm=TRUE)
+            temp <- range(x, na.rm=TRUE)
             x <- seq(min(temp), max(temp), length.out = (x.breaks))
-            temp <- if ("ylim" %in% names(extra.args))
-                extra.args$ylim else range(y, na.rm=TRUE)
+#            temp <- if ("ylim" %in% names(extra.args))
+#                extra.args$ylim else range(y, na.rm=TRUE)
+            temp <- range(y, na.rm=TRUE)
             y <- seq(min(temp), max(temp), length.out = (y.breaks))
     
             d <- data.frame(x = rep(x, each= y.breaks), y = rep(y, times=x.breaks))

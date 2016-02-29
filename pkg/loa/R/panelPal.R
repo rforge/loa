@@ -402,7 +402,7 @@ panelPal <- function(ans, panel = NULL, preprocess = FALSE,
             temp <- range(temp2, na.rm=TRUE, finite=TRUE)
 #######################
 
-            temp <- limsHandler(x=temp, lim.borders=if(is.null(ans$panel.args.common$lim.borders)) 0.1 else ans$panel.args.common$lim.borders)$xlim
+            temp <- limsHandler(x=temp, lim.borders=if(is.null(ans$panel.args.common$lim.borders)) 0.05 else ans$panel.args.common$lim.borders)$xlim
             ans$panel.args.common$xlim <- temp
             ans$x.limits <- temp
         }
@@ -421,7 +421,7 @@ panelPal <- function(ans, panel = NULL, preprocess = FALSE,
             temp <- range(temp2, na.rm=TRUE, finite=TRUE)
 #########################
 
-            temp <- limsHandler(y=temp, lim.borders=if(is.null(ans$panel.args.common$lim.borders)) 0.1 else ans$panel.args.common$lim.borders)$ylim
+            temp <- limsHandler(y=temp, lim.borders=if(is.null(ans$panel.args.common$lim.borders)) 0.05 else ans$panel.args.common$lim.borders)$ylim
             ans$panel.args.common$ylim <- temp
             ans$y.limits <- temp
         }
@@ -516,7 +516,7 @@ panelPal <- function(ans, panel = NULL, preprocess = FALSE,
    if("zlim.in.ylim" %in% reset.xylims & !"ylim" %in% panel.checks){
         if("zlim" %in% names(ans$panel.args.common)){
             temp <- range(c(ans$panel.args.common$zlim, ans$y.limits))
-            temp <- limsHandler(y=temp, lim.borders=if(is.null(ans$panel.args.common$lim.borders)) 0.1 else ans$panel.args.common$lim.borders)$ylim
+            temp <- limsHandler(y=temp, lim.borders=if(is.null(ans$panel.args.common$lim.borders)) 0.05 else ans$panel.args.common$lim.borders)$ylim
             ans$panel.args.common$ylim <- temp
             ans$y.limits <- temp
         }

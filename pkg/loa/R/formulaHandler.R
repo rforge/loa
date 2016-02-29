@@ -371,33 +371,48 @@ formulaHandler <- function (x, data = NULL, groups = NULL, ...,
 
 #new fix from version 0.2.28
 #(stackPlot introduction)
-#this made still need revisiting
+#this may still need revisiting
+
+#    if (!is.null(coord.conversion)) {
+#        temp <- extra.args[names(extra.args) %in% names(formals(coord.conversion))]
+#        lattice.like <- do.call(coord.conversion, listUpdate(lattice.like, temp))
+#    }
+
+#new fix from version 0.2.29
+#(z/zcase realignment after above 'fix')
+#this may still need revisiting
 
     if (!is.null(coord.conversion)) {
         temp <- extra.args[names(extra.args) %in% names(formals(coord.conversion))]
-        lattice.like <- do.call(coord.conversion, listUpdate(lattice.like, temp))
+        temp <- do.call(coord.conversion, listUpdate(lattice.like, 
+            temp))
+        lattice.like <- listUpdate(lattice.like, temp)
     }
+
+
+#################
+#this makes some of 
+#below redundant
+#(if it works)
+################
+
+#############
 
 
 ###############
 #testing return labels
 ###############
 
+#this might now be redundant
+
      temp <- listUpdate(lattice.like, extra.args, use=c("xlab", "ylab", "zlab"))
      lattice.like <- listUpdate(lattice.like, temp)
 
 
+#this might now be redundant
+
     extra.args <- listUpdate(extra.args, lattice.like, 
                           ignore.b = c("panel.condition", "x", "y"))
-
-
-
-#################
-#this makes some of 
-#below redundant
-################
-
-#############
 
     extra.args <- do.call(stripHandler, listUpdate(list(striplab = names(lattice.like$panel.condition)), 
         extra.args))

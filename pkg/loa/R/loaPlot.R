@@ -426,7 +426,8 @@ panel.loaPlot <- function(..., loa.settings = FALSE){
     }
 
     if(isGood4LOA(extra.args$grid))
-        panel.loaGrid(panel.scales = extra.args$panel.scales, grid = extra.args$grid) 
+        panel.loaGrid(panel.scales = extra.args$panel.scales, grid = extra.args$grid, 
+                      xlim = extra.args$xlim, ylim = extra.args$ylim) 
 
     extra.args$col <- do.call(colHandler, extra.args)
     extra.args$cex <- do.call(cexHandler, extra.args)
@@ -480,6 +481,7 @@ panel.loaGrid <- function(grid.x = NULL, grid.y = NULL,
     x.par <- getPlotArgs("axis.line", local.resets = panel.scales, 
         user.resets = temp, elements = "x", defaults.only = FALSE)
     x.par$col.line <- x.par$col
+    x.par$x <- xlim
     do.call(panel.grid, x.par)
 
     temp <- listUpdate(grid, grid.y)
@@ -489,6 +491,7 @@ panel.loaGrid <- function(grid.x = NULL, grid.y = NULL,
     y.par <- getPlotArgs("axis.line", local.resets = panel.scales, 
         user.resets = temp, elements = "y", defaults.only = FALSE)
     y.par$col.line <- y.par$col
+    y.par$y <- ylim
     do.call(panel.grid, y.par)
 
 }

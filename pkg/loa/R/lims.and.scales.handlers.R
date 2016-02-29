@@ -27,7 +27,7 @@
 ###########################
 ###########################
 
-limsHandler <- function(x=NULL, y=NULL, z=NULL, ..., lim.borders = 0.1){
+limsHandler <- function(x=NULL, y=NULL, z=NULL, ..., lim.borders = 0.05){
 
     #############
     #setup
@@ -54,13 +54,13 @@ limsHandler <- function(x=NULL, y=NULL, z=NULL, ..., lim.borders = 0.1){
 
     fun01 <- function(x, b1, b2 = 0.2){
                  if(all(is.na(x))) return(NULL)
-                 temp <- diff(range(x, na.rm=TRUE)) * b1
+##                 temp <- diff(range(x, na.rm=TRUE)) * b1
 
 ##########################
 #temp fix for ~0*0 issue
 #                 if(temp==0) temp <- x[1] * b2
-                 if(temp==0)
-                     temp <- if(x[1]==0) b2 else x[1] * b2
+##                 if(temp==0)
+##                     temp <- if(x[1]==0) b2 else x[1] * b2
 #consider
 #might be simplier to
 #drop the else 
@@ -70,11 +70,19 @@ limsHandler <- function(x=NULL, y=NULL, z=NULL, ..., lim.borders = 0.1){
 #to first case
 ###########################
 
-                 x <- range(x)
+##                 x <- range(x)
 ##################
 #0.2.28
 ##################
 #track tzone if posixct
+
+
+                 x <- unique(x[is.finite(x)])
+                 temp <- diff(range(x, na.rm = TRUE)) 
+                 if (temp == 0) {
+                     temp <- if (x[1] == 0) 
+                         b1 else x[1] * b1 
+                 } else temp <- temp * b1
 
                  temp <- c(x[1] - temp, x[2] + temp)
                  if("tzone" %in% names(attributes(x)))

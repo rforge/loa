@@ -1,3 +1,10 @@
+Changes in loa 0.2.29 [2015-12-12]
+
+*       formulaHandler update
+*       panel.loaGrid update, improved 
+        tracking of POSIX axis
+
+
 Changes in loa 0.2.28 [2015-11-18]
 =====================================
 

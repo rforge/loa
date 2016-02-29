@@ -268,7 +268,7 @@ loaPlot(copper~longitude*latitude, data= lat.lon.meuse,
 #b <- rnorm(1000)
 #c <- rnorm(1000)
 
-#comapre:
+#compare:
 #xyplot(a~b, panel = panel.kernelDensity, at = 0:5*5)
 #loaPlot(~a*b, panel = panel.kernelDensity)
 

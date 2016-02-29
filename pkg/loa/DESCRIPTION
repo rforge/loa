@@ -1,8 +1,8 @@
 Package: loa
 Type: Package
 Title: Various Options and Add-ins for Lattice 
-Version: 0.2.28
-Date: 2015-11-18
+Version: 0.2.29
+Date: 2015-12-12
 Author: Karl Ropkins
 Maintainer: Karl Ropkins <k.ropkins@its.leeds.ac.uk>
 Description: This package, Lattice Options and Add-ins (or loa), contains various plots and 
@@ -10,7 +10,7 @@ Description: This package, Lattice Options and Add-ins (or loa), contains variou
    loaPlot, GoogleMap and trianglePlot) use panelPal, a function that extends lattice and hexbin 
    package methods to automate plot subscripting and panel-to-panel and panel-to-key 
    synchronization/management. See ?loa for further details.   
-Depends: R (>= 2.13.0), lattice
+Depends: R (>= 3.0.0), lattice
 Imports: MASS, grid, png, RgoogleMaps, RColorBrewer, mgcv
 License: GPL (>= 2)
 LazyLoad: yes
