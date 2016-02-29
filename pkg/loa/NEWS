@@ -1,4 +1,11 @@
+Changes in loa 0.2.31 [2016-02-29]
+=====================================
+
+*       updates re CRAN resubmission
+
+
 Changes in loa 0.2.29 [2015-12-12]
+=====================================
 
 *       formulaHandler update
 *       panel.loaGrid update, improved 
