@@ -26,6 +26,17 @@ import(mgcv)
 
 importFrom(MASS, kde2d) #for panel.kernelDensity
 
+#next lot are because win builder told me too..
+
+importFrom("grDevices", "col2rgb", "colorRampPalette", "gray", "grey",
+           "rgb")
+importFrom("graphics", "par", "plot")
+importFrom("methods", "is")
+importFrom("stats", "aggregate", "as.formula", "loess", "na.omit",
+           "predict", "update")
+importFrom("utils", "compareVersion", "modifyList",
+           "packageDescription")
+
 
 #loaPlot
 
