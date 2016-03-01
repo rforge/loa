@@ -1,7 +1,8 @@
 Package: loa
 Type: Package
-Title: 'Lattice options and add-ins' 'Lattice Options and Add-Ins'
-Version: 0.2.32
+Title: Lattice options and add-ins 
+       Lattice Options and Add-Ins
+Version: 0.2.33
 Date: 2016-03-01
 Author: Karl Ropkins
 Maintainer: Karl Ropkins <k.ropkins@its.leeds.ac.uk>
