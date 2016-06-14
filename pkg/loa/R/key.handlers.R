@@ -182,31 +182,51 @@ draw.loaColorKey <- function (key = NULL, draw = FALSE, vp = NULL, ...){
 ##############################
 
 
+#draw.loaColorRegionsKey <- function (key = NULL, draw = FALSE, vp = NULL, ...) 
+#{
+#    if (!"at" %in% names(key)) 
+#        key$at <- pretty(c(min(key$zlim), max(key$zlim)))
+#
+#    if ("isolate.col.regions" %in% names(key)) 
+#        key$col <- NULL
+#
+#    if (!"col" %in% names(key)) {
+#        temp <- listUpdate(list(...), key)
+#        key$col <- colHandler(1:(length(key$at) - 1), col.regions = temp$col.regions, 
+#            output = "col")
+#    }
+#    key <- listUpdate(key, list(labels = list(at = key$at)))
+#    if (!"col" %in% names(key)) {
+#        key$col <- do.call(colHandler, listUpdate(key, list(z = key$zlim, 
+#            output = "all")))$col.regions
+#    }
+#    if (!"alpha" %in% names(key)) {
+#        key$alpha <- do.call(colHandler, listUpdate(key, list(z = key$zlim, 
+#            output = "all")))$alpha.regions
+#    }
+#    draw.colorkey(key, draw, vp)
+#}
+
+
+#rewrite for raster
+
 draw.loaColorRegionsKey <- function (key = NULL, draw = FALSE, vp = NULL, ...) 
 {
+
     if (!"at" %in% names(key)) 
         key$at <- pretty(c(min(key$zlim), max(key$zlim)))
-
-    if ("isolate.col.regions" %in% names(key)) 
-        key$col <- NULL
-
-    if (!"col" %in% names(key)) {
-        temp <- listUpdate(list(...), key)
-        key$col <- colHandler(1:(length(key$at) - 1), col.regions = temp$col.regions, 
-            output = "col")
-    }
     key <- listUpdate(key, list(labels = list(at = key$at)))
-    if (!"col" %in% names(key)) {
-        key$col <- do.call(colHandler, listUpdate(key, list(z = key$zlim, 
-            output = "all")))$col.regions
+    temp <- listUpdate(list(...), key)
+    if ("isolate.col.regions" %in% names(key)) {
+        key$col <- NULL
+        key$alpha <- NULL
     }
-    if (!"alpha" %in% names(key)) {
-        key$alpha <- do.call(colHandler, listUpdate(key, list(z = key$zlim, 
-            output = "all")))$alpha.regions
-    }
+    key$col <- do.call(colHandler, listUpdate(key, list(z = key$at[-1], zlim=range(key$at),
+        ref = key$at[-1])))
+    key$alpha <- NULL
+    key$alpha.regions <- NULL
     draw.colorkey(key, draw, vp)
 }
-
 
 
 

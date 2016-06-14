@@ -305,6 +305,11 @@ colHandler <- function(z = NULL, col = NULL,
     if(is.null(legend))
           legend <- colorkey
 
+#temp testing 
+#na handled as transparent
+    if(any(is.na(z)))
+        col[is.na(z)] <- "#FFFFFF00"
+
     #expand z,col if requests and 
     #ref to scale by...
     col <- zHandler(col, expand.outputs, ref)

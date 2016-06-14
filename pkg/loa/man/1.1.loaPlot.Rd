@@ -41,12 +41,12 @@
 
   \item{x}{ A formula with the general structure 
    \code{z ~ x * y | cond} applied like in the \code{\link{lattice}} 
-   function \code{\link{levelplot}}. \code{x} and \code{y} are the 
-   horizontal and vertical axes, \code{z} is any additional information 
-   to be used in point, symbol, surface or glyph generation, and 
-   \code{cond} is any additional conditioning to be applied. \code{x} and 
-   \code{y} are required elements; \code{z} and \code{cond} are typically 
-   optional.\cr
+   function \code{\link{levelplot}} or a matrix. For a formula, \code{x} 
+   and \code{y} are the horizontal and vertical axes, \code{z} is any 
+   additional information to be used in point, symbol, surface or glyph 
+   generation, and \code{cond} is any additional conditioning to be applied. 
+   \code{x} and \code{y} are required elements; \code{z} and \code{cond} are 
+   typically optional.\cr
    (Note: this element of the plot is handled by \code{\link{formulaHandler}}).
    }
 

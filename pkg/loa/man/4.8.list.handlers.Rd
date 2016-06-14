@@ -55,9 +55,9 @@ listLoad(..., load = NULL)
   } 
   \item{...}{ For \code{listLoad} only, any additional arguments.  
   } 
-  \item{load}{ For \code{listLoad}) only, a vector, default \code{NULL}. The names 
-   of any lists to be automatically generated from the additional arguments supplied 
-   as part of the command call.  
+  \item{load}{ For \code{listLoad} only, a character vector, default \code{NULL}. The 
+   names of any lists to be automatically generated from the additional arguments 
+   supplied as part of the command call.  
   } 
 
 }
@@ -109,8 +109,8 @@ listLoad(..., load = NULL)
   \code{[load]}'. So, for example, for a call including the arguments 
   \code{load = 'key'} and \code{key.fun = draw.colorkey}, it would strip out 
   both arguments and return \code{key = list(fun=draw.colorkey)}. Used in 
-  functions in series it allowed list-in-list that can be commonplace 
-  when modifying, for example, key elements in conventional \code{lattice} 
+  functions, it allowed list-in-list args that can be commonplace 
+  when modifying, for example, key elements of conventional \code{lattice} 
   plots to be simplified. 
 
 }
@@ -156,14 +156,14 @@ badplot <- function(x, ...){
                    }, ...)
 }
 
-#  badplot(a~b)               #OK
+#  badplot(a~b)                 #OK
 
 #  compare with 
-#  badplot(a~b, xlim=c(0,10)) #OK
-#  badplot(a~b, col= "blue")  #not OK
+#  badplot(a~b, xlim = c(1,20)) #OK
+#  badplot(a~b, col = "blue")   #not OK
 
-#  (because col hardcoded into badplot function
-#  AND duplicated in call and '...'
+#  because col hardcoded into badplot function
+#  It is duplicated in call and '...'
 #  so user cannot update col 
 
 
@@ -205,7 +205,7 @@ myplot <- function(x, ...){
 
 #  myplot(a~b)                 #OK
 #  myplot(a~b, col = "blue", 
-#         xlim=c(1:20))        #also OK
+#         xlim = c(1,20))      #also OK
 
 
 }

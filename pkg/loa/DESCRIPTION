@@ -1,8 +1,8 @@
 Package: loa
 Type: Package
 Title: Lattice Options and Add-Ins
-Version: 0.2.38
-Date: 2016-03-01
+Version: 0.2.39.1
+Date: 2016-06-14
 Author: Karl Ropkins
 Maintainer: Karl Ropkins <k.ropkins@its.leeds.ac.uk>
 Description: Various plots and functions that make use of the lattice/trellis plotting framework. 
