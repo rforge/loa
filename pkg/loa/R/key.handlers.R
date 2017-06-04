@@ -123,8 +123,21 @@ keyHandler <- function(key = NULL, ..., output = "key"){
 
 draw.loaColorKey <- function (key = NULL, draw = FALSE, vp = NULL, ...){
 
-    if (!"at" %in% names(key)) 
-        key$at <- seq(min(key$zlim), max(key$zlim), length.out = 100)
+#    if (!"at" %in% names(key)) 
+#        key$at <- seq(min(key$zlim), max(key$zlim), length.out = 100)
+
+##########################
+#new bit replaces above
+#to regularize non-regular col keys 
+#job 27
+
+    at.method <- if ("at" %in% names(key)) "1" else "2" 
+    if(at.method=="1") key$labels$at <- key$at
+    key$at <- seq(min(key$zlim), max(key$zlim), length.out = 800)
+    if(is.null(key$col.regions))
+        key$col.regions <- trellis.par.get("regions")$col
+    if(length(key$col.regions)<length(key$at))
+        key$col.regions <- colorRampPalette(key$col.regions)(length(key$at))
 
 ######################
 #catch col and alpha 
@@ -145,8 +158,20 @@ draw.loaColorKey <- function (key = NULL, draw = FALSE, vp = NULL, ...){
 
 
 
-        key$col <- do.call(colHandler, listUpdate(key, 
-                                       list(z=temp$at, ref=temp$at)))
+#        key$col <- do.call(colHandler, listUpdate(key, 
+#                                       list(z=temp$at, ref=temp$at)))
+
+#################
+# new bit to replace above
+#job 27
+
+     key$col <- if(at.method=="1")
+        do.call(colHandler, listUpdate(key, list(z = temp$at, 
+                  ref = temp$at, at=key$labels$at))) else 
+        do.call(colHandler, listUpdate(key, list(z = key$at, ref = key$at)))
+
+
+
 #    }
 
 #####################

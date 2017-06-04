@@ -12,8 +12,7 @@
 }
 \usage{
 
-panel.zcasePiePlot(..., zcase.rescale=TRUE, 
-         loa.settings = FALSE)
+panel.zcasePiePlot(..., loa.settings = FALSE)
 
 panel.zcasePieSegmentPlot(..., zcase.rescale=TRUE, 
          loa.settings = FALSE)
@@ -56,7 +55,7 @@ panel.zcasePieSegmentPlot(..., zcase.rescale=TRUE,
   formula). 
 
   \code{panel.zcasePieSegmentPlot} is a variation on the conventional pie plot where segement radius 
-  rather than segment width is varying by zcase.   
+  rather than segment width is varying by zcase.    
 
 }
 
@@ -89,8 +88,12 @@ panel.zcasePieSegmentPlot(..., zcase.rescale=TRUE,
 
 \note{
 
-  Functions in development. Arguments may change.    
+  Functions in development. Arguments may change, e.g.: 
 
+  \code{panel.zcasePieSegmentPlot} includes the argument \code{zcase.rescale}. 
+  This normalises data within each zcase before generating the pie segments. This 
+  might not stay. 
+  
 }
 
 \seealso{

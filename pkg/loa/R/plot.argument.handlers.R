@@ -49,8 +49,6 @@
 #when supplying a z argument to xyplot
 #[in development]
 
-
-
 cexHandler <- function(z = NULL, cex = NULL, 
          cex.range = NULL, expand.outputs = TRUE, 
          ref = NULL, ..., zlim = NULL){
@@ -124,7 +122,169 @@ cexHandler <- function(z = NULL, cex = NULL,
 #[in development]
 
 
-colHandler <- function(z = NULL, col = NULL, 
+#rescue group
+
+colHandler <- function (z = NULL, col = NULL, region = NULL, colorkey = FALSE, 
+    legend = NULL, pretty = FALSE, at = NULL, cuts = 20, col.regions = NULL, 
+    alpha.regions = NULL, expand.outputs = TRUE, ref = NULL, 
+    ..., zlim = NULL, output = "col") 
+{
+    extra.args <- list(...)
+    if ("scheme" %in% names(extra.args) & !"par.settings" %in% 
+        names(extra.args)) 
+        extra.args$par.settings <- do.call(parHandler, extra.args)
+    if (is.null(col.regions) & !is.null(extra.args$par.settings)) 
+        col.regions <- extra.args$par.settings$regions$col
+############
+#job 1 
+#new lines 
+#could merge this, one above and one below
+    if(is.null(col.regions))
+         col.regions <- trellis.par.get("regions")$col
+###############
+    if (!is.null(col.regions) && length(col.regions) < 100) {
+        if (length(col.regions) == 1) 
+            col.regions <- brewer.pal(9, col.regions)
+        col.regions <- colorRampPalette(col.regions)(100)
+    }
+    if (length(z) < 1) 
+        z <- NULL
+    if (is.null(z) & is.null(col)) {
+        if (is.null(col.regions)) 
+            regions <- FALSE
+        if (is.null(col.regions)) 
+            regions <- FALSE
+        col <- trellis.par.get("dot.symbol")$col
+    }
+    if (is.null(col)) {
+        if (!is.numeric(z)) {
+            z <- as.factor(z)
+            zlim <- z
+        }
+        else {
+            if (!is.null(zlim)) {
+                z[z < min(zlim, na.rm = TRUE) | z > max(zlim, 
+                  na.rm = TRUE)] <- NA
+            }
+            else {
+                zlim <- range(z, finite = TRUE)
+            }
+        }
+        zrng <- range(as.numeric(zlim), finite = TRUE)
+        if (length(unique(zrng)) < 2) 
+            zrng <- lattice.extend.limits(zrng)
+        if (is.null(at)) 
+            at <- if (pretty) 
+                pretty(zrng, cuts)
+            else seq(zrng[1], zrng[2], length.out = cuts + 2)
+
+###############
+#can't not be post job 1
+#
+#        if (is.null(col.regions)) {
+#            
+#            col <- level.colors(z, at)
+#            col.regions <- colorRampPalette(level.colors(at, 
+#                at))(100)
+#        }
+#        else 
+       col <- level.colors(z, at, col.regions)
+    }
+    else {
+        z <- if (is.numeric(col)) 
+            col
+        else as.factor(col)
+        zrng <- range(as.numeric(z), finite = TRUE)
+        if (length(unique(zrng)) < 2) 
+            zrng <- lattice.extend.limits(zrng)
+        if (is.null(at)) 
+            at <- if (pretty) 
+                pretty(zrng, cuts)
+            else seq(zrng[1], zrng[2], length.out = cuts + 2)
+    }
+    if (is.null(col.regions)) {
+        temp <- if (is.numeric(col)) 
+            sort(col)
+        else col
+        temp <- unique(temp)
+        temp <- if (length(temp) == 1) 
+            c(temp, temp)
+        else temp
+#################
+#job 1
+#changed 100 -> length(col.regions)
+#
+        col.regions <- colorRampPalette(level.colors(at, at, 
+            colorRampPalette(temp)(length(col.regions))))(length(col.regions))
+#################
+    }
+    if (is.null(alpha.regions)) 
+        alpha.regions <- 1
+    if (is.logical(alpha.regions) && alpha.regions) 
+        alpha.regions <- 0.5
+    if (is.numeric(alpha.regions)) {
+        if (any(alpha.regions < 0) | any(alpha.regions > 1)) {
+            warning(paste("could sensibly apply requested 'alpha.regions'", 
+                "\n\t[Suggest numeric in range 0 to 1]", "\n\t[resetting out-of-range value(s) to 0 or 1]", 
+                sep = ""), call. = FALSE)
+            alpha.regions[alpha.regions > 1] <- 1
+            alpha.regions[alpha.regions < 0] <- 0
+        }
+        col <- col2rgb(col)
+        col <- rgb(col[1, ], col[2, ], col[3, ], alpha = alpha.regions * 
+            255, maxColorValue = 255)
+    }
+    if (length(unique(col)) > 1) {
+        if (is.null(region)) 
+            region <- TRUE
+        if (is.null(colorkey)) 
+            colorkey <- TRUE
+    }
+    if (is.logical(colorkey)) {
+        if (colorkey) {
+            colorkey <- list(at = at, space = "right")
+            if (!is.null(col.regions)) 
+                colorkey$col <- col.regions
+            if (!is.null(alpha.regions)) 
+                colorkey$alpha <- alpha.regions
+        }
+        else colorkey <- NULL
+    }
+    else if (is.list(colorkey)) {
+        tmp <- list(space = if (any(c("x", "y", "corner") %in% 
+            names(colorkey))) "inside" else "right", at = at)
+        if (!is.null(col.regions)) 
+            tmp$col <- col.regions
+        if (!is.null(alpha.regions)) 
+            tmp$alpha <- alpha.regions
+        colorkey <- listUpdate(tmp, colorkey)
+    }
+    else {
+        if (!is.null(colorkey)) {
+            warning("unexpected colorkey ignored.", call. = FALSE)
+            colorkey <- NULL
+        }
+    }
+    if (!is.null(colorkey)) {
+        colorkey <- list(right = list(fun = draw.colorkey, args = list(key = colorkey), 
+            draw = FALSE))
+        if ("space" %in% names(colorkey$right$args$key)) 
+            names(colorkey)[[1]] <- colorkey$right$args$key$space
+    }
+    if (is.null(legend)) 
+        legend <- colorkey
+    if (any(is.na(z))) 
+        col[is.na(z)] <- "#FFFFFF00"
+    col <- zHandler(col, expand.outputs, ref)
+    z <- zHandler(z, expand.outputs, ref)
+    if (output == "col") 
+        return(col)
+    list(z = z, col = col, legend = legend, at = at, col.regions = col.regions, 
+        alpha.regions = alpha.regions)
+}
+
+
+old.colHandler <- function(z = NULL, col = NULL, 
          region = NULL, colorkey = FALSE, legend = NULL,
          pretty = FALSE, at = NULL, cuts = 20,
          col.regions = NULL, alpha.regions = NULL,
@@ -162,6 +322,12 @@ colHandler <- function(z = NULL, col = NULL,
             col.regions <- brewer.pal(9, col.regions)
          col.regions <- colorRampPalette(col.regions)(100)
    }
+
+   #don't assum col.regions is 100 long...
+#job 27, added this line
+   col.regions.len <- length(col.regions)
+#job 28 
+
 
    #if both z and col present
    #ignore z when coloring data
@@ -207,9 +373,21 @@ colHandler <- function(z = NULL, col = NULL,
                       pretty(zrng, cuts) else 
                           seq(zrng[1], zrng[2], length.out = cuts + 2)   
         if(is.null(col.regions)){
+
+
+#job 27b
+#replace below col <- with following one...
             col <- level.colors(z, at)
-            col.regions <- colorRampPalette(level.colors(at, at))(100)
-        } else col <- level.colors(z, at, col.regions)
+#            col <- colorRampPalette(level.colors(1:100, 1:100))(length(z))
+
+#job 27
+#100 -> col.regions.len
+
+            col.regions <- colorRampPalette(level.colors(at, at))(col.regions.len)
+        } else col <- level.colors(z, at, colorRampPalette(col.regions)(length(z)))
+#job 27
+#col.regions <- colorRampPalette(col.regions)(length(z))
+
     } else {
         #all other cases use
         #using col
@@ -230,8 +408,12 @@ colHandler <- function(z = NULL, col = NULL,
        temp <- if(is.numeric(col)) sort(col) else col
        temp <- unique(temp)
        temp <- if(length(temp) == 1) c(temp, temp) else temp 
+
+#job 27
+#100 -> col.regions.len
+
        col.regions <- colorRampPalette(level.colors(at, at, 
-                          colorRampPalette(temp)(100)))(100)
+                          colorRampPalette(temp)(col.regions.len)))(col.regions.len)
    }                       
 
    #handle alpha
@@ -325,6 +507,11 @@ colHandler <- function(z = NULL, col = NULL,
          alpha.regions = alpha.regions)
 
 }
+
+
+
+
+
 
 
 

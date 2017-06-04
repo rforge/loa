@@ -1,3 +1,25 @@
+Changes in loa 0.2.41 [2017-06-02]
+=====================================
+
+*       added loaBarPlot (might not be 
+        staying)
+*       added plyr to depends (might not 
+        be staying)
+*       updates to panel.zcasePiePlot and 
+        panel.zcasePieSegmentPlot, better 
+        scaling
+
+
+Changes in loa 0.2.40 [2016-08-22]
+=====================================
+
+*       updates to loaPolygon, for rotation 
+        and rescaling
+*       updates to draw.loaColorKey and 
+        colhandler 
+        (re raster color scales)
+
+
 Changes in loa 0.2.39 [2016-06-14]
 =====================================
 

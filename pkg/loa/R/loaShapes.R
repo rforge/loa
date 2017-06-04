@@ -26,11 +26,12 @@
 ###########################
 
 
-loaPolygon <- function(x, y, ..., polygon = NULL, loa.scale = NULL){
+loaPolygon <- function(x, y, z=NULL, rot=NULL, ..., polygon = NULL, loa.scale = NULL){
 
     #####################
-    #loaPolygon v0.1
+    #loaPolygon v0.2
     #####################
+
 
     #might want to think about the polygon and loa.scale positions 
     #in formals?
@@ -63,6 +64,8 @@ loaPolygon <- function(x, y, ..., polygon = NULL, loa.scale = NULL){
         polygon = list(x=c(1, 1, -1, -1), 
                        y=c(1, -1, -1, 1))
 
+    if(is.null(z)) z <- 1
+
 #could use listLoad on this to use
 #loa.scale.fit="absolute", etc.
 
@@ -74,7 +77,7 @@ loaPolygon <- function(x, y, ..., polygon = NULL, loa.scale = NULL){
 
     if(is.null(loa.scale))
         loa.scale <- list()
-    loa.scale <- listUpdate(list(fit="relative", scale = 1/50),
+    loa.scale <- listUpdate(list(fit="relative", scale = 1/50, x=TRUE, y=TRUE),
                             loa.scale)
 
     if(loa.scale$fit=="relative"){
@@ -103,14 +106,44 @@ loaPolygon <- function(x, y, ..., polygon = NULL, loa.scale = NULL){
 
         #tested simplification
 
+#this z scales
+
+        if(!is.null(z)){
+            if(loa.scale$x) polygon$x <- polygon$x * z
+            if(loa.scale$y) polygon$y <- polygon$y * z
+        }
+
+
+#this rotates
+
+        if(!is.null(rot)){
+             if(rot[1]!=0){
+
+#radians to degrees
+
+                 rot <- (rot * pi)/180
+                 d <- as.matrix(data.frame(x=polygon$x, y=polygon$y))
+                 d <- d %*% matrix(c(cos(rot[1]), -sin(rot[1]), sin(rot[1]), cos(rot[1])),2,2, byrow=TRUE)
+
+                 polygon$x <- d[,1]
+                 polygon$y <- d[,2]
+             }
+        }
+
+
         temp <- current.panel.limits("native")
-        ref1 <- (temp[[1]][2]-temp[[1]][1])/50
-        ref2 <- (temp[[2]][2]-temp[[2]][1])/50
+        ref1 <- (temp[[1]][2]-temp[[1]][1]) * loa.scale$scale
+        ref2 <- (temp[[2]][2]-temp[[2]][1]) * loa.scale$scale
         temp <- current.panel.limits("mm")
         ref3 <- (temp[[2]][2]-temp[[2]][1])/
                 (temp[[1]][2]-temp[[1]][1])
+
+
         x <- x + (polygon$x * ref1 * ref3)
         y <- y + (polygon$y * ref2)
+
+
+
 
     } else {
 

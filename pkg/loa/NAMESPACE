@@ -21,6 +21,7 @@ import(png)
 import(RgoogleMaps)
 import(RColorBrewer)
 import(mgcv)
+import(plyr)
 
 #single imports
 
@@ -82,6 +83,10 @@ export(triXY2ABC)
 #stackPlot
 export(stackPlot) 
 export(panel.stackPlot)
+
+#loaBarPlot
+export(loaBarPlot) 
+
 
 #special panels
 export(panel.loaLevelPlot)

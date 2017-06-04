@@ -15,8 +15,8 @@
 }
 \usage{
 
-loaPolygon(x, y, ..., polygon = NULL, 
-            loa.scale = NULL)
+loaPolygon(x, y, z=NULL, rot=NULL, ..., 
+            polygon = NULL, loa.scale = NULL)
 
 loaCircle(..., polygon = NULL, radius = 1)
 
@@ -30,6 +30,13 @@ loaPieSegment(..., polygon = NULL, start = 0,
   \item{x, y}{ The \code{x} and \code{y} points at which to plot the 
   requested shape.
   } 
+
+  \item{z}{ If supplied a \code{z} term, most often used to set 
+   the size of the polygon.
+  }
+
+  \item{rot}{ The angle to rotate the polygon by before drawing it.
+  }  
 
   \item{...}{ Any additional arguments, usually passed on.
   } 

@@ -22,8 +22,13 @@
 ###############################
 ###############################
 
-panel.zcasePiePlot <- function (..., zcase.rescale = TRUE, 
+panel.zcasePiePlot <- function (..., #zcase.rescale = TRUE, 
                                        loa.settings = FALSE){
+
+
+#testing
+#removed zcase.rescale for pieplot
+#
 
     ################################
     #panel.zcasePieSegmentPlot v0.2 
@@ -137,7 +142,19 @@ panel.zcasePiePlot <- function (..., zcase.rescale = TRUE,
         }
         
         if(!"radius" %in% names(new)){
-            new$radius <- do.call(cexHandler, listUpdate(new, list(z=sum(new$z)))) 
+
+##################################
+#testing
+#removing
+#            new$radius <- do.call(cexHandler, listUpdate(new, list(z=sum(new$z)))) 
+#replacing
+#so scaling is sum not cex 
+#this could be an option for cexHandler later
+#used in both pie panels
+             rad <- if("cex.range" %in% names(new)) max(new$cex.range, na.rm=TRUE) else 3
+             rad <- rad/max(new$zlim, na.rm=TRUE) 
+             new$radius <- sum(new$z, na.rm=TRUE) * rad
+########################
         }
 
         if(!"angle" %in% names(new)){
@@ -161,7 +178,12 @@ panel.zcasePiePlot <- function (..., zcase.rescale = TRUE,
             for(l in temp2){
                 new2[[l]] <- new[[l]][j]
             }
-            do.call(loaPieSegment, new2)          
+#####################
+#testing
+#stripping z, zlim, scaled in panel
+        new2 <- new2[!names(new2) %in% c("z", "zlim")]
+#####################
+        do.call(loaPieSegment, new2)          
         }        
         
     }
@@ -296,9 +318,22 @@ panel.zcasePieSegmentPlot <- function (..., zcase.rescale = TRUE,
                 if ("zcase.zlim" %in% names(extra.args)) 
                   new$zlim <- new$zcase.zlim[[new$zcase.ref[1]]]
             }
-            new$radius <- do.call(cexHandler, new)
-        }
 
+##############################
+#test
+#replacing
+#            new$radius <- do.call(cexHandler, new)
+#also in other pie panel
+             rad <- if("cex.range" %in% names(new)) max(new$cex.range, na.rm=TRUE) else 3
+             rad <- rad/max(new$zlim, na.rm=TRUE) 
+             new$radius <- new$z * rad
+#could be an option in cexHandler?
+##############################
+        }
+##############################
+#part of above test
+        new <- new[!names(new) %in% c("z", "zlim")]
+##############################
         do.call(loaPieSegment, new)          
 
     }
