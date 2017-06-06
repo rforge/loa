@@ -500,6 +500,18 @@ makeMapArg <- function(ylim, xlim,
         }
 
         if(length(ra) > 2){
+
+#############################
+#testing
+#newer RgoogleMaps response
+            if (ra[3] == 4 & is.null(attr(map$myTile,"type"))){
+                map$myTile <- rgb(map$myTile[, , 1], map$myTile[, , 2], 
+                                  map$myTile[, , 3], map$myTile[, , 4])
+                dim(map$myTile) <- ra[1:2]
+                return(map)
+            }
+##############################
+
             if(ra[3] == 4 & attr(map$myTile, "type") == "rgb"){
                 map$myTile <- rgb(map$myTile[, , 1], map$myTile[, , 2], 
                                   map$myTile[, , 3], map$myTile[, , 4])
