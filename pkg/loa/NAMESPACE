@@ -115,6 +115,7 @@ export(matrixHandler)
 export(stripHandler)
 
 #plot.argument.handlers
+export(scalesHandler)
 export(cexHandler)
 export(colHandler)
 export(colRegionsHandler)

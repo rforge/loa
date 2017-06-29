@@ -13,7 +13,7 @@
 
 \usage{
    loaBarPlot(x, y=NULL, groups=NULL, cond=NULL, 
-            data=NULL, ..., stat=NULL)  
+            data=NULL, ..., drop.nas=TRUE, stat=NULL)  
 }
 
 \arguments{
@@ -33,6 +33,10 @@
    }
 
   \item{...}{ Additional arguments, passed on to \code{lattice} function.
+   }
+
+  \item{drop.nas}{ Option to drop \code{NAs} before plotting results, default 
+   \code{TRUE}.
    }
 
   \item{stat}{ If supplied, the function used to summarise \code{y} data after grouping 

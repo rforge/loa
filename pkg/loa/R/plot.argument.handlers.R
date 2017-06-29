@@ -2,6 +2,7 @@
 #[TBC - NUMBER] functions 
 
 
+#scalesHandler
 #cexHandler
 #colHandler
 #colRegionsHandler
@@ -38,6 +39,43 @@
 
 
 #NOTE: much borrowed from lattice 
+
+
+######################
+######################
+##scalesHandler
+######################
+######################
+
+#this need tidying...
+
+scalesHandler <- function(...){
+    ans <- listLoad(..., load="scales")
+
+#this needs to loose the arguments
+#scales$x...
+#scales$y... 
+#after they have been used...
+
+    temp <- do.call(listLoad, listUpdate(ans$scales, list(load="x")))
+    ans$scales$x <- temp$x
+    temp <- do.call(listLoad, listUpdate(ans$scales, list(load="y")))
+    ans$scales$y <- temp$y
+   ans
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #####################
 #####################

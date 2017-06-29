@@ -13,23 +13,30 @@
 ##################################
 #to do
 ##################################
-#DONE reverse order of key when stack=TRUE
-#DONE Use Spectral as default col
-#DONE default key to right
+#new key with better top and bottom options
 #
-#BUT 
-#might want key at top when not stacking???
-#might want to rethink spectral when only one 
-#that is yellow...
+
+
+#######################
+#to think about
+#######################
+#look at x,y, group, cond input cf with pemsInput?
+#look at x,y, group, cond handling?
+#make na handling specific to x, y, group, cond?
+#allow it to draw horizontal bar 
+#    with y as factor and x as calculation case...
 #
 
 
 #kr 31/05/2017
 #ver 0.1
 
+#kr 29/06/2017
+#ver 0.2
+
 
 loaBarPlot <- function(x, y=NULL, groups=NULL, cond=NULL, data=NULL, ..., 
-              stat=NULL){
+              drop.nas=TRUE, stat=NULL){
 
 #test
 #require(loa)
@@ -84,13 +91,38 @@ loaBarPlot <- function(x, y=NULL, groups=NULL, cond=NULL, data=NULL, ...,
       if(is.null(df$y))
           df$y <- rep(0, length(df$x))
 
-      sum.df <- ddply(df, names(df)[names(df) !="y"], function(df) stat(df$y))
+#####################
+#added next three to catch NAs...
+#in x
+#in groups and cond
+#####################
+
+      if(!is.null(df$x) && !is.factor(df$x))
+            df$x <- if(drop.nas) factor(df$x) else
+                              factor(df$x, exclude=FALSE)
+
+      if(!is.null(df$groups) && !is.factor(df$groups))
+            df$groups <- if(drop.nas) factor(df$groups) else
+                              factor(df$groups, exclude=FALSE)
+
+      if(!is.null(df$cond) && !is.factor(df$cond))
+            df$cond <- if(drop.nas) factor(df$cond) else
+                              factor(df$cond, exclude=FALSE)
+
+
+      sum.df <- ddply(df, names(df)[names(df) !="y"], function(df) stat(df$y), .drop=drop.nas)
+      if(drop.nas){
+          sum.df <- na.omit(sum.df)
+      } else {
+         for(i in names(sum.df))
+             if(is.factor(sum.df[,i]))
+                  sum.df[,i] <- factor(sum.df[,i], levels(df[,i]), exclude=FALSE)
+      }
 
 ########################
 #think about this re multi-return functions...
       names(sum.df)[names(sum.df)=="V1"] <- "y"
 ########################
-
 
       form <- if("y" %in% names(sum.df)) "y~" else "~"
       form <- if("x" %in% names(sum.df)) paste(form, "x", sep="") else form
@@ -106,7 +138,16 @@ loaBarPlot <- function(x, y=NULL, groups=NULL, cond=NULL, data=NULL, ...,
       temp <- colHandler(1:20, col.regions="Spectral")
 ####################
       temp <- listUpdate(listUpdate(list(col.regions=temp),extra.args), list(z=1:length(grps)), ignore=c("zlim"))
-      col <- do.call(colHandler, temp)
+####################
+#test
+#replace    col <- do.call(colHandler, temp)
+#so we get blue as single col...
+#could move to colHandler as option?
+       col <- if(length(temp$z)<2) {
+           temp$z <- c(1,2)
+           do.call(colHandler, temp)[2]
+       }  else do.call(colHandler, temp)  
+#
  
       #strip col args in case they come back to bite us...
 
@@ -122,6 +163,23 @@ loaBarPlot <- function(x, y=NULL, groups=NULL, cond=NULL, data=NULL, ...,
                                  panel.barchart(...)
                         })
 
+##############
+#this is messy but needed so any NAs in x are shown if requested
+#must be a better way...
+##############
+
+      if(!drop.nas){
+           temp <- plot.list$data$x
+           if(is.factor(temp)){
+              temp <- as.character(temp)
+              if(any(is.na(temp))){
+                  temp[is.na(temp)] <- "NA"
+                  plot.list$data$x <- factor(temp, c(levels(plot.list$data$x), "NA"))
+              }
+           }
+      }
+
+      extra.args <- do.call(scalesHandler, extra.args)
       extra.args <- listUpdate(plot.list, extra.args)
 
       plt <- do.call(barchart, extra.args)
@@ -131,18 +189,28 @@ loaBarPlot <- function(x, y=NULL, groups=NULL, cond=NULL, data=NULL, ...,
 #key
 #should be nicer
 ############################
-            if("stack" %in% names(extra.args) && extra.args$stack){
+            if("stack" %in% names(extra.args) && !extra.args$stack){
                 grps <- rev(grps)
                 col <- rev(col)
             }
 
-            temp <- list(fun="draw.key",
+#            temp <- list(fun="draw.key",
+#                         args=list(key=list( 
+#                                   space="right", adj=1,
+#                                   title=groups.name, 
+#                                   text=list(as.character(grps)),
+#                                   rect=list(col=col), 
+#                                   rep=FALSE), 
+#                         draw=FALSE))
+#tider key using own function
+
+            temp <- list(fun="draw.zcasePlotKey",
                          args=list(key=list( 
                                    space="right", adj=1,
-                                   title=groups.name, 
-                                   text=list(as.character(grps)),
-                                   rect=list(col=col), 
-                                   rep=FALSE), 
+                                   zcases.main=if("key.main" %in% names(extra.args)) 
+                                                   extra.args$key.main else groups.name, 
+                                   zcase.ids=as.character(grps),
+                                   col=col), 
                          draw=FALSE))
             plt$legend$right <- temp           
       }

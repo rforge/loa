@@ -4,6 +4,7 @@
 \alias{colHandler}
 \alias{colRegionsHandler}
 \alias{pchHandler}
+\alias{scalesHandler}
 \alias{zHandler}
 
 
@@ -32,6 +33,8 @@ colRegionsHandler(...)
 pchHandler(z = NULL, pch = NULL, pch.order = NULL, 
            expand.outputs = TRUE, ref = NULL, ..., 
            zlim = NULL)
+
+scalesHandler(...)
 
 zHandler(z = NULL, expand.outputs = TRUE, 
            ref = NULL, ...)
@@ -111,7 +114,7 @@ zHandler(z = NULL, expand.outputs = TRUE,
    alone (\code{output='col'}) or the full list of color parameters.
   } 
 
-  \item{...}{ Additional arguments, currently all ignored.
+  \item{...}{ Additional arguments, often ignored.
   } 
 
 }
@@ -133,6 +136,9 @@ zHandler(z = NULL, expand.outputs = TRUE,
   \code{colRegionsHandler} is a wrapper for \code{colHandler} that 
   can be used to with the \code{col.regions} argument.   
 
+  \code{scalesHandler} is a crude method to avoid scales argument 
+  list structures.
+
   \code{zHandler} expands (by wrapping) or foreshortens vectors. 
 
 }
@@ -152,6 +158,12 @@ zHandler(z = NULL, expand.outputs = TRUE,
 
   \code{colRegionsHandler} returns a vector of color values suitable 
   for use with the \code{col.regions} argument.
+
+  \code{scalesHandler} returns the supplied arguments modified as follows: 
+   all \code{scales...} arguments are converted into a single \code{list(...)}; all 
+   \code{scales.x...} and \code{scales.y...} argument are converted into 
+   \code{list(x=list(...))} and \code{list(y=list(...))}, respectively. so e.g. 
+   \code{scales.x.rot=45} generates scales=list(x=list(rot=45)).
 
   \code{pchHandler} returns a vector of \code{pch} values of an 
    appropriate length, depending on \code{expand.outputs} and \code{ref} 
@@ -181,6 +193,8 @@ zHandler(z = NULL, expand.outputs = TRUE,
 \note{
   \code{cexHandler} recently revised. Default cex range now smaller, in line 
   with feedback. 
+
+  \code{scalesHandler} might not be staying.
 }
 
 \seealso{

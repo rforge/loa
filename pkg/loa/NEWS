@@ -1,3 +1,15 @@
+Changes in loa 0.2.42 [2017-06-29]
+=====================================
+
+*       modified loaBarPlot refined NA handling
+        and key handling
+*       added crude scalesHandler function
+*       modified loaBarPlot default col 
+        handling, 1 col = blue
+*       modified loaBarPlot, now has a 
+        loa key
+
+
 Changes in loa 0.2.41 [2017-06-02]
 =====================================
 
