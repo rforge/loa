@@ -1,6 +1,8 @@
 Changes in loa 0.2.42 [2017-06-29]
 =====================================
 
+*       further updates to GoogleMap to track 
+        RgoogleMaps update
 *       modified loaBarPlot refined NA handling
         and key handling
 *       added crude scalesHandler function
@@ -20,7 +22,7 @@ Changes in loa 0.2.41 [2017-06-02]
 *       updates to panel.zcasePiePlot and 
         panel.zcasePieSegmentPlot, better 
         scaling
-*       update to GoogleMap track RgoogleMap
+*       update to GoogleMap track RgoogleMaps
         update
 
 
