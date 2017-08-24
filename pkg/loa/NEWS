@@ -1,6 +1,12 @@
 Changes in loa 0.2.42 [2017-06-29]
 =====================================
 
+*       update to panel.kernelDensity, added 
+        too.far arg like in panel.surfaceSmooth
+*       added panel.triangleKernelDensity and 
+        panel.triangleSurfaceSmooth
+*       update to panel.kernelDensity, added 
+        local.wt arg
 *       further updates to GoogleMap to track 
         RgoogleMaps update
 *       modified loaBarPlot refined NA handling

@@ -3,6 +3,8 @@
 
 #trianglePlot 
 #panel.trianglePlot
+#panel.triangleKernelDensity
+#panel.triangleSurfaceSmooth
 #panel.trianglePlotFrame
 #panel.trianglePlotGrid
 #panel.trianglePlotAxes
@@ -135,6 +137,186 @@ function(x = NULL, y = NULL, a0 = NULL, b0 = NULL, c0 = NULL, ...,
         do.call(extra.args$data.panel, extra.args)
     }
 }
+
+
+
+
+
+
+
+########################################################
+#panel.triangleKernelDensity
+########################################################
+
+
+panel.triangleKernelDensity <- function (x = NULL, y = NULL, a0 = NULL, b0 = NULL, c0 = NULL, 
+    ..., loa.settings = FALSE, plot = TRUE, process = TRUE) 
+{
+    if (loa.settings) 
+        return(list(group.args = c("col"), zcase.args = c("pch"), 
+            common.args = c("alim", "blim", "clim", "grid", "axes", 
+                "ticks", "annotation", "ref.cols"), default.settings = list(local.scales = TRUE, 
+                local.scales.panel = panel.trianglePlotFrame, 
+                data.panel = panel.loaLevelPlot, grid = TRUE, 
+                axes = TRUE, allowed.scales = c("a0", "b0", "c0"), 
+                disallowed.scales = c("x", "y"), aspect = "loa.iso", 
+                reset.xylims = triLimsReset, load.lists = c("grid", 
+                  "axes", "ticks", "annotation"), n = 200, key.fun = "draw.loaColorKey", 
+                key.raster = TRUE, isolate.col.regions = TRUE)))
+    if (process) {
+        if (!plot) {
+            extra.args <- list(...)
+            temp <- as.list(model.frame(data.frame(x = x, y = y, 
+                a0 = a0, b0 = b0, c0 = c0)))
+#tidy this bit
+            plotlist <- listUpdate(extra.args, 
+                             list(x = temp$x, y = temp$y, plot = FALSE, process = TRUE))
+            if(all(c("alim", "blim", "clim") %in% names(extra.args))){
+                   #reset xlim and ylim for this
+                   abc <- with(extra.args, 
+                               triABC2XY(a=c(alim[1], alim[2], alim[1]), 
+                                    b=c(blim[1], blim[1], blim[2]),
+                                    c=c(clim[2], clim[1], clim[1])))
+                   plotlist$xlim <- abc$x[c(1,3)]
+                   plotlist$ylim <- abc$y[c(1,2)]
+            }
+#but need to keep what is temp simple
+#no xlim, ylim, etc.
+#just x and y and z here
+            temp <- do.call(panel.kernelDensity, plotlist)
+
+            #make a b and c for new x y...             
+            abc <- do.call(triXY2ABC, temp)
+            temp$a0 <- abc$a
+            temp$b0 <- abc$b
+            temp$c0 <- abc$c
+
+#other option could be to strip out all not xyzabc here?
+            temp <- as.data.frame(temp)
+
+            #restrtict to range of triangle plot
+            temp <- if("alim" %in% names(extra.args))
+                        temp[temp$a0 >= extra.args$alim[1] & temp$a0 <= extra.args$alim[2], ] else 
+                        temp[temp$a0 >= 0 & temp$a0 <= 1, ]
+            temp <- if("blim" %in% names(extra.args))
+                        temp[temp$b0 >= extra.args$blim[1] & temp$b0 <= extra.args$blim[2], ] else 
+                        temp[temp$b0 >= 0 & temp$b0 <= 1, ]
+            temp <- if("clim" %in% names(extra.args))
+                        temp[temp$c0 >= extra.args$clim[1] & temp$c0 <= extra.args$clim[2], ] else 
+                        temp[temp$c0 >= 0 & temp$c0 <= 1, ]
+            return(temp)
+        }
+    }
+    if (plot) {
+        extra.args <- listUpdate(list(...), list(x = x, y = y, 
+            a0 = a0, b0 = b0, c0 = c0, plot = plot, process = process))
+        if ("groups" %in% names(extra.args) || "zcases" %in% 
+            names(extra.args)) 
+            do.call(groupsAndZcasesPanelHandler, listUpdate(extra.args, 
+                list(panel = extra.args$data.panel, plot = plot, 
+                  process = process), ignore = "grid"))
+        else do.call(extra.args$data.panel, listUpdate(extra.args, 
+            list(), ignore = "grid"))
+        if (extra.args$local.scales) 
+            if (is.function(extra.args$local.scales.panel)) {
+                do.call(extra.args$local.scales.panel, extra.args)
+                extra.args$grid <- NULL
+            }
+    }
+}
+
+
+
+
+
+
+#################################################
+#panel.triangleSurfaceSmooth
+#################################################
+
+
+panel.triangleSurfaceSmooth <- function (x = NULL, y = NULL, z = NULL, a0 = NULL, b0 = NULL, 
+    c0 = NULL, ..., loa.settings = FALSE, plot = TRUE, process = TRUE) 
+{
+    if (loa.settings) 
+        return(list(group.args = c("col"), zcase.args = c("pch"), 
+            common.args = c("alim", "blim", "clim", "grid", "axes", 
+                "ticks", "annotation", "ref.cols"), default.settings = list(local.scales = TRUE, 
+                local.scales.panel = panel.trianglePlotFrame, 
+                data.panel = panel.loaLevelPlot, grid = TRUE, 
+                axes = TRUE, allowed.scales = c("a0", "b0", "c0"), 
+                disallowed.scales = c("x", "y"), aspect = "loa.iso", 
+                reset.xylims = triLimsReset, load.lists = c("grid", 
+                  "axes", "ticks", "annotation"), n = 200, key.fun = "draw.loaColorKey", 
+                key.raster = TRUE, isolate.col.regions = TRUE)))
+    if (process) {
+        if (!plot) {
+#like panel.triangleKernelDensity
+            extra.args <- list(...)
+            temp <- as.list(model.frame(data.frame(x = x, y = y, 
+                z = z, a0 = a0, b0 = b0, c0 = c0)))
+            plotlist <- listUpdate(extra.args, 
+                             list(x = temp$x, y = temp$y, z = temp$z, plot = FALSE, process = TRUE))
+            if(all(c("alim", "blim", "clim") %in% names(extra.args))){
+                   #reset xlim and ylim for this
+                   abc <- with(extra.args, 
+                               triABC2XY(a=c(alim[1], alim[2], alim[1]), 
+                                    b=c(blim[1], blim[1], blim[2]),
+                                    c=c(clim[2], clim[1], clim[1])))
+                   plotlist$xlim <- abc$x[c(1,3)]
+                   plotlist$ylim <- abc$y[c(1,2)]
+            }
+            temp <- do.call(panel.surfaceSmooth, plotlist)
+
+            abc <- do.call(triXY2ABC, temp)
+            temp$a0 <- abc$a
+            temp$b0 <- abc$b
+            temp$c0 <- abc$c
+            temp <- as.data.frame(temp)
+            temp <- if("alim" %in% names(extra.args))
+                        temp[temp$a0 >= extra.args$alim[1] & temp$a0 <= extra.args$alim[2], ] else 
+                        temp[temp$a0 >= 0 & temp$a0 <= 1, ]
+            temp <- if("blim" %in% names(extra.args))
+                        temp[temp$b0 >= extra.args$blim[1] & temp$b0 <= extra.args$blim[2], ] else 
+                        temp[temp$b0 >= 0 & temp$b0 <= 1, ]
+            temp <- if("clim" %in% names(extra.args))
+                        temp[temp$c0 >= extra.args$clim[1] & temp$c0 <= extra.args$clim[2], ] else 
+                        temp[temp$c0 >= 0 & temp$c0 <= 1, ]
+            return(temp)
+        }
+    }
+    if (plot) {
+        extra.args <- listUpdate(list(...), list(x = x, y = y, 
+            z = z, a0 = a0, b0 = b0, c0 = c0, plot = plot, process = process))
+        if ("groups" %in% names(extra.args) || "zcases" %in% 
+            names(extra.args)) 
+            do.call(groupsAndZcasesPanelHandler, listUpdate(extra.args, 
+                list(panel = extra.args$data.panel, plot = plot, 
+                  process = process), ignore = "grid"))
+        else do.call(extra.args$data.panel, listUpdate(extra.args, 
+            list(), ignore = "grid"))
+        if (extra.args$local.scales) 
+            if (is.function(extra.args$local.scales.panel)) {
+                do.call(extra.args$local.scales.panel, extra.args)
+                extra.args$grid <- NULL
+            }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

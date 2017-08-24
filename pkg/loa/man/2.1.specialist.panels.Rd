@@ -23,8 +23,9 @@ panel.surfaceSmooth(x = NULL, y = NULL, z = NULL,
          plot = TRUE, process = TRUE, loa.settings = FALSE)
 
 panel.kernelDensity(x, y, z = NULL, ..., n = 20, 
-         kernel.fun = NULL, panel.range = TRUE, 
-         process = TRUE, plot = TRUE, loa.settings = FALSE)
+         local.wt = TRUE, kernel.fun = NULL, too.far = 0, 
+         panel.range = TRUE, process = TRUE, plot = TRUE, 
+         loa.settings = FALSE)
 
 panel.binPlot(x = NULL, y = NULL, z = NULL, 
          breaks=20, x.breaks = breaks, y.breaks = breaks,
@@ -63,13 +64,18 @@ panel.binPlot(x = NULL, y = NULL, z = NULL,
   details.
   } 
 
- \item{too.far}{ (For \code{panel.surfaceSmooth}) The distance from original data 
+ \item{too.far}{ (For \code{panel.surfaceSmooth} and \code{panel.kernelDensity}) The distance from original data 
   at which to stop predicting surface values. See notes below for further 
   details.  
   }
 
  \item{n}{ (For \code{panel.kernelDensity}) the number of x and y 
   cases to estimate when estimating density.  
+  } 
+
+ \item{local.wt}{ (For \code{panel.kernelDensity}) A logical (default \code{TRUE})
+  indicating if kernel density estimates should be weighed relative to other 
+  groups, panels, etc.  
   } 
 
  \item{kernel.fun}{ (For \code{panel.kernelDensity}) A function that can 

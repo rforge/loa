@@ -12,6 +12,9 @@
 #NOTE: much borrowed from lattice 
 
 
+
+
+
 ###################################
 ###################################
 ##panel.loaLevelPlot
@@ -203,6 +206,7 @@ panel.loaLevelPlotRaster <- function (x, y, z, subscripts, at = pretty(z), ..., 
 #######################################
 #######################################
 
+
 panel.surfaceSmooth <- function (x = NULL, y = NULL, z = NULL, 
     breaks = 200, x.breaks = breaks, y.breaks = breaks, 
     smooth.fun = NULL, too.far=0, ..., 
@@ -221,7 +225,12 @@ panel.surfaceSmooth <- function (x = NULL, y = NULL, z = NULL,
 #
 
     if(!is.function(smooth.fun)){
-        smooth.fun <- function(x, y, z, ...) loess(z~x*y, ...)
+
+#surface arg is to extrapolate to full
+#range if outside requested surface range 
+#is larger than data
+
+        smooth.fun <- function(x, y, z, ...) loess(z ~ x * y, surface="direct", ...)
         process.args <- unique(names(formals(loess)))
     } else {
         process.args <- unique(names(formals(smooth.fun)))
@@ -236,9 +245,9 @@ panel.surfaceSmooth <- function (x = NULL, y = NULL, z = NULL,
                    common.args = c("breaks", "x.breaks", "y.breaks", "smooth.fun"), 
                    default.settings = loaHandler(panel.loaLevelPlot)$default.settings))
 
-#    if(is.null(z))
-#        stop("no z values supplied; this function requires z",
-#              call. = FALSE)
+    if(is.null(z))
+        stop("no z values supplied; please recall supplying z",
+              call. = FALSE)
 
     if (process) {
 
@@ -260,6 +269,7 @@ panel.surfaceSmooth <- function (x = NULL, y = NULL, z = NULL,
 
 
 #this need to be redone/redesigned
+
 
         ghosts <- list(x=x,y=y,z=z)
 
@@ -294,15 +304,19 @@ panel.surfaceSmooth <- function (x = NULL, y = NULL, z = NULL,
         if("call" %in% names(mod)){
 
 ##############################
-#testing
-#this stops the big white space border
-#            temp <- if ("xlim" %in% names(extra.args))
-#                extra.args$xlim else range(x, na.rm=TRUE)
-            temp <- range(x, na.rm=TRUE)
+#previous
+#was to stop the big white space border
+#might need a panel.range like panel.kernelDensity
+
+#            temp <- range(x, na.rm=TRUE)
+            temp <- if("xlim" %in% names(extra.args)) 
+                          extra.args$xlim else range(x, na.rm = TRUE)
+
             x <- seq(min(temp), max(temp), length.out = (x.breaks))
-#            temp <- if ("ylim" %in% names(extra.args))
-#                extra.args$ylim else range(y, na.rm=TRUE)
-            temp <- range(y, na.rm=TRUE)
+#            temp <- range(y, na.rm=TRUE)
+            temp <- if("ylim" %in% names(extra.args)) 
+                          extra.args$ylim else range(y, na.rm = TRUE)
+
             y <- seq(min(temp), max(temp), length.out = (y.breaks))
     
             d <- data.frame(x = rep(x, each= y.breaks), y = rep(y, times=x.breaks))
@@ -340,7 +354,7 @@ panel.surfaceSmooth <- function (x = NULL, y = NULL, z = NULL,
 
         if("na.rm" %in% names(extra.args) && extra.args$na.omit)
             mod <- na.omit(mod)
-
+        
 ################################
 #could just return mod as list at this stage???
 ###############################
@@ -392,7 +406,7 @@ panel.surfaceSmooth <- function (x = NULL, y = NULL, z = NULL,
 
 
 panel.kernelDensity <- function (x, y, z = NULL, ..., 
-          n = 20, kernel.fun = NULL, panel.range = TRUE, 
+          n = 20, local.wt = TRUE, kernel.fun = NULL, too.far=0, panel.range = TRUE, 
           process = TRUE, plot = TRUE, loa.settings = FALSE) 
 {
 
@@ -448,9 +462,20 @@ panel.kernelDensity <- function (x, y, z = NULL, ...,
             mylist$lims <- c(lims$xlim, lims$ylim)
         }
         kern.in <- do.call(kernel.fun, mylist)
-        kern.in$z <- (kern.in$z/sum(kern.in$z)) * temp
+        if(local.wt)
+              kern.in$z <- (kern.in$z/sum(kern.in$z)) * temp
+        
+#this is from panel.surfaceSmooth
+#there ghosts was make at start as list(x=x, y=y)
+#here mylist has x and y unchanged... I think...
 
-    if(!plot) return(kern.in)
+        if (too.far > 0) {
+             ex.tf <- exclude.too.far(kern.in$x, kern.in$y, mylist$x, 
+                 mylist$y, dist = too.far)
+             kern.in$z[ex.tf] <- NA
+         }
+          
+         if(!plot) return(kern.in)
     } else {
         kern.in <- list(x=x, y=y, z=z)
     }

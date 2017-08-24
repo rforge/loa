@@ -2,6 +2,8 @@
 \alias{1.3.triangle.plots}
 \alias{trianglePlot}
 \alias{panel.trianglePlot}
+\alias{panel.triangleKernelDensity}
+\alias{panel.triangleSurfaceSmooth}
 \alias{panel.trianglePlotFrame}
 \alias{panel.trianglePlotAxes}
 \alias{panel.trianglePlotGrid}
@@ -33,6 +35,15 @@
    panel.trianglePlotAxes(alim = NULL, blim = NULL, clim = NULL, 
             ..., axes = TRUE, ticks=TRUE, annotation=TRUE, 
             panel.scales = NULL)  
+
+   #other panels
+
+   panel.triangleKernelDensity(x = NULL, y = NULL, a0 = NULL, 
+            b0 = NULL, c0 = NULL, ..., loa.settings = FALSE, 
+            plot = TRUE, process = TRUE) 
+   panel.triangleSurfaceSmooth(x = NULL, y = NULL, z = NULL, 
+            a0 = NULL, b0 = NULL, c0 = NULL, ..., loa.settings = FALSE, 
+            plot = TRUE, process = TRUE) 
 
    #data handlers
 
@@ -70,11 +81,11 @@
    \code{axes}, \code{ticks}, \code{grid}, etc. (See below).  
    }
 
-  \item{y, a, a0, b, b0, c, c0}{(and \code{x} in relevant functions). \code{a/a0} , \code{b/b0} and 
+  \item{y, a, a0, b, b0, c, c0, z}{(and \code{x} in relevant functions). \code{a/a0} , \code{b/b0} and 
    \code{c/c0} are the three scales of the triangle plot, and \code{x} and \code{y} 
    are the equivalent 2-D projections. The arguments are typically options in panel functions 
    (\code{panel...} functions), conversion functions (\code{triABC2XY} and \code{triXY2ABC}) and 
-   the scaling function \code{triLimsReset}. 
+   the scaling function \code{triLimsReset}. \code{z} is the z-case from the plot formula.  
    }
 
   \item{loa.settings, plot, process}{\code{\link{loaPlot}} arguments used to manage 
@@ -149,6 +160,12 @@
     axes and grid componets of the plot, and \code{panel.trianglePlotFrame} is 
     a wrapper for these. The data layer, which by default is \code{panel.loaPlot}, 
     can be accessed separately using the \code{data.panel} argument. 
+
+   \code{triangleKernelDensity} generates a kernel density surface for supplied \code{a0}, 
+   \code{b0} and \code{c0} cases. 
+
+   \code{triangleSurfaceSmooth} generates a smoothed surface for supplied \code{a0}, 
+   \code{b0}, \code{c0} and \code{z} cases. 
 
    \code{triABC2XY} converts supplied (a, b, c) coordinates to an (x, y) scale suitable 
     for use with \code{panel.trianglePlotFrame}, etc. 
