@@ -217,7 +217,7 @@ colHandler <- function (z = NULL, col = NULL, region = NULL, colorkey = FALSE,
             else seq(zrng[1], zrng[2], length.out = cuts + 2)
 
 ###############
-#can't not be post job 1
+#cannot be post job 1
 #
 #        if (is.null(col.regions)) {
 #            

@@ -2,6 +2,7 @@
 \alias{1.3.triangle.plots}
 \alias{trianglePlot}
 \alias{panel.trianglePlot}
+\alias{panel.triangleByGroupPolygon}
 \alias{panel.triangleKernelDensity}
 \alias{panel.triangleSurfaceSmooth}
 \alias{panel.trianglePlotFrame}
@@ -10,6 +11,7 @@
 \alias{triLimsReset}
 \alias{triABC2XY}
 \alias{triXY2ABC}
+\alias{triABCSquareGrid}
 
 
 \title{
@@ -37,7 +39,9 @@
             panel.scales = NULL)  
 
    #other panels
-
+   panel.triangleByGroupPolygon(x = NULL, y = NULL, a0 = NULL, 
+            b0 = NULL, c0 = NULL, ..., loa.settings = FALSE, 
+            plot = TRUE, process = TRUE) 
    panel.triangleKernelDensity(x = NULL, y = NULL, a0 = NULL, 
             b0 = NULL, c0 = NULL, ..., loa.settings = FALSE, 
             plot = TRUE, process = TRUE) 
@@ -53,6 +57,8 @@
    triXY2ABC(x, y = NULL, ..., force.xy = TRUE, 
             verbose = FALSE)
    triLimsReset(ans)
+   triABCSquareGrid(a, b = NULL, c = NULL, ..., n=100)
+
 }
 
 \arguments{
@@ -145,6 +151,9 @@
    to be scaled and plotted based on the assumption that it is a \code{trianglePlot}.
   }
 
+   \item{n}{For \code{triABCSquareGrid} only, number of points to divide each axes by 
+    when generating the data grid.
+   }
   
 }
 
@@ -322,7 +331,7 @@
 
    Code currently in revision. Please handle with care.
    
-   \code{triABC2XY}: 
+   \code{triABC2XY, triABCSquareGrid}: 
 
    Code currently in revision. Please handle with care.
               

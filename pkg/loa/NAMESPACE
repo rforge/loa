@@ -65,6 +65,7 @@ export(axis.components.GoogleMaps)
 
 export(trianglePlot) 
 export(panel.trianglePlot)
+export(panel.triangleByGroupPolygon)
 export(panel.trianglePlotFrame)
 export(panel.trianglePlotGrid)
 export(panel.trianglePlotAxes)
@@ -73,6 +74,7 @@ export(panel.triangleSurfaceSmooth)
 export(triLimsReset)
 export(triABC2XY)
 export(triXY2ABC)
+export(triABCSquareGrid)
 
 #superceded functions
 ##export(trianglePlot) 
@@ -165,6 +167,7 @@ export(draw.loaColorKey)
 export(draw.loaColorRegionsKey)
 export(draw.zcasePlotKey)
 export(draw.ycasePlotKey)
+export(draw.groupPlotKey)
 export(draw.key.log10)
 
 #loa.shapes/glyphs

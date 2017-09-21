@@ -1,6 +1,12 @@
-Changes in loa 0.2.42 [2017-06-29]
+Changes in loa 0.2.42 [2017-09-21]
 =====================================
 
+*       added draw.groupPlotKey
+*       added panel.triangleByGroupPolygon
+*       update to triABC2XY and triXY2ABC
+*       added triABCSquareGrid
+*       update to panel.trianglePlot, tidied 
+        grid and group handling
 *       update to panel.kernelDensity, added 
         too.far arg like in panel.surfaceSmooth
 *       added panel.triangleKernelDensity and 

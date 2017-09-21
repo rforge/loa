@@ -1125,3 +1125,43 @@ draw.key.log10 <- function (key = NULL, draw = FALSE, vp = NULL, ...) {
 
 
 
+
+
+
+draw.groupPlotKey <- function (key = NULL, draw = FALSE, vp = NULL, ...) 
+{
+
+#this will need more work
+#don't think extra.args ever contains anything
+#this falls over if col and group.ids are not same length
+#     this happens because factor cases are missing from a factor
+
+    extra.args <- list(...)
+
+#this need grid:::nullGrob() to run in workspace
+
+    if (!is.list(key)) {
+        warning("suspect key ignored", call. = FALSE)
+        return(nullGrob())
+    }
+
+    #nothing to plot
+    if(!"group.ids" %in% names(key)) return(nullGrob())
+
+    temp <- listUpdate(list(space="right", adj=1), key, use=c("space", "adj"))
+    temp$zcases.main = if("main" %in% names(key))
+                          key$main else "groups"
+    temp$zcase.ids <- as.character(key$group.ids)
+    temp$col <- key$col
+    do.call(draw.zcasePlotKey, listUpdate(list(key = temp, draw = draw, vp = vp), extra.args))  
+   
+}
+
+
+
+
+
+
+
+
+
