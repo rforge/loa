@@ -18,8 +18,10 @@
 
 \arguments{
 
-  \item{x}{ The x case for the bar plot, typically a vector of factor or grouping 
-   terms, used to assign x positions in bar plot.}
+  \item{x}{ Either the x case for the bar plot or a plot formula. If the x case, 
+   typically a vector of factor or grouping terms, used to assign x positions in 
+   bar plot. If a plot formula, a plot description in the format y~x|cond, where 
+   x is a factor or grouping term and y and cond are optional.}
 
   \item{y}{ (Optional) The y case for the bar plot, typically a vector of numeric 
    terms, used with \code{stat} when calculating summary information for bar plots.}
@@ -58,7 +60,7 @@
 
 \value{
 
-   \code{stackPlot} returns trellis objects, much like 
+   \code{loaBarPlot} returns trellis objects, much like 
    conventional \code{lattice} plot functions.
 
 }
@@ -113,6 +115,9 @@
 ## Basic bar plot usage
 
 loaBarPlot(Species, Sepal.Width, data=iris, stat=mean)
+
+#or equivalent using formula 
+## loaBarPlot(Sepal.Width~Species, data=iris, stat=mean)
  
 }
 

@@ -25,7 +25,9 @@
 #make na handling specific to x, y, group, cond?
 #allow it to draw horizontal bar 
 #    with y as factor and x as calculation case...
-#
+########################
+#think this falls over if multiple cond or group 
+#    arguments are applied
 
 
 #kr 31/05/2017
@@ -47,31 +49,37 @@ loaBarPlot <- function(x, y=NULL, groups=NULL, cond=NULL, data=NULL, ...,
       arguments <- as.list(match.call()[-1])
 
       extra.args <- list(...)
-
-      #var.names
-      x.name <- as.character(arguments)[argnames=="x"]
-      y.name <- as.character(arguments)[argnames=="y"]
-      groups.name <- as.character(arguments)[argnames=="groups"]
-      cond.name <- as.character(arguments)[argnames=="cond"]
-
-#print(argnames)
-#print(argnames=="x")
-#print(as.character(arguments))
-#print(x.name)
-
-      #name is character(0) if not declared
-
       if(!is.null(data)) data <- as.data.frame(data)
       env <- parent.frame()
 
-      #when packaged this might be 
-      #here <- x
-      ##x <- eval(substitute(x), data, environment(here))
+      if("formula" %in% class(try(x, silent=TRUE))){
 
-      df <- list(x = eval(substitute(x), data, env),
-                 y = eval(substitute(y), data, env),
-                 groups = eval(substitute(groups), data, env),
-                 cond = eval(substitute(cond), data, env))
+          #if x is formula   
+          fm <- formulaHandler(x, data=data, formula.type="y~x|cond", output="lattice.like")
+          x.name <- if(is.null(fm$xlab)) character() else fm$xlab
+          y.name <- if(is.null(fm$zlab)) character() else fm$zlab
+          groups.name <- as.character(arguments)[argnames == "groups"]
+          cond.name <- if(is.null(fm$panel.condition)) character() else 
+                             paste(names(fm$panel.condition),sep="+")
+          df <- list(x = fm$x, y = fm$z, 
+                     groups = eval(substitute(groups), data, env), 
+                     cond = fm$panel.condition[[1]])
+          
+      } else {
+
+         x.name <- as.character(arguments)[argnames == "x"]
+         y.name <- as.character(arguments)[argnames == "y"]
+         groups.name <- as.character(arguments)[argnames == "groups"]
+         cond.name <- as.character(arguments)[argnames == "cond"]
+         df <- list(x = eval(substitute(x), data, env), 
+                    y = eval(substitute(y), data, env), 
+                    groups = eval(substitute(groups), data, env), 
+                    cond = eval(substitute(cond), data, env))
+
+      }
+
+#here you have x.name, etc as character() or name
+#df as list of x,y,groups,cond with empties as NULL...
 
       ref <- lapply(df, length)
 

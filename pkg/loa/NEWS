@@ -1,3 +1,10 @@
+Changes in loa 0.2.43 [2017-11-22]
+=====================================
+
+*       update to loaBarPlot, now allows both 
+        (x,y,cond) and (y~x|cond) use
+
+
 Changes in loa 0.2.42 [2017-09-21]
 =====================================
 
