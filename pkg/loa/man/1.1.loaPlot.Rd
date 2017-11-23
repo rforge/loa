@@ -50,8 +50,8 @@
    (Note: this element of the plot is handled by \code{\link{formulaHandler}}).
    }
 
-  \item{data}{ If supplied, the assumed source of the elements of formula 
-   \code{x}, typically a \code{data.frame}.
+  \item{data}{ If supplied, the assumed source of elements of \code{x}, 
+   typically a \code{data.frame}.
    }
 
   \item{panel}{ \code{panel} is the function to be used when generating 

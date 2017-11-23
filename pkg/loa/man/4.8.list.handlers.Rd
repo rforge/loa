@@ -139,6 +139,7 @@ listUpdate(list1, list2)
 ## use in plot functions
 ## to simplify formals
 
+\dontrun{
 #  some data
 a <- 1:10
 b <- rnorm(10,5,2)
@@ -156,11 +157,11 @@ badplot <- function(x, ...){
                    }, ...)
 }
 
-#  badplot(a~b)                 #OK
+  badplot(a~b)                 #OK
 
 #  compare with 
-#  badplot(a~b, xlim = c(1,20)) #OK
-#  badplot(a~b, col = "blue")   #not OK
+  badplot(a~b, xlim = c(1,20)) #OK
+  badplot(a~b, col = "blue")   #not OK
 
 #  because col hardcoded into badplot function
 #  It is duplicated in call and '...'
@@ -180,9 +181,9 @@ stdplot <- function(x, pch = 20, col = "red", ...){
                    }, ...)
 }
 
-#  stdplot(a~b)                  #OK
-#  stdplot(a~b, col = "blue", 
-#          xlim=c(1:20))         #also OK
+  stdplot(a~b)                  #OK
+  stdplot(a~b, col = "blue", 
+          xlim=c(1:20))         #also OK
  
 
 #  An alternative correction using lists and 
@@ -203,10 +204,10 @@ myplot <- function(x, ...){
 }
 
 
-#  myplot(a~b)                 #OK
-#  myplot(a~b, col = "blue", 
-#         xlim = c(1,20))      #also OK
-
+  myplot(a~b)                 #OK
+  myplot(a~b, col = "blue", 
+         xlim = c(1,20))      #also OK
+}
 
 }
 

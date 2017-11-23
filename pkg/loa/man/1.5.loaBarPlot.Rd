@@ -114,10 +114,11 @@
 ## Example 1
 ## Basic bar plot usage
 
-loaBarPlot(Species, Sepal.Width, data=iris, stat=mean)
+  loaBarPlot(Species, Sepal.Width, data=iris, stat=mean)
 
 #or equivalent using formula 
-## loaBarPlot(Sepal.Width~Species, data=iris, stat=mean)
+\dontrun{
+  loaBarPlot(Sepal.Width~Species, data=iris, stat=mean)}
  
 }
 

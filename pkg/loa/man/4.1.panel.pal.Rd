@@ -255,9 +255,9 @@ loaPlot(~a*a|ref, col=ref, pch=19)
 # assumption to all supplied arguments.  
 
 # For example, try
-# loaPlot(~a*a|ref, col=ref, pch=ref)
-# loaPlot(~a*a|ref, col=ref, pch=1:10)
-# etc
+\dontrun{
+  loaPlot(~a*a|ref, col=ref, pch=ref)
+  loaPlot(~a*a|ref, col=ref, pch=1:10)}
 
 }
 

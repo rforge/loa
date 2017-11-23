@@ -87,12 +87,12 @@
    only. If supplied, a vector of elements that R can treat as colors, 
    used as a color scale to recolor \code{map}. This uses standard 
    \code{\link{RColorBrewer}} functions, so can handle arguments like 
-   \code{recolor.map = c("white", "grey")} for greyscale, etc. Disabled 
+   \code{recolor.map} \code{= c("white", "grey")} for greyscale, etc. Disabled 
    by the default \code{FALSE} or \code{NULL}.    
    }
 
-  \item{lon.lat}{For \code{GoogleMap} only, logical. Should the plot formula 
-   be applied as \code{z ~ lon * lat | cond}? This operation is handled 
+  \item{lon.lat}{For \code{GoogleMap} only, logical. If \code{TRUE} applies 
+   \code{z ~ lon * lat | cond}? This operation is handled 
    using the \code{formula.type} argument in \code{\link{formulaHandler}}    
    }
 
@@ -152,7 +152,7 @@
    \code{quickMap} provides access to most common plot parameters, e.g. \code{col}, 
    \code{pch}, and \code{cex} for plot symbol color, type and size, respectively. 
 
-   \code{getMapArg} recovers the \code{map} from a \code{\link{lattice}} plot object 
+   \code{getMapArg} recovers the \code{map} from a \code{\link{lattice}} plot 
    generated with \code{GoogleMap}. Unless the plot object is supplied in the 
    \code{getMapArg} call, this is assumed to be the last lattice (trellis) output. 
    }
@@ -222,9 +222,8 @@
    panel functions.
 
   \code{yscale.components.GoogleMaps}, \code{xscale.components.GoogleMaps} 
-   and \code{axis.components.GoogleMaps} generate suitable latitude, 
-   longitude scales for use with map layers. 
-   
+   generate suitable latitude, longitude scales for use with map layers. 
+   \code{axis.components.GoogleMaps} is a wrapper for their routine use.    
 }
 
 \note{
@@ -357,11 +356,12 @@ GoogleMap(cadmium*50+copper*10+lead*2+zinc~latitude*longitude,
 
 #  Note 1:
 #  Here, the map argument is supplied so example works off-line. 
-#  If not supplied and R is on-line, GoogleMap will (try to) get map 
+#  If not supplied and R is on-line, GoogleMap will get map 
 #  from the Google API. Repeat any of above without map argument 
-#  to see. For example:
-#  GoogleMap(zinc~latitude*longitude, col.regions=c("grey", "darkred"), 
-#            data=lat.lon.meuse)
+#  when on-line. For example:
+\dontrun{
+   GoogleMap(zinc~latitude*longitude, col.regions=c("grey", "darkred"), 
+             data=lat.lon.meuse)}
 #  (The map will appear slightly different because non-default 
 #  size and maptype settings were used to make roadmap.meuse. See 
 #  ?roadmap.meuse for details.)  

@@ -28,8 +28,8 @@
 
 \arguments{
 
-  \item{x}{ For \code{stackPlot} only, a formula with the general structure 
-   \code{y ~ x} or \code{y1 + y2 ~ x | cond}, etc. The elements 
+  \item{x}{ For \code{stackPlot} only, a formula of general structure 
+   \code{y1 + y2 ~ x | cond}, etc. The elements 
    \code{y1}, \code{y2}, etc are stacked on the y-axis, and plotted against x. 
    Both are required.   
    }
@@ -126,10 +126,11 @@
 ## Example 1
 ## Basic stack plot usage
 
-#stackPlot(lead~dist.m, data=lat.lon.meuse)
-#stackPlot(cadmium+copper+lead+zinc~dist.m, data=lat.lon.meuse)
+\dontrun{
+  stackPlot(lead~dist.m, data=lat.lon.meuse)
+  stackPlot(cadmium+copper+lead+zinc~dist.m, data=lat.lon.meuse)}
 
-stackPlot(cadmium*40+copper*5+lead+zinc~dist.m, data=lat.lon.meuse)
+  stackPlot(cadmium*40+copper*5+lead+zinc~dist.m, data=lat.lon.meuse)
  
 }
 

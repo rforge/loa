@@ -132,9 +132,10 @@ GoogleMap(zinc~latitude*longitude, data=temp,
 #  Note 2:
 #  Here, the map argument is supplied so example works off-line. 
 #  If not supplied and R is on-line, GoogleMap will (try to) get map 
-#  from the Google API. Looke at:
-#  GoogleMap(zinc~latitude*longitude, data=lat.lon.meuse, 
-#            col.regions=c("grey", "darkred"))
+#  from the Google API. Look at:
+\dontrun{
+   GoogleMap(zinc~latitude*longitude, data=lat.lon.meuse, 
+             col.regions=c("grey", "darkred"))}
 #  (The map will appear slightly different, because non-default 
 #  size and maptype settings were used to make roadmap.meuse. See above.)  
 

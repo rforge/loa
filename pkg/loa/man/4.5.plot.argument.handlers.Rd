@@ -223,14 +223,15 @@ myplot1 <- function(x, y, z = NULL, cex = NULL,
 myplot1(a, a, a)
 
 #  compare
-#  myplot1(a, a)             #like plot(x, y)    
-#  myplot1(a, a, a*100)      #as myplot1(a, a, a)
-#                            #because cex scaled by range
-#  myplot1(a, b, c, 
-#      cex.range = c(1,5))   #cex range reset
-#  myplot1(a, b, c, 
-#      cex.range = c(10,50), 
-#      cex = 1)              #cex supersedes all else if supplied
+\dontrun{ 
+  myplot1(a, a)             #like plot(x, y)    
+  myplot1(a, a, a*100)      #as myplot1(a, a, a)
+                            #because cex scaled by range
+  myplot1(a, b, c, 
+      cex.range = c(1,5))   #cex range reset
+  myplot1(a, b, c, 
+      cex.range = c(10,50), 
+      cex = 1)              #cex supersedes all else if supplied}
 
 
 ## Example2
@@ -255,10 +256,11 @@ myplot2 <- function(x, y, z = NULL, ...){
 myplot2(a, a, a) 
 
 #  compare 
-#  myplot2(a, b, c, 
-#      col.regions = "Blues") #col.regions recoloring  
-#  myplot2(a, b, c, 
-#      col = "red")           ##but (again) col supersedes if supplied
+\dontrun{
+   myplot2(a, b, c, 
+       col.regions = "Blues") #col.regions recoloring  
+   myplot2(a, b, c, 
+       col = "red")           ##but (again) col supersedes if supplied}
 
 #  Note:
 #  See also example in ?listUpdate
