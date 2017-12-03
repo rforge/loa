@@ -109,11 +109,11 @@ loaPlot(~longitude*latitude, data=temp)
 
 loaPlot(cadmium~longitude*latitude, data=temp)
 
-loaPlot(cadmium~longitude*latitude, col.regions=c("lightblue", "darkblue"), 
+loaPlot(cadmium~longitude*latitude, col.regions=c("green", "red"), 
         data=temp)
 
 loaPlot(cadmium*50+copper*10+lead*2+zinc~longitude*latitude, panel.zcases = TRUE, 
-        col.regions=c("lightblue", "darkblue"), 
+        col.regions=c("green", "red"), 
         key.z.main="Concentrations", data=temp)
 
 

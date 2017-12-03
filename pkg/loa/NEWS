@@ -1,6 +1,9 @@
 Changes in loa 0.2.43 [2017-11-23]
 =====================================
 
+*       update to cexHandler (NA handling)
+*       updated defaults for panel.loaPlot
+        (blue col.regions and grid on) 
 *       updates requested for CRAN resubmission
 *       update to loaBarPlot, now allows both 
         (x,y,cond) and (y~x|cond) use

@@ -143,6 +143,10 @@ cexHandler <- function(z = NULL, cex = NULL,
  
     #return cex 
     #scaled by ref if requested
+################
+#testing
+    cex[is.na(cex)] <- 0
+################
     return(zHandler(cex, expand.outputs, ref))
 
 }
