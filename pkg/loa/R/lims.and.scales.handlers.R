@@ -77,8 +77,12 @@ limsHandler <- function(x=NULL, y=NULL, z=NULL, ..., lim.borders = 0.05){
 #track tzone if posixct
 
 
-                 x <- unique(x[is.finite(x)])
-                 temp <- diff(range(x, na.rm = TRUE)) 
+##############
+#new handler
+#                 x <- unique(x[is.finite(x)])
+#                 temp <- diff(range(x, na.rm = TRUE)) 
+                 x <- range(unique(x[is.finite(x)]), na.rm=TRUE)
+                 temp <- diff(x)
                  if (temp == 0) {
                      temp <- if (x[1] == 0) 
                          b1 else x[1] * b1 

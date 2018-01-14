@@ -340,7 +340,9 @@ panel.loaPlot2 <- function(..., loa.settings = FALSE){
     if(loa.settings)
         return(list(group.args= c("col"),
                     zcase.args= c("pch"),
-                    default.settings = list(key = "draw.loaPlotZKey")))
+                    default.settings = list(grid=TRUE, scheme="loa.scheme",
+                                            load.lists = c("grid"),
+                                            key = "draw.loaPlotZKey")))
 
 
 
@@ -402,10 +404,12 @@ panel.loaPlot <- function(..., loa.settings = FALSE){
 #suggested new bits
 # new col.regions default
 # blues or spectral or others
-                                             col.regions = colorRampPalette(colHandler(1:14, col.regions="Blues", 
-                                                                            output = "col")[3:14])(100),
+#                                             col.regions = colorRampPalette(colHandler(1:14, col.regions="Blues", 
+#                                                                            output = "col")[3:14])(100),
 #or maybe???
 #  col.regions = colHandler(10:130, col.regions="Blues", output = "col")[31:130]),
+#or maybe??? send default scheme...
+                                             scheme="loa.scheme",
 # grid default is TRUE
 # load.list grid 
 # so you can send it list abbreviations

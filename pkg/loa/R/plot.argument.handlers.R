@@ -187,16 +187,32 @@ colHandler <- function (z = NULL, col = NULL, region = NULL, colorkey = FALSE,
     if (!is.null(col.regions) && length(col.regions) < 100) {
         if (length(col.regions) == 1) 
             col.regions <- brewer.pal(9, col.regions)
+################
+#above creates issue for some brewer terms...
+#only have 8 terms...
         col.regions <- colorRampPalette(col.regions)(100)
     }
     if (length(z) < 1) 
         z <- NULL
     if (is.null(z) & is.null(col)) {
+
+###################
+#why is this replicated?
         if (is.null(col.regions)) 
             regions <- FALSE
         if (is.null(col.regions)) 
             regions <- FALSE
+#################
+#testing new default col for z=NULL...
+#this might not be quite right      
+#following col.regions in panel
+
+#        col <- if(is.null(col.regions)) trellis.par.get("dot.symbol")$col else
+#                   colHandler(1, col.regions=col.regions)
+
+#using scheme
         col <- trellis.par.get("dot.symbol")$col
+
     }
     if (is.null(col)) {
         if (!is.numeric(z)) {

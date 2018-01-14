@@ -1,7 +1,11 @@
-Changes in loa 0.2.43 [2017-11-23]
+Changes in loa 0.2.43 [2018-01-14]
 =====================================
 
+*       update to panel.loaPlot2 
+        (grid by default)
+*       update to limHandler (NA handling)
 *       update to cexHandler (NA handling)
+*       updated GoogleMap defaults grid off
 *       updated defaults for panel.loaPlot
         (blue col.regions and grid on) 
 *       updates requested for CRAN resubmission

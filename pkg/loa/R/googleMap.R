@@ -57,6 +57,11 @@ GoogleMap <- function (x, data = NULL, panel = panel.loaPlot, map = NULL,
 
     extra.args <- list(...)
 
+    #default in panel.loaPlot is now grid=TRUE
+    #this is too much clutter on maps...
+    if(!"grid" %in% names(extra.args))
+        extra.args$grid <- FALSE
+
     #formular default z ~ lat * lon | cond
     if (!lon.lat) 
         if (!"formula.type" %in% names(extra.args)) 
