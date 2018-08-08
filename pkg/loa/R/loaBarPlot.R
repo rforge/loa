@@ -94,7 +94,18 @@ loaBarPlot <- function(x, y=NULL, groups=NULL, cond=NULL, data=NULL, ...,
                  stat <- function(y) sum(y, na.rm=TRUE)
       }}
 
-      df <- as.data.frame(df[ref>0])
+###################
+#something to look into
+#this falls over from as.data.frame.list 
+#takes name from name in attributes??
+#so is name of e.g. y instead of y
+##      df <- as.data.frame(df[ref>0])
+###################
+#temp fix force names 
+     ref <- names(ref)[ref > 0]
+     df <- as.data.frame(df[ref])
+     names(df) <- ref
+###################
 
       if(is.null(df$y))
           df$y <- rep(0, length(df$x))

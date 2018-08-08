@@ -1,6 +1,8 @@
-Changes in loa 0.2.43 [2018-01-14]
+Changes in loa 0.2.43 [2018-06-16]
 =====================================
 
+*       update to loaBarPlot (simplified 
+        df naming)
 *       update to panel.loaPlot2 
         (grid by default)
 *       update to limHandler (NA handling)
