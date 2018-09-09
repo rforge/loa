@@ -237,10 +237,9 @@ parHandler <- function (scheme = NULL, ...) {
 #dot.symbol.col 
 
         if(scheme == "loa.scheme"){
-
             symbol <- colHandler(1:10, col.regions="Blues", output = "col")[3:10]
             fill <- "grey"
-            region <- colHandler(1:14, col.regions="Blues", output = "col")[3:14]
+            region <- colHandler(1:14, col.regions="Blues", output = "col")[4:14]
             reference <- "grey"
             bg <- "transparent"
             fg <- "black"
@@ -263,6 +262,32 @@ parHandler <- function (scheme = NULL, ...) {
                          par.sub.text = list(col = fg))
         }
 
+
+        if(scheme == "map.data.scheme"){
+            symbol <- colHandler(1:10, col.regions=c("lightgrey", "darkred"), output = "col")[3:10]
+            fill <- "grey"
+            region <- colHandler(1:14, col.regions=c("lightgrey", "darkred"), output = "col")[4:14]
+            reference <- "grey"
+            bg <- "transparent"
+            fg <- "black"
+            myschm <- list(plot.polygon = list(col = fill[1], border = fg[1]), 
+                         box.rectangle = list(col = symbol[1]), box.umbrella = list(col = symbol[1]), 
+                         dot.line = list(col = fg), dot.symbol = list(col = region[7]), 
+                         plot.line = list(col = symbol[7]), plot.symbol = list(col = symbol[7]), 
+                         regions = list(col = colorRampPalette(region)(100)), 
+                         reference.line = list(col = reference), superpose.line = list(col = symbol), 
+                         superpose.symbol = list(col = symbol), superpose.polygon = list(col = fill, 
+                         border = fg), background = list(col = bg), add.line = list(col = fg), 
+                         add.text = list(col = fg), box.dot = list(col = fg), 
+                         axis.line = list(col = fg), axis.text = list(col = fg), 
+                         strip.border = list(col = fg), strip.background = list(col = c("#ffe5cc",
+                         "#ccffcc","#ccffff","#cce6ff","#ffccff","#ffcccc","#ffffcc")), 
+                         strip.shingle = list(col = c("#ff7f00","#00ff00","#00ffff","#0080ff",
+                         "#ff00ff","#ff0000","#ffff00")), box.3d = list(col = fg), 
+                         par.xlab.text = list(col = fg), par.ylab.text = list(col = fg), 
+                         par.zlab.text = list(col = fg), par.main.text = list(col = fg), 
+                         par.sub.text = list(col = fg))
+        }
 
         if (scheme == "greyscale") {
             symbol <- gray(1:8/8)
@@ -291,7 +316,7 @@ parHandler <- function (scheme = NULL, ...) {
         if (scheme == "kr.web") {
             symbol <- colHandler(1:10, col.regions="Blues", output = "col")[3:10]
             fill <- "white"
-            region <- colHandler(1:14, col.regions="Blues", output = "col")[3:14]
+            region <- colHandler(1:14, col.regions="Blues", output = "col")[4:14]
             reference <- "white"
             bg <- "black"
             fg <- "white"
@@ -315,7 +340,7 @@ parHandler <- function (scheme = NULL, ...) {
         if (scheme == "kr.blues") {
             symbol <- colHandler(1:10, col.regions="Blues", output = "col")[3:10]
             fill <- "darkblue"
-            region <- colHandler(1:14, col.regions="Blues", output = "col")[3:14]
+            region <- colHandler(1:14, col.regions="Blues", output = "col")[4:14]
             reference <- "darkblue"
             bg <- "white"
             fg <- "darkblue"

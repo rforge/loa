@@ -37,7 +37,8 @@ panel.loaLevelPlot <- function (x = NULL, y = NULL, z = NULL,
                     default.settings = list(key.fun = "draw.loaColorKey", 
                                             region = TRUE, contour = TRUE, 
                                             lim.borders = 0.05, key.raster = TRUE,
-                                            isolate.col.regions = TRUE)))
+                                            isolate.col.regions = TRUE,
+                                            scheme="loa.scheme")))
 
 
 ##########################
@@ -440,7 +441,8 @@ panel.kernelDensity <- function (x, y, z = NULL, ...,
                     group.args = c("col"),
                     default.settings = list(key.fun = "draw.loaColorRegionsKey", 
                                             key.raster = TRUE, 
-                                            isolate.col.regions = TRUE)))
+                                            isolate.col.regions = TRUE,
+                                            scheme="loa.scheme")))
 
     ###################
     #process section
@@ -585,7 +587,8 @@ panel.binPlot <- function(x = NULL, y = NULL, z = NULL,
                     zcase.args= c("pch"),
                     common.args = c("breaks", "pad.grid", "x.breaks", "y.breaks", "statistics"),
                     default.settings = list(key.fun = "draw.loaColorKey", key.raster = TRUE, 
-                                            x.elements = c("x", "x1", "x2"), isolate.col.regions = TRUE)))
+                                            x.elements = c("x", "x1", "x2"), isolate.col.regions = TRUE,
+                                            scheme="loa.scheme")))
 
     extra.args <- list(...)
     

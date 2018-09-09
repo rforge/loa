@@ -1,6 +1,9 @@
-Changes in loa 0.2.43 [2018-06-16]
+Changes in loa 0.2.43 [2018-09-03]
 =====================================
 
+*       changed panel.loaLevelPlot, ...binPlot,  
+        ...kernelDensity, ...surfaceSmooth
+        defaults to scheme = "loa.scheme"
 *       update to loaBarPlot (simplified 
         df naming)
 *       update to panel.loaPlot2 

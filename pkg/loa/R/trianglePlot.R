@@ -1,6 +1,15 @@
 #in development code
 #[TBC - NUMBER] functions 
 
+#issue with trianglePlot
+#axis misalignment in...
+#trianglePlot(~Petal.Width+Sepal.Length+Sepal.Width, groups=iris$Species, data=iris)
+
+#check trianglePlot 
+#is temp around the right way
+# trianglePlot(ozone~wind*6+radiation+temperature*2, data=environmental)
+
+
 #trianglePlot 
 #panel.trianglePlot
 #panel.triangleByGroupPolygon

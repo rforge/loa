@@ -46,7 +46,7 @@ panel.zcasePiePlot <- function (..., #zcase.rescale = TRUE,
     if (loa.settings) 
         return(list(zcase.args = c("col"),  
             default.settings = list(key.fun = "draw.zcasePlotKey", 
-                grid = FALSE)))
+                grid = FALSE, scheme="loa.scheme")))
 
     extra.args <- list(...)
 
@@ -220,7 +220,7 @@ panel.zcasePieSegmentPlot <- function (..., zcase.rescale = TRUE,
     if (loa.settings) 
         return(list(zcase.args = c("col"),  
             default.settings = list(key.fun = "draw.zcasePlotKey", 
-                grid = FALSE)))
+                grid = FALSE, scheme="loa.scheme")))
 
     extra.args <- list(...)
 

@@ -61,6 +61,8 @@ GoogleMap <- function (x, data = NULL, panel = panel.loaPlot, map = NULL,
     #this is too much clutter on maps...
     if(!"grid" %in% names(extra.args))
         extra.args$grid <- FALSE
+    if(!"scheme" %in% names(extra.args))
+        extra.args$scheme <- "map.data.scheme"
 
     #formular default z ~ lat * lon | cond
     if (!lon.lat) 

@@ -280,10 +280,13 @@ draw.zcasePlotKey <- function (key = NULL, draw = FALSE, vp = NULL, ...)
         if("col" %in% names(key) && length(key$col)<2)
             return(nullGrob())
 
-    
-    if(!"zcase.ids" %in% names(key)){
-        key$zcase.ids <- if("zlab" %in% names(key))
-                             key$zlab else " "
+#new version 0.2.43
+#change to handling labs     
+    if (!"zcase.ids" %in% names(key)) {
+        key$zcase.ids <- "z"
+    }
+    if ("zcaselab" %in% names(key)) {
+        key$zcases.main <- key$zcaselab
     }
 
     #taken from draw.loaPlotZKey
@@ -515,6 +518,12 @@ draw.ycasePlotKey <- function (key = NULL, draw = FALSE, vp = NULL, ...)
     if(!"ycases.main" %in% names(key))
         key$ycases.main <- "ycases"
 
+#new to version 0.2.43
+#change of ycase label handling
+    if ("ycaselab" %in% names(key)) {
+        key$ycases.main <- key$ycaselab
+    }
+
     #cheat to use zcasePlot for ycases
     names(key) <- gsub("ycases", "zcases", names(key))
     names(extra.args) <- gsub("ycases", "zcases", names(extra.args))
@@ -566,6 +575,11 @@ draw.loaPlotZKey <- function (key = NULL, draw = FALSE, vp = NULL, ...){
 ###pch not tracked if set in call 
 ###but not a group.arg
 
+#wrap long zlabs if you can
+   if("zlab" %in% names(key)){
+        if(nchar(key$zlab)>20) 
+            key$zlab <- paste(strwrap(key$zlab, 20), collapse = "\n")
+   }
 
 #might not need some of these
 

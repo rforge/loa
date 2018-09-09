@@ -68,7 +68,8 @@ panel.polarPlot <- function(x = NULL, y = NULL, r = NULL, theta = NULL, ...,
                                             aspect = "loa.iso", 
                                             reset.xylims = c("refit.xylims", "max.xylims"),
                                             load.lists = c("grid", "axes", "labels"),                                            
-                                            key.fun = "draw.loaPlotZKey")))
+                                            key.fun = "draw.loaPlotZKey",
+                                            scheme="loa.scheme")))
 
     if(process){
 
