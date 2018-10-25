@@ -260,9 +260,7 @@ if("reset.conds" %in% names(extra.args)){
 
      } else {  
 
-
          for(i in 1:length(n)){
-
 
 #this needs to be better
 #terminates badly
@@ -280,8 +278,10 @@ if("reset.conds" %in% names(extra.args)){
              for(j in temp$cond.args)
                  temp[[j]] <- temp[[j]][i]
              temp$subscripts <- 1:length(temp$x)
-
-
+##########################
+#new bit 
+#now passing this cond.id function
+             temp$local.cond.id <- cond.ids[i]
 #            temp[names(temp) %in% c(temp$cond.args] <- temp[names(temp) %in% c(temp$cond.args][i]
 
              if(is.list(by.cond[[n[i]]])) do.call(panel, listUpdate(temp, by.cond[[n[i]]]))

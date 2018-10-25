@@ -1,6 +1,17 @@
+Changes in loa 0.2.44 [2018-10-25]
+=====================================
+
+*       added add_loaPanel 
+*       added addXYLMFit, addXYLOESSFit, 
+        addXYFit_prep, loaXYFit_lm, 
+        loaXYFit_loess, panel.loaXYFit
+
+
 Changes in loa 0.2.43 [2018-09-03]
 =====================================
 
+*       update to condPanelHandler, now passes 
+        current cond to panel
 *       changed panel.loaLevelPlot, ...binPlot,  
         ...kernelDensity, ...surfaceSmooth
         defaults to scheme = "loa.scheme"

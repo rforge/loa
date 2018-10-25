@@ -34,7 +34,7 @@ importFrom("grDevices", "col2rgb", "colorRampPalette", "gray", "grey",
 importFrom("graphics", "par", "plot")
 importFrom("methods", "is")
 importFrom("stats", "aggregate", "as.formula", "loess", "na.omit",
-           "predict", "update", "model.frame")
+           "predict", "update", "model.frame", "coef", "lm")
 importFrom("utils", "compareVersion", "modifyList",
            "packageDescription")
 
@@ -190,6 +190,18 @@ export(screenLatticePlot)
 #export(geoDistance)
 #export(geoElevation)
 #export(geoDestination)
+
+#add
+
+export(add_loaPanel)
+
+export(addXYLMFit)
+export(addXYLOESSFit) 
+export(addXYFit_prep)
+export(loaXYFit_lm)
+export(loaXYFit_loess)
+export(panel.loaXYFit)
+
 
 
 
