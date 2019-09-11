@@ -16,7 +16,7 @@ getXY(n = -1, ..., unit = "native", scale.correction = NULL)
 
 getLatLon(...,   
           scale.correction = function(x) {
-                                temp <- MercatorXY2LatLon(map, x$x, x$y)
+                                temp <- MercatorXY2LatLon(x$x, x$y)
                                 as.list(as.data.frame(temp))
                             })
 
