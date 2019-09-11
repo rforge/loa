@@ -8,7 +8,7 @@
 \docType{data}
 
 \title{
-   example data for use with loa
+   Example data for use with loa
 }
 
 \description{
@@ -51,8 +51,8 @@
 
   \code{roadmap.meuse} was generated using:
 
-\code{GoogleMap(zinc~latitude*longitude, data=lat.lon.meuse, size=c(450,500), maptype="roadmap")} \cr
-\code{roadmap.meuse <- getMapArg()} \cr
+\code{RgoogleMapsPlot(zinc~latitude*longitude, data=lat.lon.meuse, size=c(450,500), maptype="roadmap")} \cr
+\code{roadmap.meuse <- loaMapArg()} \cr
 
 }
 

@@ -865,6 +865,223 @@ triABC2XY <- function(a, b=NULL, c=NULL, ..., force.abc=TRUE,
         d/temp
     }
     data.abc <- prop.abc(data.abc)
+    temp <- apply(data.abc, 2, function(x)
+                                 diff(range(x, na.rm=TRUE)))
+    abc.bord <- if(all(is.na(temp))) 0.05 else
+                    max(temp, na.rm=TRUE) * 0.1
+    if(abc.bord <= 0) abc.bord <- 0.05
+    #abc.bord is plot border
+
+    lims <- data.frame(a=c(0,1),b=c(0,1),c=c(0,1))
+    
+    #shrink c
+    temp <- seq(lims[1,3], lims[2,3], length.out=20)
+    #temp <- pretty(c(lims[1,3], lims[2,3]), 10)
+    temp <- temp[temp < min(data.abc[,3]-abc.bord, na.rm=TRUE)]
+    temp <- if(length(temp) < 1) 0 else 
+                 max(c(temp, 0), na.rm=TRUE)
+    
+    temp <- temp - lims[1,3]
+    lims[1,3] <- lims[1,3]+temp
+    lims[2,1] <- lims[2,1]-temp
+    lims[2,2] <- lims[2,2]-temp
+
+    #shrink b
+    temp <- seq(lims[1,2], lims[2,2], length.out=20)
+    #temp <- pretty(c(lims[1,2], lims[2,2]), 10)
+
+
+    temp <- temp[temp<min(data.abc[,2]-abc.bord, na.rm=TRUE)]
+    temp <- if(length(temp) < 1) 0 else 
+                 max(c(temp, 0), na.rm=TRUE)
+    temp <- temp - lims[1,2]
+    lims[1,2] <- lims[1,2]+temp
+    lims[2,1] <- lims[2,1]-temp
+    lims[2,3] <- lims[2,3]-temp
+
+
+    #shrink a
+    temp <- seq(lims[1,1], lims[2,1], length.out=20)
+    #temp <- pretty(c(lims[1,1], lims[2,1]), 10)
+
+    temp <- temp[temp<min(data.abc[,1]-abc.bord, na.rm=TRUE)]
+    temp <- if(length(temp) < 1) 0 else 
+                 max(c(temp, 0), na.rm=TRUE)
+    temp <- temp - lims[1,1]
+    lims[1,1] <- lims[1,1]+temp
+    lims[2,2] <- lims[2,2]-temp
+    lims[2,3] <- lims[2,3]-temp
+
+    
+    #shrink c
+    temp <- seq(lims[1,3], lims[2,3], length.out=20)
+    #temp <- pretty(c(lims[1,3], lims[2,3]), 10)
+    temp <- temp[temp < min(data.abc[,3]-abc.bord, na.rm=TRUE)]
+    temp <- if(length(temp) < 1) 0 else 
+      max(c(temp, 0), na.rm=TRUE)
+    
+    temp <- temp - lims[1,3]
+    lims[1,3] <- lims[1,3]+temp
+    lims[2,1] <- lims[2,1]-temp
+    lims[2,2] <- lims[2,2]-temp
+    
+    #shrink b
+    temp <- seq(lims[1,2], lims[2,2], length.out=20)
+    #temp <- pretty(c(lims[1,2], lims[2,2]), 10)
+    
+    
+    temp <- temp[temp<min(data.abc[,2]-abc.bord, na.rm=TRUE)]
+    temp <- if(length(temp) < 1) 0 else 
+      max(c(temp, 0), na.rm=TRUE)
+    temp <- temp - lims[1,2]
+    lims[1,2] <- lims[1,2]+temp
+    lims[2,1] <- lims[2,1]-temp
+    lims[2,3] <- lims[2,3]-temp
+    
+    
+    #shrink a
+    temp <- seq(lims[1,1], lims[2,1], length.out=20)
+    #temp <- pretty(c(lims[1,1], lims[2,1]), 10)
+    
+    temp <- temp[temp<min(data.abc[,1]-abc.bord, na.rm=TRUE)]
+    temp <- if(length(temp) < 1) 0 else 
+      max(c(temp, 0), na.rm=TRUE)
+    temp <- temp - lims[1,1]
+    lims[1,1] <- lims[1,1]+temp
+    lims[2,2] <- lims[2,2]-temp
+    lims[2,3] <- lims[2,3]-temp
+    
+    
+    ans <- list(x =  data.abc[,2]+(0.5*data.abc[,1]), 
+                y = ((data.abc[,1]*0.866)*1.1)/1,      #confirm 1.1
+                alim = lims[,1], blim = lims[,2], clim = lims[,3])
+
+    if(!verbose) return(ans) 
+
+    #full return
+    #may want to rethink structure
+    #re passing a,b,c to xyplot.formula...
+
+    #check for out of range values
+    ##compare with lims
+    oor.log <- rep(FALSE, nrow(data.abc))
+    oor.log <- ifelse(data.abc[,1] < min(lims[,1], na.rm=TRUE) |  
+                      data.abc[,1] > max(lims[,1], na.rm=TRUE), TRUE, oor.log)
+    oor.log <- ifelse(data.abc[,2] < min(lims[,2], na.rm=TRUE) |  
+                      data.abc[,2] > max(lims[,2], na.rm=TRUE), TRUE, oor.log)
+    oor.log <- ifelse(data.abc[,3] < min(lims[,3], na.rm=TRUE) |  
+                      data.abc[,3] > max(lims[,3], na.rm=TRUE), TRUE, oor.log)
+    #catch na's
+    oor.log[is.na(oor.log)]<- FALSE
+
+
+    listUpdate(ans, list(a=data.abc[,1], b=data.abc[,2], c=data.abc[,3],
+                         report = list(nas=na.log, negs=neg.log, oor=oor.log)))  
+}
+
+
+triABC2XY.old <- function(a, b=NULL, c=NULL, ..., force.abc=TRUE, 
+              if.na="remove.row", if.neg="remove.row", verbose=FALSE){
+
+    #############
+    #setup
+    #############
+
+    #extra.args
+    extra.args <- list(...)
+
+#############
+#new
+#############
+
+#if a,b,c not there 
+#use a0, b0, and c0 if there 
+
+    if(missing(a) && "a0" %in% names(extra.args)) a <- extra.args$a0
+    if(is.null(b) && "b0" %in% names(extra.args)) b <- extra.args$b0
+    if(is.null(c) && "c0" %in% names(extra.args)) c <- extra.args$c0
+
+#############
+#
+
+    #make a,b,c a data.frame
+
+################
+#could standardise this next bit and front end of triXY2ABC
+#and make common function dataHandler
+#could also put the logs in there
+################
+
+    data.abc <- if(is.data.frame(a)) a else
+                    if(is.list(a)) as.data.frame(a) else
+                       if(is.vector(a)) data.frame(a=a) else
+                           stop("unable to handle supplied data", call. = FALSE)
+###################
+#possible issue if
+#a shorter than b,c
+###################
+    if(is.vector(b))
+        data.abc$b <- if(length(b) < nrow(data.abc))
+                          rep(b, ceiling(nrow(data.abc)/length(b)))[1:nrow(data.abc)] else 
+                              b[1:nrow(data.abc)]
+    if(is.vector(c))
+        data.abc$c <- if(length(c) < nrow(data.abc))
+                          rep(c, ceiling(nrow(data.abc)/length(c)))[1:nrow(data.abc)] else 
+                              c[1:nrow(data.abc)]
+    #check dim
+    if(ncol(data.abc) < 3)
+        stop("insufficient data for 'abc' assignment", call. = FALSE)
+
+    #force.abc/rescale
+    temp <- data.abc[,1:3]
+    if(force.abc){
+        if("a" %in% names(data.abc)) temp[,1] <- data.abc$a
+        if("b" %in% names(data.abc)) temp[,2] <- data.abc$b
+        if("c" %in% names(data.abc)) temp[,3] <- data.abc$c
+    } 
+    data.abc <- temp
+    abc.status <- rep(0, nrow(data.abc)) #abc.status
+
+    ###########
+    #if.neg and if.na
+    ###########
+
+##############
+#need keep.as.is catcher
+##############
+    na.log <- apply(data.abc, 1, function(x) any(is.na(x))) #na
+    neg.log <- apply(data.abc, 1, function(x) any(!is.na(x) & x<0)) #negs
+
+    if(any(na.log)) {
+        if(if.na == "remove.row")
+            data.abc[na.log, 1:3] <- c(NA,NA,NA)
+        if(if.na == "make.zero")
+            data.abc[is.na(data.abc)] <- 0
+    }
+
+    if(any(neg.log)) {
+        if(if.neg == "remove.row")
+            data.abc[neg.log, 1:3] <- c(NA,NA,NA)
+        if(if.neg == "make.zero")
+            data.abc[data.abc<0] <- 0
+        if(if.neg == "rescale.col")
+            if(nrow(data.abc)==1)
+                data.abc[data.abc<0] <- 0 else 
+                    data.abc <- as.data.frame(apply(data.abc, 2, function(x) 
+                        if(min(x, na.rm=TRUE)<0) x-min(x, na.rm=TRUE) else x))            
+    }
+
+#############
+#below needs documenting in help
+#############
+
+    #abc 2 prop(abc)
+    #function used again later
+    prop.abc <- function(d){
+        temp <- d[,1] + d[,2] + d[,3]
+        d/temp
+    }
+    data.abc <- prop.abc(data.abc)
 
 ################################
 ################################

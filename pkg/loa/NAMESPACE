@@ -19,6 +19,7 @@ import(lattice)
 import(grid)
 import(png)
 import(RgoogleMaps)
+import(OpenStreetMap)
 import(RColorBrewer)
 import(mgcv)
 import(plyr)
@@ -26,6 +27,10 @@ import(plyr)
 #single imports
 
 importFrom(MASS, kde2d) #for panel.kernelDensity
+
+#below because conflict between sp and graphics... 
+
+importFrom(sp, "coordinates", "proj4string", "CRS", "spTransform")
 
 #next lot are because win builder told me too..
 
@@ -48,19 +53,26 @@ export(panel.loaPlot2)
 export(panel.loaGrid)
 
 
-#googleMap
+#loaMapPlot 
 
+export(loaMapPlot)
+export(RgoogleMapsPlot)
+export(OpenStreetMapPlot)
 export(GoogleMap)
-export(GoogleMap.old)
 export(googleMap) 
-export(quickMap) 
+#export(quickMap)
+export(getOSMapArg)
+export(getRGMapArg)
+export(loaMapArg)
 export(makeMapArg)
 export(getMapArg)
-export(panel.GoogleMapsRaster) 
-export(panel.GoogleMaps)
-export(xscale.components.GoogleMaps)
-export(yscale.components.GoogleMaps)
-export(axis.components.GoogleMaps)
+export(LatLon2MercatorXY)
+export(MercatorXY2LatLon)
+export(panel.loaBGMapPlotRaster) 
+export(panel.loaBGMapPlot)
+export(xscale.components.loaMap)
+export(yscale.components.loaMap)
+export(axis.components.loaMap)
 
 #trianglePlot
 
@@ -180,7 +192,8 @@ export(loaPieSegment)
 #plot.interactives
 export(getXY)
 export(getLatLon)
-export(screenLatticePlot)
+
+#export(screenLatticePlot)
 
 
 #misc

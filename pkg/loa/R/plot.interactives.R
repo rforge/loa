@@ -98,15 +98,17 @@ getXY <- function (n = -1, ..., unit = "native", scale.correction = NULL)
 #####################
 #####################
 
-getLatLon <- function(..., map = NULL, object = trellis.last.object(),  
+getLatLon <- function(...,   
             scale.correction = function(x) {
-                                temp <- XY2LatLon(map, x$x, x$y)
+                                temp <- MercatorXY2LatLon(x$x, x$y)
                                 as.list(as.data.frame(temp))
                             })
 {
 
-    if(is.null(map))
-        map <- getMapArg(object)
+# don't need to track map with MercatorXY2LatLon conversion
+  
+#    if(is.null(map))
+#        map <- getMapArg(object)
 
 #need new error catcher
 
@@ -129,6 +131,7 @@ getLatLon <- function(..., map = NULL, object = trellis.last.object(),
 
 #needs a lot of tidying but it is promising
 
+#not exportinging 
 
 screenLatticePlot <- function(object = trellis.last.object(),...){
 #temp

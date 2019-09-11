@@ -14,8 +14,8 @@
 \tabular{ll}{
 Package: \tab loa\cr
 Type: \tab Package\cr
-Version: \tab 0.2.44.2\cr
-Date: \tab 2017-10-26\cr
+Version: \tab 0.2.45.0\cr
+Date: \tab 2019-09-11\cr
 License: \tab GPL (>= 2)\cr
 LazyLoad: \tab yes\cr
 }
@@ -31,7 +31,7 @@ use of this framework. These are summarized in section 1 of this manual, and inc
 
 1.1. \code{\link{loaPlot}} for various XYZ plots.
 
-1.2. \code{\link{GoogleMap}} and associated geoplotting functions.
+1.2. \code{\link{loaMapPlot}} and associated geoplotting functions.
 
 1.3. \code{\link{trianglePlot}} and associated functions.
 

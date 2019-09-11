@@ -1,6 +1,25 @@
-Changes in loa 0.2.44 [2018-10-25]
+Changes in loa 0.2.45 [209-09-11]
+
+*       added loaMapPlot as generic map plot 
+*       replaced existing makeMap...,  
+        getMap... and panel.GoogleMap... functions 
+        with generic versions
+*       Added sp to imports, and added Mercator 
+        transform functions, LatLon2MercatorXY 
+        and MercatorXY2LatLon
+*       replaced GoogleMap/googleMap with 
+        loaMapPlot warpper RgoogleMapsPlot. 
+*       Added OpenStreetMap to imports, loaMapPlot 
+        wrapper OpenStreetMapPlot, and getOSMapArg.
+*       replaced roadmap.meuse with getRGMapArg 
+        make version.
+        
+
+Changes in loa 0.2.44 [2018-08-19]
 =====================================
 
+*       update to triABC2XY, track lims for 
+        very different a, b and c ranges
 *       added add_loaPanel 
 *       added addXYLMFit, addXYLOESSFit, 
         addXYFit_prep, loaXYFit_lm, 
