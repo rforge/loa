@@ -23,6 +23,7 @@ import(RgoogleMaps)
 import(RColorBrewer)
 import(mgcv)
 import(plyr)
+import(rgdal)
 
 #single imports
 
@@ -31,6 +32,7 @@ importFrom(MASS, kde2d) #for panel.kernelDensity
 #below because conflict between sp and graphics... 
 
 importFrom(sp, "coordinates", "proj4string", "CRS", "spTransform")
+
 
 #next lot are because win builder told me too..
 
