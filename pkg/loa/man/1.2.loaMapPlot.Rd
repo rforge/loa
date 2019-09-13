@@ -2,11 +2,9 @@
 \alias{1.2.loaMapPlot.and.geoplotting.tools}
 \alias{loaMapPlot}
 \alias{RgoogleMapsPlot}
-\alias{OpenStreetMapPlot}
 \alias{GoogleMap}
 \alias{googleMap}
 \alias{getRGMapArg}
-\alias{getOSMapArg}
 \alias{panel.loaBGMapPlotRaster}
 \alias{panel.loaBGMapPlot}
 \alias{getMapArg}
@@ -22,7 +20,7 @@
   Map plotting for lattice
 }
 \description{
-  Plotting georeferenced data on maps using lattice, RgoogleMaps and OpenStreetMap
+  Plotting georeferenced data on maps using lattice, RgoogleMaps, and OpenStreetMap or GoogleMaps
 }
 \usage{
 
@@ -32,12 +30,9 @@
         lon.lat = FALSE)
 
   RgoogleMapsPlot(x, data = NULL, ...)
-
-  OpenStreetMapPlot(x, data = NULL, ...)
   
   #map handlers
   getRGMapArg(ylim, xlim, ..., lim.borders = 0.1)
-  getOSMapArg(ylim, xlim, ..., lim.borders = 0.1)
   loaMapArg(object = trellis.last.object())
 
   #map panels
@@ -79,9 +74,9 @@
    }
 
   \item{map, map.source}{For \code{MapPlot}s and related functions only. 
-   If supplied, \code{map} is a modified \code{RgoogleMaps} or 
-   \code{OpenStreetMap} output, generated using either package and 
-   \code{getRSMapArg} or \code{getOSMapArg}, respectively. If \code{NULL} 
+   If supplied, \code{map} is a modified \code{RgoogleMaps} output, 
+   generated using either package and 
+   \code{getRSMapArg}. If \code{NULL} 
    (default), the \code{MapPlot} using the \code{get} function assigned 
    using \code{map.source} to get the map.  
    }
@@ -101,7 +96,7 @@
 
   \item{...}{ Additional arguments are passed on to related functions. 
 
-   For \code{MapPlot}s these are \code{getRSMapArg} or \code{getOSMapArg}, 
+   For \code{MapPlot}s these are \code{getRSMapArg}, 
    \code{\link{colHandler}}, \code{\link{cexHandler}} and \code{\link{xyplot}}.
    
    By default both data point colour and size are \code{z}-scaled for \code{MapPlot}s. 
@@ -118,8 +113,7 @@
    provides access to most common plot parameters, e.g. \code{col}, 
    \code{pch}, and \code{cex} for plot symbol color, type and size, respectively. 
 
-   \code{getMap} functions pass arguments to related \code{RgoogleMaps} or 
-   \code{OpenStreetMap} functions.
+   \code{getMap} functions pass arguments to related \code{RgoogleMaps} functions.
    
   } 
 
@@ -155,18 +149,15 @@
 \details{
 
   \code{loaMapPlot} provides lattice-style conditioning/handling for 
-   \code{RgoogleMaps} and \code{OpenStreetMap} outputs. This uses 
+   \code{RgoogleMaps} outputs. This uses 
    \code{\link{loaPlot}} and \code{\link{panelPal}} to manage default 
    panel and key settings.  
  
   \code{RgoogleMapsPlot} is a shortcut for using \code{loaMapPlot} with 
-   maps produced by \code{RgoogleMaps}. 
-   
-  \code{OpenStreetMapPlot} is a shortcut for using \code{loaMapPlot} with 
-   maps produced by \code{OpenStreetMap}. 
+   maps produced by \code{RgoogleMaps}.  
 
   \code{getMap...} functions accept latitude and longitude ranges and 
-   related \code{RgoogleMaps} or \code{OpenStreetMap} function arguments, 
+   related \code{RgoogleMaps} function arguments, 
    and produces an output suitable for use as the \code{map} argument in 
    subsequent (same area) \code{MatPlot}s or in \code{panel.loaBGMapPlotRaster} 
    or \code{panel.loaBGMapPlot} panel function calls.
@@ -276,12 +267,7 @@
   RgoogleMaps: Overlays on Google map tiles in R. R
   package version 1.1.9.6.
   http://CRAN.R-project.org/package=RgoogleMaps
-  
-  OpenStreetMap:
-  Ian Fellows and using the JMapViewer library by Jan Peter Stotz (2019).
-  OpenStreetMap: Access to Open Street Map Raster Images. R package version 0.3.4.
-  https://CRAN.R-project.org/package=OpenStreetMap
-  
+    
   sp:
   Pebesma, E.J., R.S. Bivand, 2005. 
   Classes and methods for spatial data in R. R News 5 (2). 
@@ -294,10 +280,10 @@
   Users should also always cite map sources when using outputs from 
   these \code{MapPlot}s:
   
-  For GoogleMaps:
+  For GoogleMap maps:
   Map layer: Map data (c) [year] Google
   
-  For OpenStreetMap
+  For OpenStreetMap maps:
   Map layer (c) OpenStreetMap contributors
 
 }
@@ -311,9 +297,7 @@
    In other packages, see
 
    \code{RgoogleMaps}: \code{\link{GetMap}}.
-   
-   \code{OpenStreetMap}: \code{\link{openmap}}.
-   
+      
    \code{sp}: \code{\link{coordinates}}; \code{\link{proj4string}}; and, 
    \code{\link{spTransform}}.
    

@@ -12,7 +12,9 @@ Changes in loa 0.2.45 [209-09-11]
 *       Added OpenStreetMap to imports, loaMapPlot 
         wrapper OpenStreetMapPlot, and getOSMapArg.
 *       replaced roadmap.meuse with getRGMapArg 
-        make version.
+        make version
+*       removed OpenStreetMap related functions, 
+        can't get CRAN to accept
         
 
 Changes in loa 0.2.44 [2018-08-19]

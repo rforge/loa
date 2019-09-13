@@ -1,8 +1,8 @@
 Package: loa
 Type: Package
 Title: Lattice Options and Add-Ins
-Version: 0.2.45.2
-Date: 2019-09-11
+Version: 0.2.45.3
+Date: 2019-09-13
 Author: Karl Ropkins
 URL: http://loa.r-forge.r-project.org/loa.intro.html
 Maintainer: Karl Ropkins <karl.ropkins@gmail.com>
@@ -11,7 +11,8 @@ Description: Various plots and functions that make use of the lattice/trellis pl
    extends 'lattice' and 'hexbin' package methods to automate plot subscript and panel-to-panel 
    and panel-to-key synchronization/management.   
 Depends: R (>= 3.5.0), lattice
-Imports: methods, MASS, grid, png, RgoogleMaps, OpenStreetMap, sp, RColorBrewer, mgcv, plyr
+Imports: methods, MASS, grid, png, RgoogleMaps, sp, RColorBrewer, mgcv, plyr
 License: GPL (>= 2)
 LazyLoad: yes
 LazyData: yes
+RoxygenNote: 6.1.1
