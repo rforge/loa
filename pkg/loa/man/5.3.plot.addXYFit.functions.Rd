@@ -177,15 +177,15 @@ panel.loaXYFit(...)
 \examples{
 
 # add lm fit a loaPlot
-addXYLMFit(loaPlot(cadmium~copper*zinc, data=lat.lon.meuse))
+add.XYLMFit(loaPlot(cadmium~copper*zinc, data=lat.lon.meuse))
 
 \dontrun{
 
 loaPlot(cadmium~copper*zinc, data=lat.lon.meuse)
-addXYLOESSFit(col="red")
+add.XYLOESSFit(col="red")
 
 p <- loaPlot(cadmium~copper*zinc, data=lat.lon.meuse)
-addXYLMFit(p, se.col="grey", report.position=c(0.95, 0.22))
+add.XYLMFit(p, se.col="grey", report.position=c(0.95, 0.22))
 
 }
 
