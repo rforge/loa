@@ -520,3 +520,128 @@ panel.loaGrid <- function(grid.x = NULL, grid.y = NULL,
 
 
 
+
+
+
+
+
+
+
+
+############################
+#test
+############################
+
+panel.loa <- function(..., loa.settings = FALSE){
+    
+    
+    ###################
+    #return safe.mode info
+    ###################
+    if(loa.settings)
+        return(list(group.args= c("col", "type"),
+                    zcase.args= c("pch", "lty", "type"),
+                    default.settings = list(key.fun = "draw.loaKey02", 
+                                            type="p",
+                                            scheme="loa.scheme",
+                                            grid = TRUE, load.lists = c("grid"))))
+    
+    extra.args <- list(...)
+    #b -> lp needs to be done by key as well...
+    extra.args$type <- gsub("b", "lp", extra.args$type)
+    if("groups" %in% names(extra.args)){
+        if("group.args" %in% names(extra.args) && length(extra.args$group.args)>0){
+            
+            #group.ids might not always be there
+            
+            temp <- as.numeric(factor(extra.args$groups, levels = extra.args$group.ids))
+            for(i in extra.args$group.args){
+                extra.args[[i]] <- extra.args[[i]][temp]
+            }
+        }
+        #extra.args$groups <- NULL
+    } 
+    
+    if("zcases" %in% names(extra.args)){
+        if("zcase.args" %in% names(extra.args) && length(extra.args$zcase.args)>0){
+            
+            #zcase.ids might not always be there
+            
+            temp <- as.numeric(factor(extra.args$zcases, levels = extra.args$zcase.ids))
+            for(i in extra.args$zcase.args){
+                extra.args[[i]] <- extra.args[[i]][temp]
+            }
+        }
+        #extra.args$zcases <- NULL
+    } 
+    
+    extra.args$type <- zHandler(extra.args$type, ref=extra.args$x)
+    
+    if(isGood4LOA(extra.args$grid))
+        panel.loaGrid(panel.scales = extra.args$panel.scales, grid = extra.args$grid, 
+                      xlim = extra.args$xlim, ylim = extra.args$ylim) 
+    
+    extra.args$col <- do.call(colHandler, extra.args)
+    extra.args$cex <- do.call(cexHandler, extra.args)
+    extra.args$pch <- do.call(pchHandler, listUpdate(extra.args, list(z=NULL)))
+    
+    extra.args$lwd <- do.call(zHandler, listUpdate(extra.args, list(z=extra.args$lwd)))
+    extra.args$lty <- do.call(zHandler, listUpdate(extra.args, list(z=extra.args$lty)))
+
+#print(extra.args$x)    
+#print(extra.args$y)
+#print(extra.args$groups)
+#print(extra.args$zcases)    
+#print(extra.args$col)
+#print(extra.args$cex)
+#print(extra.args$pch)
+#print(extra.args$lty)
+#print(extra.args$lwd)
+
+    for(i in 1:length(extra.args$x)){
+    #for(i in 1:10){
+        if(grepl("p", extra.args$type[i])){ 
+            lpoints(x=extra.args$x[i],
+                    y=extra.args$y[i],
+                    col=extra.args$col[i],
+                    cex=extra.args$cex[i],
+                    pch=extra.args$pch[i])
+        }
+        if(grepl("h", extra.args$type[i])){
+            llines(x=extra.args$x[c(i, i)],
+                    y=c(max(min(extra.args$ylim, na.rm=TRUE), 0, na.rm=TRUE),
+                          extra.args$y[i]),
+                    col=extra.args$col[i],
+                    cex=extra.args$lwd[i],
+                    pch=extra.args$lty[i])
+        }
+        
+        if(i > 1){
+            #this is only linked to groups at the moment 
+            #not groups and zcases
+            test <- FALSE
+            if(is.null(extra.args$groups) & is.null(extra.args$zcases)) test <- TRUE
+            if(!is.null(extra.args$groups) && is.null(extra.args$zcases) &&
+                   extra.args$groups[i]==extra.args$groups[i-1]) test <- TRUE 
+            if(is.null(extra.args$groups) && !is.null(extra.args$zcases) &&
+               extra.args$zcases[i]==extra.args$zcases[i-1]) test <- TRUE
+            if(!is.null(extra.args$groups) && !is.null(extra.args$zcases) &&
+               extra.args$groups[i]==extra.args$groups[i-1] &&
+               extra.args$zcases[i]==extra.args$zcases[i-1]) test <- TRUE
+            
+            if(test){
+                if(grepl("l", extra.args$type[i]) & 
+                    grepl("l", extra.args$type[i-1])){
+                    llines(x=extra.args$x[c(i, i-1)],
+                        y=extra.args$y[c(i, i-1)],
+                        col=extra.args$col[i],
+                        cex=extra.args$cex[i],
+                        pch=extra.args$pch[i],
+                        lty=extra.args$lty[i],
+                        lwd=extra.args$lwd[i])
+                }
+            }
+        }
+    }
+}
+

@@ -1173,6 +1173,847 @@ draw.groupPlotKey <- function (key = NULL, draw = FALSE, vp = NULL, ...)
 
 
 
+#############################################################
+#############################################################
+##draw.loaGroupKey
+#############################################################
+#############################################################
+
+
+
+draw.loaKey02 <- function (key = NULL, draw = FALSE, vp = NULL, ...){
+    
+    #############
+    #setup
+    #############
+    
+    #key is args from key
+    #... 
+    
+    ##############################################
+    #the key.z.labels does not seem to track properly
+    #need to fix this
+    ##############################################
+    
+    extra.args <- list(...) 
+    
+    extra.args$type <- gsub("b", "lp", extra.args$type)
+    key$type <- gsub("b", "lp", key$type)
+    
+
+
+#print("up front")        
+#print(key$type)        
+#print(key$group.args)
+#print(key[key$group.args])
+
+    
+    #check key useable
+    if (!is.list(key)){ 
+        warning("suspect key ignored", call. = FALSE)
+        return(nullGrob())
+    }
+    
+    ###pch not tracked if set in call 
+    ###but not a group.arg
+    
+    #wrap long zlabs if you can
+    if("zlab" %in% names(key)){
+        if(nchar(key$zlab)>20) 
+            key$zlab <- paste(strwrap(key$zlab, 20), collapse = "\n")
+    }
+    
+    #might not need some of these
+    
+    #default key components
+    z.main <- nullGrob() 
+    z.main.ht <- unit(0.01, "cm")
+    z.main.wd <- z.main.ht
+    z.elements <- z.main 
+    z.elements.ht <- z.main.ht
+    z.elements.wd <- z.main.ht
+    z.labels <- z.main 
+    z.labels.ht <- z.main.ht
+    z.labels.wd <- z.main.ht
+    
+    groups.main <- z.main 
+    groups.main.ht <- z.main.ht
+    groups.main.wd <- z.main.ht
+    groups.elements <- z.main 
+    groups.elements.ht <- z.main.ht
+    groups.elements.wd <- z.main.ht
+    groups.labels <- z.main 
+    groups.labels.ht <- z.main.ht
+    groups.labels.wd <- z.main.ht
+    
+    zcases.main <- z.main 
+    zcases.main.ht <- z.main.ht
+    zcases.main.wd <- z.main.ht
+    zcases.elements <- z.main 
+    zcases.elements.ht <- z.main.ht
+    zcases.elements.wd <- z.main.ht
+    zcases.labels <- z.main 
+    zcases.labels.ht <- z.main.ht
+    zcases.labels.wd <- z.main.ht
+    
+    
+    #check for z
+    temp <- key$panel.elements
+    z.check <- if(is.null(temp)) FALSE else 
+        if("z" %in% temp) TRUE else FALSE
+    
+    #check for z info
+    z.temp <- key[grep("^z[.]", names(key))]
+    names(z.temp) <- gsub("^z[.]", "", names(z.temp))
+    
+    #make z from inputs
+    z <- if(!"z" %in% names(key)) list() else
+        if(is.list(key$z)) key$z else 
+            if(is.logical(key$z) && key$z) list() else 
+                FALSE
+    z <- if(is.logical(z) && !z) z else
+        if(is.list(z)) listUpdate(z, z.temp) else z.temp  
+    
+    #add at if list and at not there 
+    if(is.list(z) && !"at" %in% names(z))
+        z$at <- if(is.null(key$zlim))
+            NULL else {
+                temp <- pretty(key$zlim,
+                               if(is.null(z$n.ticks)) 5 else z$n.ticks)
+                temp[temp >= min(key$zlim) & temp <= max(key$zlim)]
+            }
+    
+    
+    if(is.list(z) && length(z) > 0){
+        
+#tests don't happen if z is missing
+#so if only using group...
+        
+        #text if plot controls have been transposed
+        #if so warning that these may not map on key
+        temp <- c("col", "pch", "cex",
+                  "lty", "lwd")
+        check.trans <- temp[temp %in% key$panel.elements]
+        if(length(check.trans)>0){
+            warning(paste(check.trans, collapse=", "), 
+                    " transposed; key may not automatically track", call. = FALSE)
+        }
+        
+        if(length(check.trans)>0){
+            
+            temp.fun <- function(x, d=key){
+                if(paste(x, "lim", sep="") %in% names(d)) return(d[[paste(x, "lim", sep="")]][1])
+                if(paste(x, "unique", sep="") %in% names(d)) return(d[[paste(x, "unique", sep="")]][1])
+            }
+            temp <- lapply(check.trans, temp.fun)
+            names(temp) <- check.trans 
+            
+            ##################
+            #this might trip up if col supplied by user as key arg
+            #not sure because has to be in group.elements
+            ##################
+            
+            z <- listUpdate(z, temp)
+        }
+        
+        
+        
+        if(!"main" %in% names(z))
+            z$main <- key$zlab
+        if(!"labels" %in% names(z))
+            z$labels <- if(is.null(z$at)) NULL else as.character(z$at)
+        
+        if(!"col" %in% names(z)){
+            test <- if("group.ids" %in% names(key) && "col" %in% names(key)) TRUE else
+                if("zcase.ids" %in% names(key) && "col" %in% names(key)) TRUE else FALSE
+            z$col <- if(test){
+                temp <- key$col
+                temp <- temp[ceiling(length(temp)/2)]
+                do.call(colHandler, listUpdate(key, list(col=temp, ref = 1:length(z$at)))) 
+            } else {
+                if("at" %in% names(z))
+                    do.call(colHandler, listUpdate(key, list(z=z$at, ref=1:length(z$at)))) else
+                        NULL
+            }         
+        }
+        z$col <- rep(z$col, length.out=length(z$labels))
+        #check above
+        
+        if(!"cex" %in% names(z)){
+            test <- if("group.ids" %in% names(key) && "cex" %in% names(key)) TRUE else
+                if("zcase.ids" %in% names(key) && "cex" %in% names(key)) TRUE else FALSE
+            z$cex <- if(test){
+                temp <- key$cex
+                temp <- temp[ceiling(length(temp)/2)]
+                do.call(cexHandler, listUpdate(key, list(cex=temp, ref = 1:length(z$at)))) 
+            } else {
+                if("at" %in% names(z))
+                    do.call(cexHandler, listUpdate(key, list(z=z$at, ref=1:length(z$at)))) else
+                        NULL
+            }         
+        }
+        z$cex <- rep(z$cex, length.out=length(z$labels))
+        #check above
+        
+        if(!"pch" %in% names(z)){
+            test <- if("group.ids" %in% names(key) && "pch" %in% names(key)) TRUE else
+                if("zcase.ids" %in% names(key) && "pch" %in% names(key)) TRUE else FALSE
+            z$pch <- if(test){
+                temp <- key$pch
+                temp <- temp[ceiling(length(temp)/2)]
+                do.call(pchHandler, listUpdate(key, list(pch=temp, ref = 1:length(z$at)))) 
+            } else {
+                if("at" %in% names(z))
+                    do.call(pchHandler, listUpdate(key, list(z=NULL, ref=1:length(z$at)))) else
+                        NULL
+            }          
+        }
+        z$pch <- rep(z$pch, length.out=length(z$labels))
+        #check above
+        
+        if(!"lty" %in% names(z)){
+            test <- if("group.ids" %in% names(key) && "lty" %in% names(key)) TRUE else
+                if("zcase.ids" %in% names(key) && "lty" %in% names(key)) TRUE else FALSE
+            z$lty <- if(test){
+                temp <- key$lty
+                temp <- temp[ceiling(length(temp)/2)]
+                do.call(zHandler, listUpdate(key, list(z=temp, ref = 1:length(z$at)))) 
+            } else {
+                if("at" %in% names(z))
+                    do.call(zHandler, listUpdate(key, list(z=1, ref=1:length(z$at)))) else
+                        NULL
+            }          
+        }
+        z$lty <- rep(z$lty, length.out=length(z$labels))
+        #check above
+
+        if(!"lwd" %in% names(z)){
+            test <- if("group.ids" %in% names(key) && "lwd" %in% names(key)) TRUE else
+                if("zcase.ids" %in% names(key) && "lwd" %in% names(key)) TRUE else FALSE
+            z$lwd <- if(test){
+                temp <- key$lwd
+                temp <- temp[ceiling(length(temp)/2)]
+                do.call(zHandler, listUpdate(key, list(z=temp, ref = 1:length(z$at)))) 
+            } else {
+                if("at" %in% names(z))
+                    do.call(zHandler, listUpdate(key, list(z=1, ref=1:length(z$at)))) else
+                        NULL
+            }          
+        }
+        z$lwd <- rep(z$lwd, length.out=length(z$labels))
+        #check above
+        
+#print("pre-z")
+#print("*******************")
+#print(z)
+        
+        if(isGood4LOA(z$main)){
+            #handle character vector or list
+            ##########################
+            #temp fix
+            #as above
+            #        txt <- z$main[[1]][[1]]
+            txt <- if(is.list(z$main)) z$main[[1]] else z$main
+            ###########################
+            
+            temp <- if(is.list(z$main))
+                listUpdate(list(cex = 1.1), z$main) else list(cex = 1.1)
+            txt.settings <- getPlotArgs("axis.text", user.resets = temp)
+            
+            z.main <- textGrob(txt, gp = do.call(gpar, txt.settings))
+            z.main.ht <- unit(2, "grobheight", data = list(z.main))
+            z.main.wd <- unit(1.1, "grobwidth", data = list(z.main))
+        } 
+        
+        if(isGood4LOA(z$col) & isGood4LOA(z$cex) & isGood4LOA(z$pch) & 
+           isGood4LOA(z$lty) & isGood4LOA(z$lwd)){
+            
+            ###########################################################
+            
+            len <- max(c(length(z$cex), length(z$col), length(z$pch),
+                         length(z$lwd), length(z$lty)), na.rm=TRUE)
+            
+            my.type <- rep(key$type, length.out=length(z$labels))
+            
+            pnt.ref <- grepl("p", my.type)
+            my.cex <- z$cex
+            my.cex[!pnt.ref] <- 0
+            my.y <- (rep(my.cex/2, each=2)) #* 0.8
+            my.y[my.y<1] <-1
+            wdth <- max(my.cex, na.rm=TRUE)
+# print(my.y)
+# print(wdth)
+            lne.ref <- grepl("l", my.type)
+            lne.lty <- z$lty
+            lne.lty[!lne.ref] <- 0
+            temp <- ifelse(is.na(lne.lty), 0, lne.lty * 0.1)
+            temp <- rep(temp, each=2)
+            my.y <- ifelse(my.y>temp, my.y, temp)
+            if(any(lne.ref)) wdth <- wdth + 2
+# print(my.y)
+# print(lne.lty)
+            h.ref <- grepl("h", my.type)
+            h.lty <- z$lty
+            h.lty[!h.ref] <- 0
+            temp <- ifelse(is.na(h.lty) || h.lty==0, 0, 1.5)
+# print("this")
+# print(temp)
+            my.y[seq(1, length(my.y), by=2)] <- my.y[seq(1, length(my.y), by=2)] + temp
+# print(my.y)
+# print(wdth)
+            my.y[my.y<0.5] <- 0.5
+            if(any(h.ref) & wdth<1) wdth <- 1
+            
+# print(my.y)
+            my.y <- my.y
+            ht <- sum(my.y)
+            y <- cumsum(my.y)
+            y.2 <- y[seq(2, length(y), 2)]
+            y.2 <- c(0, y.2[-length(y.2)])/ ht
+            y <- y[seq(1, length(y), 2)] / ht 
+            
+            
+            
+            x <- rep(0.5, length(y))       
+            
+            
+            # print("in groups")
+            # print(y)
+            # print(my.y)
+            
+            #some of this might not be needed
+            #rep(...)?
+            
+            
+            z.elements <- pointsGrob(x = x, y = y, pch=rep(z$pch, length.out = len), size = unit(par("cex"), "char"), 
+                                          
+                                          default.units = "npc", gp = gpar(col = rep(z$col, length.out = len), 
+                                                                           cex=my.cex*0.8 * 0.8))
+            z.el2 <- segmentsGrob(x0 = 0.1, x1 = 0.9, y0 = y, y1 = y,
+                                    gp =gpar(col=z$col, lty=lne.lty, 
+                                             lwd=z$lwd))
+            z.el3 <- segmentsGrob(x0 = 0.5, x1 = 0.5, y0 = y, y1 = y.2,
+                                    gp =gpar(col=z$col, lty=h.lty, 
+                                             lwd=z$lwd))
+            
+            z.elements <- gTree(children = gList(z.elements, z.el2, z.el3))
+            
+            z.elements.ht <- unit(ht/4, "cm")
+            z.elements.wd <- unit(wdth/4, "cm")
+            
+            
+        } 
+        
+        
+        if(isGood4LOA(z$labels)){
+            
+            
+            #tidy next bit latter
+            #if.list about txt and temp setting
+            
+            #####################
+            #update pchHandler
+            #rescale cex
+            #rescale spacing when cex small
+            #in elements
+            #####################
+            #transpose check
+            #group main, element, labels
+            #etc
+            #####################
+            
+            txt <- if(is.list(z$labels)) z$labels[[1]] else z$labels
+            temp <- if(is.list(z$labels))
+                listUpdate(list(cex = 1), z$labels) else list(cex = 1)
+            txt.settings <- getPlotArgs("axis.text", user.resets = temp)
+            
+            z.labels <- textGrob(txt, x = 0, y = y, just = c("left", "centre"), 
+                                 gp = do.call(gpar, txt.settings), default.units = "npc")
+            z.labels.ht <- unit(1.1, "grobheight", data=list(z.labels))
+            z.labels.wd <- unit(1.1, "grobwidth", data=list(z.labels))
+            
+        } 
+        
+    }
+    
+    
+    
+    #groups info
+    
+    #groups pch and cex missing
+    #if z not set
+    
+    
+    
+    #check for groups info
+    groups.temp <- key[grep("^groups[.]", names(key))]
+    names(groups.temp) <- gsub("^groups[.]", "", names(groups.temp))
+    
+    #make groups from inputs
+    groups <- if(!"groups" %in% names(key)) list() else
+        if(is.list(key$groups)) key$groups else 
+            if(is.logical(key$groups) && key$groups) list() else 
+                FALSE
+    groups <- if(is.logical(groups) && !groups) groups else
+        if(is.list(groups)) listUpdate(groups, groups.temp) else groups.temp  
+    
+    #add labels if list and at not there 
+    if(is.list(groups) && !"at" %in% names(groups))
+        groups$at <- key$group.ids
+    
+    if(is.list(groups) && length(groups) > 0){
+        
+        if(!"main" %in% names(groups))
+            groups$main <- "groups"
+        if(!"labels" %in% names(groups))
+            groups$labels <- if(is.null(groups$at)) NULL else as.character(groups$at)
+        
+        if(!"col" %in% names(groups)) 
+            groups$col <- if("col" %in% key$group.args) 
+                do.call(colHandler, listUpdate(key, list(z = NULL, 
+                                                         ref = 1:length(key$col)))) 
+        else if(is.null(z$col))
+            do.call(colHandler, listUpdate(key, list(z=NULL, ref=1:length(groups$labels)))) else
+                z$col[1]
+        groups$col <- rep(groups$col, length.out=length(groups$labels))
+        #check above
+        
+        if(!"cex" %in% names(groups)) 
+            groups$cex <- if("cex" %in% key$group.args) 
+                key$cex else if(is.null(z$cex))
+                    do.call(cexHandler, listUpdate(key, list(z=NULL, ref=1:length(groups$labels)))) else
+                        z$cex[1]
+        groups$cex <- rep(groups$cex, length.out=length(groups$labels))
+#check above
+        if(!"pch" %in% names(groups)) 
+            groups$pch <- if("pch" %in% key$group.args) 
+                key$pch else if(is.null(z$pch))
+                    do.call(pchHandler, listUpdate(key, list(z=NULL, ref=1:length(groups$labels)))) else
+                        z$pch[1]
+        groups$pch <- rep(groups$pch, length.out=length(groups$labels))
+        #check above
+        
+        if(!"lwd" %in% names(groups)) 
+            groups$lwd <- if("lwd" %in% key$group.args) 
+                key$lwd else if(is.null(z$lwd))
+                    do.call(zHandler, listUpdate(key, list(z=1, ref=1:length(groups$labels)))) else
+                        rep(1, length(groups$labels))
+        groups$lwd <- rep(groups$lwd, length.out=length(groups$labels))
+        #check above
+        
+        if(!"lty" %in% names(groups)) 
+            groups$lty <- if("lty" %in% key$group.args) 
+                key$lty else if(is.null(z$lty))
+                    do.call(zHandler, listUpdate(key, list(z=1, ref=1:length(groups$labels)))) else
+                        rep(1, length(groups$labels))
+        groups$lty <- rep(groups$lty, length.out=length(groups$labels))
+        #check above
+        
+
+#print("pre groups")
+#print("*****************")
+#print(groups)
+##print(key$type)
+
+        
+        if(isGood4LOA(groups$main)){
+            #handle character vector or list
+            txt <- groups$main[[1]][[1]]
+            temp <- if(is.list(groups$main))
+                listUpdate(list(cex = 1.1), groups$main) else list(cex = 1.1)
+            txt.settings <- getPlotArgs("axis.text", user.resets = temp)
+            
+            groups.main <- textGrob(txt, gp = do.call(gpar, txt.settings))
+            groups.main.ht <- unit(2, "grobheight", data = list(groups.main))
+            groups.main.wd <- unit(1.1, "grobwidth", data = list(groups.main))
+        } 
+        
+        
+        
+        
+        if(isGood4LOA(groups$col) & isGood4LOA(groups$cex) & isGood4LOA(groups$pch) 
+           & isGood4LOA(groups$lwd) & isGood4LOA(groups$lty)){
+            
+            len <- max(c(length(groups$cex), length(groups$col), length(groups$pch),
+                         length(groups$lwd), length(groups$lty)), na.rm=TRUE)
+            
+            my.type <- rep(key$type, length.out=length(groups$labels))
+            
+            pnt.ref <- grepl("p", my.type)
+            my.cex <- groups$cex
+            my.cex[!pnt.ref] <- 0
+            my.y <- (rep(my.cex/2, each=2)) #* 0.8
+            my.y[my.y<1] <-1
+            wdth <- max(my.cex, na.rm=TRUE)
+ #   print(my.y)
+ #   print(wdth)
+            lne.ref <- grepl("l", my.type)
+            lne.lty <- groups$lty
+            lne.lty[!lne.ref] <- 0
+            temp <- ifelse(is.na(lne.lty), 0, lne.lty * 0.1)
+            temp <- rep(temp, each=2)
+            my.y <- ifelse(my.y>temp, my.y, temp)
+            if(any(lne.ref)) wdth <- wdth + 2
+ #   print(my.y)
+ #   print(lne.lty)
+        h.ref <- grepl("h", my.type)
+        h.lty <- groups$lty
+        h.lty[!h.ref] <- 0
+        temp <- ifelse(is.na(h.lty) || h.lty==0, 0, 1.5)
+ #   print("this")
+ #   print(temp)
+        my.y[seq(1, length(my.y), by=2)] <- my.y[seq(1, length(my.y), by=2)] + temp
+ #   print(my.y)
+ #   print(wdth)
+        my.y[my.y<1] <- 1
+        if(any(h.ref) & wdth<1) wdth <- 1
+        
+#print(my.y)
+    
+    ht <- sum(my.y)
+    y <- cumsum(my.y)
+    y.2 <- y[seq(2, length(y), 2)]
+    y.2 <- c(0, y.2[-length(y.2)])/ ht
+    y <- y[seq(1, length(y), 2)] / ht 
+    
+        
+        
+            x <- rep(0.5, length(y))       
+            
+
+# print("in groups")
+# print(y)
+# print(my.y)
+            
+            #some of this might not be needed
+            #rep(...)?
+            
+            
+            groups.elements <- pointsGrob(x = x, y = y, pch=rep(groups$pch, length.out = len), size = unit(par("cex"), "char"), 
+            
+                                                                        default.units = "npc", gp = gpar(col = rep(groups$col, length.out = len), 
+                                                                           cex=my.cex*0.8 * 0.8))
+            grp.el2 <- segmentsGrob(x0 = 0.1, x1 = 0.9, y0 = y, y1 = y,
+                                    gp =gpar(col=groups$col, lty=lne.lty, 
+                                             lwd=groups$lwd))
+            grp.el3 <- segmentsGrob(x0 = 0.5, x1 = 0.5, y0 = y, y1 = y.2,
+                                    gp =gpar(col=groups$col, lty=h.lty, 
+                                             lwd=groups$lwd))
+            
+            groups.elements <- gTree(children = gList(groups.elements, grp.el2, grp.el3))
+            
+            groups.elements.ht <- unit(ht/4, "cm")
+            groups.elements.wd <- unit(wdth/4, "cm")
+            
+        } 
+        
+        
+        if(isGood4LOA(groups$labels)){
+            
+            #tidy next bit latter
+            #if.list about txt and temp setting
+            
+            #####################
+            #update pchHandler
+            #rescale cex
+            #rescale spacing when cex small
+            #in elements
+            #####################
+            #transpose check
+            #group main, element, labels
+            #etc
+            #####################
+            
+            txt <- if(is.list(groups$labels)) groups$labels[[1]] else groups$labels
+            temp <- if(is.list(groups$labels))
+                listUpdate(list(cex = 1), groups$labels) else list(cex = 1)
+            txt.settings <- getPlotArgs("axis.text", user.resets = temp)
+            
+            groups.labels <- textGrob(txt, x = 0, y = y, just = c("left", "centre"), 
+                                      gp = do.call(gpar, txt.settings), default.units = "npc")
+            groups.labels.ht <- unit(1.1, "grobheight", data=list(groups.labels))
+            groups.labels.wd <- unit(1.1, "grobwidth", data=list(groups.labels))
+            
+        } 
+        
+        ##########################
+        
+    }
+    
+    
+    
+    ##################################
+    ##################################
+    ##################################
+    
+    #zcases info
+    
+    #zcase pch and cex missing
+    #if z not set
+    
+    
+    
+    #check for zcases info
+    zcases.temp <- key[grep("^zcases[.]", names(key))]
+    names(zcases.temp) <- gsub("^zcases[.]", "", names(zcases.temp))
+    
+    #make zcases from inputs
+    zcases <- if(!"zcases" %in% names(key)) list() else
+        if(is.list(key$zcases)) key$zcases else 
+            if(is.logical(key$zcases) && key$zcases) list() else 
+                FALSE
+    zcases <- if(is.logical(zcases) && !zcases) zcases else
+        if(is.list(zcases)) listUpdate(zcases, zcases.temp) else zcases.temp  
+    
+    #add labels if list and at not there 
+    if(is.list(zcases) && !"at" %in% names(zcases))
+        zcases$at <- key$zcase.ids
+    
+    if(is.list(zcases) && length(zcases) > 0){
+        
+        if(!"main" %in% names(zcases))
+            zcases$main <- "zcases"
+        if(!"labels" %in% names(zcases))
+            zcases$labels <- if(is.null(zcases$at)) NULL else as.character(zcases$at)
+        
+        if(!"col" %in% names(zcases)) 
+            zcases$col <- if("col" %in% key$zcase.args) 
+                do.call(colHandler, listUpdate(key, list(z = NULL, 
+                                                         ref = 1:length(key$col)))) 
+        else if(is.null(z$col))
+            do.call(colHandler, listUpdate(key, list(z=NULL, ref=1:length(zcases$labels)))) else
+                z$col[1]
+        zcases$col <- rep(zcases$col, length.out=length(zcases$labels))
+        #check above
+        
+        if(!"cex" %in% names(zcases)) 
+            zcases$cex <- if("cex" %in% key$zcase.args) 
+                key$cex else if(is.null(z$cex))
+                    do.call(cexHandler, listUpdate(key, list(z=NULL, ref=1:length(zcases$labels)))) else
+                        z$cex[1]
+        zcases$cex <- rep(zcases$cex, length.out=length(zcases$labels))
+        #check above
+        
+        if(!"pch" %in% names(zcases)) 
+            zcases$pch <- if("pch" %in% key$zcase.args) 
+                key$pch else if(is.null(z$pch))
+                    do.call(pchHandler, listUpdate(key, list(z=NULL, ref=1:length(zcases$labels)))) else
+                        z$pch[1]
+        zcases$pch <- rep(zcases$pch, length.out=length(zcases$labels))
+        #check above
+        
+        if(!"lty" %in% names(zcases)) 
+            zcases$lty <- if("lty" %in% key$zcase.args) 
+                key$lty else if(is.null(z$lty))
+                    do.call(zHandler, listUpdate(key, list(z=1, ref=1:length(zcases$labels)))) else
+                        z$lty[1]
+        zcases$lty <- rep(zcases$lty, length.out=length(zcases$labels))
+        #check above
+        
+        if(!"lwd" %in% names(zcases)) 
+            zcases$lwd <- if("lwd" %in% key$zcase.args) 
+                key$lwd else if(is.null(z$lwd))
+                    do.call(zHandler, listUpdate(key, list(z=1, ref=1:length(zcases$labels)))) else
+                        z$lwd[1]
+        zcases$lwd <- rep(zcases$lwd, length.out=length(zcases$labels))
+        #check above
+        
+        
+        
+        if(isGood4LOA(zcases$main)){
+            #handle character vector or list
+            txt <- zcases$main[[1]][[1]]
+            temp <- if(is.list(zcases$main))
+                listUpdate(list(cex = 1.1), zcases$main) else list(cex = 1.1)
+            txt.settings <- getPlotArgs("axis.text", user.resets = temp)
+            
+            zcases.main <- textGrob(txt, gp = do.call(gpar, txt.settings))
+            zcases.main.ht <- unit(2, "grobheight", data = list(zcases.main))
+            zcases.main.wd <- unit(1.1, "grobwidth", data = list(zcases.main))
+        } 
+        
+        if(isGood4LOA(zcases$col) & isGood4LOA(zcases$cex) & isGood4LOA(zcases$pch) &
+           isGood4LOA(zcases$lty) & isGood4LOA(zcases$lwd)){
+            
+            ################################################
+            ################################################
+#print("zcases")
+#print("*********")
+#print(zcases)
+
+            len <- max(c(length(zcases$cex), length(zcases$col), length(zcases$pch),
+                         length(zcases$lwd), length(zcases$lty)), na.rm=TRUE)
+            
+            my.type <- rep(key$type, length.out=length(zcases$labels))
+            
+            pnt.ref <- grepl("p", my.type)
+            my.cex <- zcases$cex
+            my.cex[!pnt.ref] <- 0
+            my.y <- (rep(my.cex/2, each=2)) #* 0.8
+            my.y[my.y<1] <-1
+            wdth <- max(my.cex, na.rm=TRUE)
+#            print(my.y)
+#            print(wdth)
+            lne.ref <- grepl("l", my.type)
+            lne.lty <- zcases$lty
+            lne.lty[!lne.ref] <- 0
+            temp <- ifelse(is.na(lne.lty), 0, lne.lty * 0.1)
+            temp <- rep(temp, each=2)
+            my.y <- ifelse(my.y>temp, my.y, temp)
+            if(any(lne.ref)) wdth <- wdth + 2
+#            print(my.y)
+#            print(lne.lty)
+            h.ref <- grepl("h", my.type)
+            h.lty <- zcases$lty
+            h.lty[!h.ref] <- 0
+            temp <- ifelse(is.na(h.lty) || h.lty==0, 0, 1.5)
+#            print("this")
+#            print(temp)
+            my.y[seq(1, length(my.y), by=2)] <- my.y[seq(1, length(my.y), by=2)] + temp
+#            print(my.y)
+#            print(wdth)
+            my.y[my.y<1] <- 1
+            if(any(h.ref) & wdth<1) wdth <- 1
+            
+#            print(my.y)
+            
+            ht <- sum(my.y)
+            y <- cumsum(my.y)
+            y.2 <- y[seq(2, length(y), 2)]
+            y.2 <- c(0, y.2[-length(y.2)])/ ht
+            y <- y[seq(1, length(y), 2)] / ht 
+            
+            
+            
+            x <- rep(0.5, length(y))       
+            
+            
+            # print("in groups")
+            # print(y)
+            # print(my.y)
+            
+            #some of this might not be needed
+            #rep(...)?
+            
+            
+            zcases.elements <- pointsGrob(x = x, y = y, pch=rep(zcases$pch, length.out = len), size = unit(par("cex"), "char"), 
+                                          
+                                          default.units = "npc", gp = gpar(col = rep(zcases$col, length.out = len), 
+                                                                           cex=my.cex*0.8 * 0.8))
+            zcases.el2 <- segmentsGrob(x0 = 0.1, x1 = 0.9, y0 = y, y1 = y,
+                                    gp =gpar(col=zcases$col, lty=lne.lty, 
+                                             lwd=zcases$lwd))
+            zcases.el3 <- segmentsGrob(x0 = 0.5, x1 = 0.5, y0 = y, y1 = y.2,
+                                    gp =gpar(col=zcases$col, lty=h.lty, 
+                                             lwd=zcases$lwd))
+            
+            zcases.elements <- gTree(children = gList(zcases.elements, zcases.el2, zcases.el3))
+            
+            zcases.elements.ht <- unit(ht/4, "cm")
+            zcases.elements.wd <- unit(wdth/4, "cm")
+            
+        } 
+        
+        
+        if(isGood4LOA(zcases$labels)){
+            
+            
+            #tidy next bit latter
+            #if.list about txt and temp setting
+            
+            #####################
+            #update pchHandler
+            #rescale cex
+            #rescale spacing when cex small
+            #in elements
+            #####################
+            #transpose check
+            #group main, element, labels
+            #etc
+            #####################
+            
+            txt <- if(is.list(zcases$labels)) zcases$labels[[1]] else zcases$labels
+            temp <- if(is.list(zcases$labels))
+                listUpdate(list(cex = 1), zcases$labels) else list(cex = 1)
+            txt.settings <- getPlotArgs("axis.text", user.resets = temp)
+            
+            zcases.labels <- textGrob(txt, x = 0, y = y, just = c("left", "centre"), 
+                                      gp = do.call(gpar, txt.settings), default.units = "npc")
+            zcases.labels.ht <- unit(1.1, "grobheight", data=list(zcases.labels))
+            zcases.labels.wd <- unit(1.1, "grobwidth", data=list(zcases.labels))
+            
+        } 
+        
+        
+        ##########################
+        
+    }
+    
+    ###############################
+    ###############################
+    ###############################
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    ###############
+    #key output
+    ###############
+    
+    scales.ht <- unit.c(z.main.ht, z.elements.ht, groups.main.ht, groups.elements.ht, zcases.main.ht, zcases.elements.ht)
+    
+    ##################
+    #this needs fixing
+    #wd need to know all
+    ##################
+    
+    temp1 <- max(z.elements.wd, groups.elements.wd, zcases.elements.wd) 
+    temp2 <- max(z.labels.wd, groups.labels.wd, zcases.labels.wd)    
+    temp3 <- max(z.main.wd, groups.main.wd, zcases.main.wd)
+    
+    if(as.numeric(convertX(temp1 + temp2, "cm")) > as.numeric(convertX(temp3, "cm"))){
+        scales.wd <- unit.c(temp1, temp2)
+    } else {
+        #testing changes - temp2 to - temp1
+        scales.wd <- unit.c(temp1, temp3 - temp1)
+    }
+    
+    ###    scales.wd <- unit.c(z.elements.wd, z.labels.wd)
+    
+    key.layout <- grid.layout(nrow = 6, ncol = 2,
+                              heights = scales.ht, 
+                              widths = scales.wd, 
+                              respect = TRUE, just="right")
+    key.gf <- frameGrob(layout = key.layout, vp = vp)
+    
+    key.gf <- placeGrob(key.gf, z.main, row = 1, col = 1:2)
+    key.gf <- placeGrob(key.gf, z.elements, row = 2, col = 1)
+    key.gf <- placeGrob(key.gf, z.labels, row = 2, col = 2)
+    
+    key.gf <- placeGrob(key.gf, groups.main, row = 3, col = 1:2)
+    key.gf <- placeGrob(key.gf, groups.elements, row = 4, col = 1)
+    key.gf <- placeGrob(key.gf, groups.labels, row = 4, col = 2)
+    
+    key.gf <- placeGrob(key.gf, zcases.main, row = 5, col = 1:2)
+    key.gf <- placeGrob(key.gf, zcases.elements, row = 6, col = 1)
+    key.gf <- placeGrob(key.gf, zcases.labels, row = 6, col = 2)
+    
+    key.gf
+    
+}
+
 
 
 

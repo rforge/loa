@@ -1,67 +1,110 @@
 \name{5.2.plot.add.functions}
 \alias{5.2.plot.add.functions}
 \alias{add.functions}
-\alias{add_loaPanel}
+\alias{add.XYZGhosts}
+\alias{add.Y2Axis}
+\alias{add.XYPolygon}
+\alias{add.LonLatMap}
 
 \title{
   General plot add... functions
 }
 \description{
-  General functions for adding extra layers to existing plots.
+  General functions for adding extra layers to existing 
+  plots.
 }
 
 \usage{
 
-add_loaPanel(lattice.plot=trellis.last.object(),
-             preprocess = NULL, panel = NULL, 
-             postprocess = NULL, ...)
+add.XYZGhosts(object = trellis.last.object(), 
+              ..., unit = "native", 
+              ghost.panel = panel.loaPlot) 
+
+add.Y2Axis(object = trellis.last.object(), 
+              ..., unit = "native", 
+              rescale = NULL) 
+
+add.XYPolygon(object = trellis.last.object(),
+              x = NULL, y = NULL, data = NULL,
+              ..., unit = "native",
+              y2.scale=FALSE, first=FALSE)
+
+add.LonLatMap(object = trellis.last.object(),
+              ..., map = NULL, recolor.map=FALSE,
+              show.axes = FALSE, unit = "native",
+              first = TRUE)
+                        
 }
+
 
 \arguments{
 
-  \item{lattice.plot}{ The plot to add an extra layer or layers 
-   to. This defaults to last lattice plot produced if not set in 
-   call. 
+  \item{object}{ The plot to add an extra plot layer or 
+  layers to. This defaults to last lattice plot produced 
+  if not set in call. 
+  } 
+  
+  \item{...}{ Additional arguments, passed on to related 
+  functions.
   } 
 
-  \item{preprocess}{ If set, a function to apply to 
-  \code{lattice.plot} before adding new panel.
+  \item{unit}{ The plot units, by default native.
+  } 
+  \item{ghost.panel}{ The plot panel to use when adding 
+  ghost points (lines, etc). 
+  }
+
+  \item{rescale}{ For \code{add.Y2Axis}, y data-series 
+  rescaling, by default NULL/none.  
   } 
 
-  \item{panel}{ If set, a new \code{panel...} function to add to  
-  \code{lattice.plot} after the current \code{lattice.plot} panel. 
+  \item{x,y}{ x and y data-series to be used.  
   } 
-
-  \item{postprocess}{ If set, a function to apply to 
-  \code{lattice.plot} after adding new panel.
+  
+  \item{data}{ If supplied, the expected source of x 
+  and y data-series.  
   } 
+  
+  \item{y2.scale}{ When building the Plot, use the second 
+  y axis if that exists, default FALSE.  
+  }
 
-  \item{...}{ Additional arguments, passed on to related functions.
-  } 
-
+  \item{first}{ When building the plot add the new plot 
+  layer first, default varies. 
+  }
+  
+  \item{map,recolor.map,show.axes}{ Options when adding 
+  a map layer, see loaMapPlot documentations.
+  }
 }
 
-
 \details{
-  \code{add_loaPanel} is a frame work function for adding 
-  additional layers to an exiting lattice plot.      
+  \code{add.loaGhosts} adds ghost points showing the 
+  locations of all points in all panels.
+  
+  \code{add.Y2Axis} adds a second y axis. 
+  
+  \code{add.XYPolygon} adds a supplied (x,y) polygon.
+  
+  \code{add.LonLatMap} adds a map layer.
 }
 
 \value{
-  \code{add_loaPanel} returns the supply (or last) lattice plot 
-   with an additional plot layer added.
+  \code{add...} functions returns the supplied (or last) 
+  lattice plot with an additional plot layer added.
 }
 
 \note{
-  \code{add_loaPanel} is in-development aand may change 
-  significantly in future pacakge versions
-
+  \code{add.XYZGhosts} and \code{add.LonLatMap} are 
+  in-development and may change significantly in 
+  future package versions.
 }
 
 
 \references{
 
-  This function makes extensive use of code developed by others.
+  These functions make extensive use of code developed 
+  by others.
 
   lattice:
   Sarkar, Deepayan (2008) Lattice: Multivariate Data
@@ -69,8 +112,9 @@ add_loaPanel(lattice.plot=trellis.last.object(),
   978-0-387-75968-5
 
   Grid (part of base R):
-  R Core Team (2017). R: A language and environment for statistical
-  computing. R Foundation for Statistical Computing, Vienna, Austria.
+  R Core Team (2017). R: A language and environment 
+  for statistical computing. R Foundation for 
+  Statistical Computing, Vienna, Austria.
   URL https://www.R-project.org/.
 
 }

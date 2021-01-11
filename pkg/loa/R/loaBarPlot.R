@@ -34,7 +34,10 @@
 #ver 0.1
 
 #kr 29/06/2017
-#ver 0.2
+#ver 0.2 (now .old)
+
+
+
 
 
 loaBarPlot <- function(x, y=NULL, groups=NULL, cond=NULL, data=NULL, ..., 
@@ -242,3 +245,102 @@ loaBarPlot <- function(x, y=NULL, groups=NULL, cond=NULL, data=NULL, ...,
 
      plt
 }
+
+
+
+
+
+
+
+
+
+
+###############################
+#unexported
+###############################
+
+
+#kr 10/01/2021 
+#ver 0.3
+
+loaBarPlot.new <- function (x, data = NULL, ...){
+   
+   extra.args <- list(...)
+   extra.args <- listUpdate(list(x = x, data = data, formula.type = "z~x|cond", 
+                                 #coord.conversion = XZ2XYZ, 
+                                 panel = panel.loa), 
+                            extra.args)
+   
+   do.call(loaPlot, extra.args)
+}
+
+XZ2XYZ <- function(col=NULL, col.regions=NULL, par.settings=NULL, scheme=NULL, border=NULL, key.handling = NULL, force.key=NULL,...){
+   
+   #this is from stackPlot
+   
+   #set up
+   extra.args <- list(...)
+   
+   #y data and labels
+   extra.args$y <- extra.args$z
+   if(!"ylab" %in% names(extra.args))
+      extra.args$ylab <- extra.args$zlab
+   
+   #defualt one col
+   cols <- 1
+   
+   if(!"zcases" %in% names(extra.args)) {
+      zcases <- rep("default", length(extra.args$y))
+      zcase.ids <- "default"
+   } else {
+      zcases <- extra.args$zcases
+      zcase.ids <- extra.args$zcase.ids
+      cols <- 1:length(zcase.ids)
+   }
+   
+   if("panel.condition" %in% names(extra.args)){
+      zcases <- extra.args$panel.condition$zcases
+      zcase.ids <- unique(extra.args$panel.condition$zcases)
+   }
+   
+################################
+#this is stacking code
+   
+#   ref.x <- extra.args$x[zcases == zcase.ids[1]]
+#   ref.y <- rep(0, length(ref.x))
+#   extra.args$y0 <- extra.args$y
+   
+#   for(i in zcase.ids){
+#      temp <- extra.args$y[zcases == i]
+#      temp <- temp - min(temp, na.rm=T) #range[1] might be more robust?
+#      temp[is.na(temp)] <- 0
+#      extra.args$y[zcases == i] <- temp + ref.y
+#      extra.args$y0[zcases == i] <- ref.y
+#      if(!"panel.condition" %in% names(extra.args)) ref.y <- ref.y + temp
+#   }
+   
+
+###############################
+   
+   #this is the cheat to recolour the plot
+   #this works because it is only applied to 
+   #in the colHandler call below
+   
+   if(is.null(scheme))
+      scheme <- "kr.web"
+   
+   #need to look into why include par.settings = NULL 
+   #stop colHandler looking at scheme
+   
+   extra.args$col <- colHandler(z=cols, ref=cols, col=col, col.regions=col.regions, scheme=scheme)
+   if(is.null(border))
+      extra.args$border <- extra.args$col
+   
+   #this is the cheat for the new key handling 
+   
+   if(is.null(force.key))
+      extra.args$ycase.key.method2 <- TRUE
+   
+   extra.args
+}
+

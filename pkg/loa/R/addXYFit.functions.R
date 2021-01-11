@@ -1,17 +1,18 @@
 #indevelopment
 
 ###################
-#addXYFit functions
+#add.XYFit functions
 ###################
 
 ######################
 #function (exported)
 ######################
 
-# addXYLMFit 
-# addXYLOESSFit
+# add.XYLMFit 
+# add.XYLOESSFit
+# add.loaPanel
 
-# addXYFit_prep
+# add.XYFit_prep
 # loaXYFit_lm
 # loaXYFit_loess 
 # panel.loaXYFit 
@@ -29,36 +30,80 @@
 ########################
 
 
+
+
+########################
+#add.loaPanel
+########################
+
+#not sure about use and ignore
+#might not be staying
+
+add.loaPanel <- function (lattice.plot = trellis.last.object(), preprocess = NULL, 
+                          panel = NULL, postprocess = NULL, ...,
+                          use = NULL, ignore = NULL) 
+{
+  x.args <- list(...)
+  if (!is.null(preprocess)) 
+    lattice.plot <- do.call(preprocess, listUpdate(x.args, 
+                                                   list(lattice.plot = lattice.plot)))
+  if (!is.null(panel)) {
+    pre.panel <- lattice.plot$panel
+    lattice.plot$panel <- function(...) {
+      pre.panel(...)
+      l.args <- list(...)
+      if(!is.null(ignore) || !is.null(use)){
+        l.args <- listHandler(l.args, use=use, 
+                              ignore=ignore)
+      }
+      do.call(panel, listUpdate(l.args, x.args))
+    }
+  }
+  if (!is.null(postprocess)) 
+    lattice.plot <- do.call(postprocess, 
+                            listUpdate(x.args, 
+                                       list(lattice.plot = lattice.plot)))
+  lattice.plot
+}
+
+
+
 ###################
 #addXYLMFit
 ###################
 
-addXYLMFit <- function(lattice.plot=trellis.last.object(),
-                      preprocess = addXYFit_prep,
-                      panel=panel.loaXYFit, ...){
-  add_loaPanel(lattice.plot=lattice.plot, ...,
-               preprocess=preprocess, panel=panel)
+add.XYLMFit <- function(lattice.plot = trellis.last.object(),
+                      preprocess = add.XYFit_prep,
+                      panel = panel.loaXYFit, ...){
+  x.args <- list(lattice.plot = lattice.plot, ...,
+               preprocess = preprocess, panel=panel)
+  x.args$grid <- FALSE
+  x.args$type <- "l"
+  do.call(add.loaPanel, x.args)
 }
 
 ####################
-# addXYLOESSFit
+# add.XYLOESSFit
 ####################
 
-addXYLOESSFit <- function(lattice.plot=trellis.last.object(),
-                      preprocess = addXYFit_prep,
-                      model.method=loaXYFit_loess,
-                      panel=panel.loaXYFit, ...){
-  add_loaPanel(lattice.plot=lattice.plot, 
-               model.method=loaXYFit_loess, 
-               ..., preprocess=preprocess, panel=panel)
+add.XYLOESSFit <- function(lattice.plot=trellis.last.object(),
+                      preprocess = add.XYFit_prep,
+                      model.method = loaXYFit_loess,
+                      panel = panel.loaXYFit, ...){
+  x.args <- list(lattice.plot = lattice.plot, ...,
+                 model.method = model.method,
+                 preprocess = preprocess, panel=panel)
+  x.args$grid <- FALSE
+  x.args$type <- "l"
+  do.call(add.loaPanel, x.args)
 }
 
 
 #########################
-#addXYFit_prep
+#add.XYFit_prep
 #########################
 
-addXYFit_prep <- function(lattice.plot=trellis.last.object(),
+add.XYFit_prep <- function(lattice.plot=trellis.last.object(),
                               model.method=loaXYFit_lm,
                              ...){
   
@@ -211,7 +256,7 @@ panel.loaXYFit <- function(...){
   all.mods <- if("loa.mod.fit" %in% names(plot.args))
 #this needs tidying
     plot.args$loa.mod.fit[[panel.number()]] else {
-      temp2 <- addXYFit_prep(list(panel.args.common=plot.args,
+      temp2 <- add.XYFit_prep(list(panel.args.common=plot.args,
                              panel.args=list(list())))
       temp2$panel.args.common$loa.mod.fit[[1]]
   }

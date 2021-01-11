@@ -2,6 +2,7 @@
 \alias{4.6.key.handlers}
 \alias{keyHandler}
 \alias{draw.loaPlotZKey}
+\alias{draw.loaKey02}
 \alias{draw.loaColorKey}
 \alias{draw.loaColorRegionsKey}
 \alias{draw.zcasePlotKey}
@@ -24,6 +25,8 @@ keyHandler(key = NULL, ..., output = "key")
 #keys
 
 draw.loaPlotZKey(key = NULL, draw = FALSE, vp = NULL, ...)
+
+draw.loaKey02(key = NULL, draw = FALSE, vp = NULL, ...)
 
 draw.loaColorKey(key = NULL, draw = FALSE, vp = NULL, ...)
 

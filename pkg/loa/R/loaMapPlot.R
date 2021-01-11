@@ -9,12 +9,16 @@
 #replaces googleMap.R
 
 #started because Markus changed the default RgoogleMaps output to 
-#openstreetmaps so plot is not strictly GoogleMap anymore... 
 #(because Google changes their sign-up conditions...)
+#openstreetmaps so plot is not strictly GoogleMap anymore... 
+
 
 #also because of problems using RgoogleMaps to plot on larger scales...
 #(warning in his own documentation) 
 #latlon2xy not a true  transform (2019/09/07)
+
+#re warning surpression, see
+#http://rgdal.r-forge.r-project.org/articles/PROJ6_GDAL3.html
 
 #loaMapPlot
 
@@ -157,7 +161,18 @@ googleMap <- function(...) RgoogleMapsPlot(...)
 
 GoogleMap <- function(...) RgoogleMapsPlot(...)
 
-#OpenStreetMapPlot (script in archive)
+#OpenStreetMapPlot 
+
+OpenStreetMapPlot <- function(x, data = NULL, ...){
+  
+  extra.args <- list(...)
+  if(!"map.source" %in% names(extra.args))
+    extra.args$map.source <- getOSMapArg
+  extra.args <- listUpdate(list(x=x, data=data),
+                           extra.args)
+  do.call(loaMapPlot, extra.args)
+}
+
 
 #panels...
 
@@ -219,7 +234,61 @@ panel.loaBGMapPlot <- panel.OSMapPlot <- function(map){
 # kr 0.0.2 2019/09/08 (warning supression + tidies)
 # kr 0.0.1 2019/09/07 (mod makeMapArg)
 
-#getOSMapArg   (script in archive) 
+#getOSMapArg
+
+# kr 0.0.2 2019/09/08 (warning supression + tidies)
+# kr 0.0.1 2019/09/07 (mod makeMapArg)
+
+getOSMapArg <- function(ylim, xlim, ..., lim.borders = 0.1){
+  #more tidying to do on this
+  #make a map object for OSMapPlot
+  extra.args <- list(...)
+  map.type <- if("map.type" %in% names(extra.args))
+                    extra.args$map.type else "osm"  
+  
+  #create border for plot 
+  #border is function of arm length 
+  #ignores relative length of arms and aspect?
+  #fix in limHandler?
+  temp <- limsHandler(xlim, ylim, lim.borders = lim.borders)
+  xlim <- temp$xlim
+  ylim <- temp$ylim
+  
+  #get map 
+  #error message from openmap??
+  #hiding for now; look into fixing...
+  osm <- suppressWarnings(OpenStreetMap::openmap(
+    c(ylim[2], xlim[1]), 
+    c(ylim[1], xlim[2]),
+    type=map.type))
+  mytile <- matrix(osm$tiles[[1]]$colorData, 
+                   ncol=osm$tiles[[1]]$yres,
+                   nrow=osm$tiles[[1]]$xres,
+                   byrow = TRUE)
+  #make it like Markus' getMap output, so it works with existing code 
+  #might not need all I am tracking 
+  #might think about nativeraster rather than raster 
+  #might want to document source and supplier??? 
+  mymap <- list(lat.center=mean(ylim, na.rm=TRUE), 
+                lon.center=mean(xlim, na.rm=TRUE),
+                zoom = MaxZoom(xlim, ylim), 
+                myTile = as.raster(mytile),
+                BBOX = list(ll=c(lat=ylim[1], lon=xlim[1]),
+                            ur=c(lat=ylim[2], lon=xlim[2])), 
+                url = "OSM",
+                source = "OpenStreetMap", 
+                size = c(osm$tiles[[1]]$yres, 
+                         osm$tiles[[1]]$xres), 
+                SCALE = 1, 
+                aspect=osm$tiles[[1]]$xres/osm$tiles[[1]]$yres,
+                xlim=range(c(osm$tiles[[1]]$bbox[[1]][1],
+                             osm$tiles[[1]]$bbox[[2]][1])),
+                ylim=range(c(osm$tiles[[1]]$bbox[[1]][2],
+                             osm$tiles[[1]]$bbox[[2]][2])),
+                proj = osm$tiles[[1]]$projection)
+  mymap
+}
+
 #getRGMapArg
 
 #kr v.0.0.1 (mod getOSMapArg) 
@@ -241,7 +310,9 @@ getRGMapArg <- function(ylim, xlim, ..., lim.borders = 0.1){
   
   #setup
   extra.args <- list(...)
-  
+  map.type <- if("map.type" %in% names(extra.args))
+    extra.args$map.type else "terrain"
+    
   #get map
   #get names of args that MapBackground can handle
   temp <- unique(c(names(formals(MapBackground)), 
@@ -262,7 +333,7 @@ getRGMapArg <- function(ylim, xlim, ..., lim.borders = 0.1){
       c(640, ceiling((my.y/my.x) * 640))
   #override some RgoogleMaps defaults
   map <- list(lon = temp2$lonR, lat = temp2$latR, destfile = "XtempX.png",
-              maptype = "terrain", size = my.size)
+              maptype = map.type, size = my.size)
   if(my.x==0 & my.y==0){
     if(is.null(map$zoom))
       map$zoom <- 15
@@ -350,8 +421,10 @@ LatLon2MercatorXY <- function(latitude, longitude, ...){
   #############################
   #from projectMercator
   sp::coordinates(df) <- ~longitude + latitude
-  sp::proj4string(df) <- sp::CRS("+proj=longlat +datum=WGS84")
-  df1 <- sp::spTransform(df, sp::CRS("+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs"))
+  sp::proj4string(df) <- 
+    suppressWarnings(sp::CRS("+proj=longlat +datum=WGS84"))
+  df1 <- 
+    suppressWarnings(sp::spTransform(df, sp::CRS("+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs")))
   loc <- sp::coordinates(df1)
   ##############################
   newX <- rep(NA, length(latitude))
@@ -384,8 +457,9 @@ MercatorXY2LatLon <- function(mx, my, ...){
   #MOD from projectMercator
   sp::coordinates(df) <- ~mx + my
   sp::proj4string(df) <- 
-    sp::CRS("+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs")
-  df1 <- sp::spTransform(df, sp::CRS("+proj=longlat +datum=WGS84"))
+    suppressWarnings(sp::CRS("+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs"))
+  df1 <- 
+    suppressWarnings(sp::spTransform(df, sp::CRS("+proj=longlat +datum=WGS84")))
   loc <- sp::coordinates(df1)
   ##############################
   newX <- rep(NA, length(my))

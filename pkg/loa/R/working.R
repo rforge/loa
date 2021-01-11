@@ -43,28 +43,6 @@ addText <- function (x=NULL, y=NULL, text=NULL, ..., unit = "native", scale.corr
 }
 
 
-#add ghost points in multipanel loaPlots
-
-addGhosts <- function (..., unit = "native", scale.correction = NULL, object = trellis.last.object()){ 
-
-   #add ghost points to an existing plot
-   extra.args <- list(...)
-   temp <- object$panel.args
-   if(length(temp)==1) warning("ghosts won't help...")
-   x <- lapply(temp, function(x) x$x)
-   x <- do.call(c, x)
-   y <- lapply(temp, function(x) x$y)
-   y <- do.call(c, y)
-   z <- lapply(temp, function(x) x$z)
-   z <- do.call(c, z)
-   panel <- object$panel
-   object$panel <- function(...){
-                        do.call(panel.loaPlot, listUpdate(extra.args, list(x=x, y=y, z=z, col="grey", alpha=0.25)))
-                        panel(...)
-                    }
-   object
-}
-
 
 #add trend line(s) to an existing plot
 

@@ -1,4 +1,12 @@
-Changes in loa 0.2.45 [209-09-11]
+Changes in loa 0.2.46 [2020-12-30]
+
+*       added panel.loa and drawkey.loaKey02,
+        type="l" and "h" handler for loaPlot
+*       refined and renamed add methods 
+*       added add.LonLatMap 
+
+
+Changes in loa 0.2.45 [2019-09-11]
 
 *       added loaMapPlot as generic map plot 
 *       replaced existing makeMap...,  

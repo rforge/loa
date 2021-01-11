@@ -1,15 +1,16 @@
-\name{5.3.plot.addXYFit.functions}
-\alias{5.3.plot.addXYFit.functions}
-\alias{addXYFit.functions}
-\alias{addXYLMFit}
-\alias{addXYLOESSFit} 
-\alias{addXYFit_prep}
+\name{5.3.plot.add.XYFit.functions}
+\alias{5.3.plot.add.XYFit.functions}
+\alias{add.XYFit.functions}
+\alias{add.XYLMFit}
+\alias{add.XYLOESSFit} 
+\alias{add.XYFit_prep}
 \alias{loaXYFit_lm}
 \alias{loaXYFit_loess}
 \alias{panel.loaXYFit}
+\alias{add.loaPanel}
 
 \title{
-  Plot addXYFit... functions
+  Plot add.XY...Fit functions
 }
 \description{
   Functions for adding XY fit model layers to existing plots.
@@ -19,17 +20,23 @@
 
 #main functions
 
-addXYLMFit(lattice.plot = trellis.last.object(),
-           preprocess = addXYFit_prep,
-           panel=panel.loaXYFit, ...)
+add.loaPanel(lattice.plot = trellis.last.object(), 
+           preprocess = NULL, panel = NULL, 
+           postprocess = NULL, ..., 
+           use = NULL, ignore = NULL) 
 
-addXYLOESSFit(lattice.plot = trellis.last.object(),
-           preprocess = addXYFit_prep, model.method = loaXYFit_loess,
+add.XYLMFit(lattice.plot = trellis.last.object(),
+           preprocess = add.XYFit_prep,
+           panel = panel.loaXYFit, ...)
+
+add.XYLOESSFit(lattice.plot = trellis.last.object(),
+           preprocess = add.XYFit_prep, 
+           model.method = loaXYFit_loess,
            panel = panel.loaXYFit, ...)
 
 #others
 
-addXYFit_prep(lattice.plot = trellis.last.object(),
+add.XYFit_prep(lattice.plot = trellis.last.object(),
            model.method = loaXYFit_lm, ...)
 
 loaXYFit_lm(x, y, output.len = 25, formula.signif = 2, 
@@ -44,47 +51,63 @@ panel.loaXYFit(...)
 
 \arguments{
 
-  \item{lattice.plot}{ The plot to add an extra layer or layers 
-   to. This defaults to last lattice plot produced if not set in 
-   call. 
+  \item{lattice.plot}{ The plot to add an extra layer or 
+  layers to. This defaults to last lattice plot produced 
+  if not set in call. 
   } 
 
   \item{preprocess}{ If set, a function to apply to 
   \code{lattice.plot} before adding new panel.
   } 
 
-  \item{panel}{ If set, a new \code{panel...} function to add to  
-  \code{lattice.plot} after the current \code{lattice.plot} panel. 
+  \item{panel}{ If set, a new \code{panel...} function to 
+  add to \code{lattice.plot} after the current 
+  \code{lattice.plot} panel. 
+  } 
+  
+  \item{postprocess}{ If set, a function to apply to 
+  \code{lattice.plot} after the new panel.
   } 
 
-  \item{...}{ Additional arguments, passed on to daughter functions.
+
+  \item{...}{ Additional arguments, passed on to 
+  daughter functions.
   } 
 
-  \item{model.method}{ Function to use on XY data to generate 
-  fit reports.
+  \item{model.method}{ Function to use on XY data 
+  to generate fit reports.
   } 
-
-  \item{x, y}{ XY data from plot, typically filtered by both panel 
-  and group.
+  
+  \item{use,ignore}{ if set, the names of arguments 
+  supplied to the previous plot that should be used 
+  or ignored, respectively, by panel being added.
   }
 
-  \item{output.len}{ Number of XY pairs to use when making fit line 
-  standard error bands.  
+  \item{x, y}{ XY data from plot, typically filtered 
+  by both panel and group.
   }
 
-  \item{formula.signif, r2.digits}{ When number of significant numbers 
-  and digits to use when reporting the fit formula and r.squared, 
-  respectively.
+  \item{output.len}{ Number of XY pairs to use when 
+  making fit line standard error bands.  
   }
 
-  \item{group.id}{ When XY data is grouped, the group identity.
+  \item{formula.signif, r2.digits}{ When number of 
+  significant numbers and digits to use when reporting 
+  the fit formula and r.squared, respectively.
+  }
+
+  \item{group.id}{ When XY data is grouped, the group 
+  identity.
   }
 }
 
 
 \details{
-  \code{addXYLMFit} and \code{addXYLMFit} add linear and loess 
-  model fit surfaces to exiting lattice plot.  
+  \code{add.loaPanel} adds a plot panel to an existing 
+  loaPlot output. 
+  
+  \code{add.XYLMFit} and \code{add.XYLFit} add linear 
+  and loess model fit surfaces to exiting lattice plot.  
 
   Both functions are intended to be used in form:
 
@@ -103,7 +126,7 @@ panel.loaXYFit(...)
    with an added linear fit surface layer, generated using 
    \code{lm()}.
 
-  \code{addXYLMFit} returns the supply (or last) lattice plot 
+  \code{add.XYLMFit} returns the supply (or last) lattice plot 
    with an added linear fit surface layer, generated using 
    \code{loess()}.
 

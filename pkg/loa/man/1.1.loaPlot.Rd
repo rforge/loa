@@ -3,7 +3,9 @@
 \alias{loaPlot}
 \alias{panel.loaPlot}
 \alias{panel.loaPlot2}
+\alias{panel.loa}
 \alias{panel.loaGrid}
+
 
 
 \title{
@@ -28,6 +30,7 @@
 
   panel.loaPlot(..., loa.settings = FALSE)
   panel.loaPlot2(..., loa.settings = FALSE)
+  panel.loa(..., loa.settings = FALSE)
 
   #grids
 
@@ -142,8 +145,8 @@
 
 \note{
 
-  \code{panel.loaPlot2} is an alternative versions of \code{panel.loaPlot} that is 
-  currently under revision. Please use with care.
+  \code{panel.loaPlot2} and \code{panel.loaPlot2} are alternative versions of 
+  \code{panel.loaPlot} that is currently under revision. 
 
   \code{loaPlot} arguments \code{by.group} and \code{by.zcase} are currently in 
   revision. Please use with care. 
