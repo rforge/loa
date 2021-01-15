@@ -122,7 +122,7 @@ panel.loaXYFit(...)
 }
 
 \value{
-  \code{addXYLMFit} returns the supply (or last) lattice plot 
+  \code{add.XYLMFit} returns the supply (or last) lattice plot 
    with an added linear fit surface layer, generated using 
    \code{lm()}.
 

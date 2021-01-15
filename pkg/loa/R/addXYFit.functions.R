@@ -157,7 +157,9 @@ loaXYFit_lm <- function(x, y, output.len=25,
   if(length(x)<3 || length(y)<3)
     return(list(mod=NULL, mod.x=NULL, mod.y=NULL, 
                 mod.se=NULL, formula=NULL, r2=NULL))
-  mod <- lm(y~x)
+  x.args <- listHandler(list(...), use=names(formals(lm)))
+  x.args$formula <- y~x
+  mod <- do.call(lm, x.args)
   mod.x <- seq(min(x, na.rm=TRUE), 
                  max(x, na.rm=TRUE), length.out=output.len)
   temp <- predict(mod, newdata=data.frame(x=mod.x),
@@ -202,7 +204,9 @@ loaXYFit_loess <- function(x, y, output.len=25,
   if(length(x)<3 || length(y)<3)
     return(list(mod=NULL, mod.x=NULL, mod.y=NULL, 
                 mod.se=NULL, formula=NULL, r2=NULL))
-  mod <- loess(y~x)
+  x.args <- listHandler(list(...), use=names(formals(loess)))
+  x.args$formula <- y~x
+  mod <- do.call(loess, x.args)
   mod.x <- seq(min(x, na.rm=TRUE), 
                  max(x, na.rm=TRUE), length.out=output.len)
   temp <- predict(mod, newdata=data.frame(x=mod.x),
