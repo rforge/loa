@@ -1,8 +1,8 @@
 Package: loa
 Type: Package
 Title: Lattice Options and Add-Ins
-Version: 0.2.46.2
-Date: 2021-01-15
+Version: 0.2.46.3
+Date: 2021-01-16
 Author: Karl Ropkins
 URL: http://loa.r-forge.r-project.org/loa.intro.html
 Maintainer: Karl Ropkins <karl.ropkins@gmail.com>
