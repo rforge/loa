@@ -172,6 +172,7 @@ colHandler <- function (z = NULL, col = NULL, region = NULL, colorkey = FALSE,
     ..., zlim = NULL, output = "col") 
 {
     extra.args <- list(...)
+
     if ("scheme" %in% names(extra.args) & !"par.settings" %in% 
         names(extra.args)) 
         extra.args$par.settings <- do.call(parHandler, extra.args)
@@ -246,7 +247,7 @@ colHandler <- function (z = NULL, col = NULL, region = NULL, colorkey = FALSE,
 #                at))(100)
 #        }
 #        else 
-       col <- level.colors(z, at, col.regions)
+       col <- level.colors(as.numeric(z), at, col.regions)
     }
     else {
         z <- if (is.numeric(col)) 

@@ -333,7 +333,6 @@ formulaHandler <- function (x, data = NULL, groups = NULL, ...,
         ##################################
         #return if output lattice.like
         ##################################
-
         if(output=="lattice.like") return(lattice.like)
 
 ##################
@@ -408,11 +407,25 @@ formulaHandler <- function (x, data = NULL, groups = NULL, ...,
      temp <- listUpdate(lattice.like, extra.args, use=c("xlab", "ylab", "zlab"))
      lattice.like <- listUpdate(lattice.like, temp)
 
-
 #this might now be redundant
-
     extra.args <- listUpdate(extra.args, lattice.like, 
                           ignore.b = c("panel.condition", "x", "y"))
+#test factor handling
+    if(is.factor(lattice.like$x)){
+        extra.args <- listUpdate(
+            list(scales=list(x=list(at = 1:length(levels(lattice.like$x)),
+                                    labels=levels(lattice.like$x),
+                                    rot=45))),
+                                 extra.args)
+        lattice.like$x <- as.numeric(lattice.like$x)
+    }
+    if(is.factor(lattice.like$y)){
+        extra.args <- listUpdate(
+            list(scales=list(y=list(at = 1:length(levels(lattice.like$y)),
+                                    labels=levels(lattice.like$y)))),
+            extra.args)
+        lattice.like$y <- as.numeric(lattice.like$y)
+    }
 
     extra.args <- do.call(stripHandler, listUpdate(list(striplab = names(lattice.like$panel.condition)), 
         extra.args))

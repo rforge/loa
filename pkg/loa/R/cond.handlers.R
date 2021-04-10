@@ -329,7 +329,7 @@ groupsHandler <- function(z = NULL, groups = NULL, ..., group.ids = NULL,
         known.handlers <- c("col", "cex", "pch")
         if(handler %in% known.handlers){
 
-              temp <- as.numeric(factor(group.ids))
+              temp <- as.numeric(factor(group.ids, levels=group.ids))
               extra.args$z <- temp
               extra.args$ref <- NULL
               extra.args <- extra.args[names(extra.args) != "zlim"]
@@ -353,7 +353,6 @@ groupsHandler <- function(z = NULL, groups = NULL, ..., group.ids = NULL,
         #because this is what the user set arg as
 
     }
-
     #output
     z
 

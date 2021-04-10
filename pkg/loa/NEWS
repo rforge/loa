@@ -1,3 +1,10 @@
+Changes in loa 0.2.47 [2021-04-10]
+
+*       loaPlot updated, now accepts factors as  
+        x, y, z terms 
+*       groupHandler tidy 
+
+
 Changes in loa 0.2.46 [2020-12-30]
 
 *       added panel.loa and drawkey.loaKey02,

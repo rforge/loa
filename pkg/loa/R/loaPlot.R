@@ -66,7 +66,6 @@ loaPlot <- function (x, data = NULL, panel = panel.loaPlot, ...,
         x <- extra.args$x
         data <- extra.args$data
         extra.args <- extra.args[!names(extra.args) %in% c("x", "data")]
-
     }
 
     #check for any panel defaults
@@ -261,15 +260,19 @@ loaPlot <- function (x, data = NULL, panel = panel.loaPlot, ...,
 
 ###########################################################
 
+
+        
     extra.args$panel <- function(..., subscripts) panel.xyplot(..., subscripts=subscripts)
               
     ans <- do.call(xyplot, extra.args)
 
+
+    
     ans <- panelPal(ans, panel=panel, preprocess = preprocess,
                     by.group = by.group, by.zcase = by.zcase, 
                     reset.xylims = reset.xylims, legend = legend)
 
-
+    
     if(reset.aspect){
         temp <- (max(ans$y.limits) - min(ans$y.limits))/
                 (max(ans$x.limits) - min(ans$x.limits))
@@ -451,6 +454,7 @@ panel.loaPlot <- function(..., loa.settings = FALSE){
         panel.loaGrid(panel.scales = extra.args$panel.scales, grid = extra.args$grid, 
                       xlim = extra.args$xlim, ylim = extra.args$ylim) 
 
+
     extra.args$col <- do.call(colHandler, extra.args)
     extra.args$cex <- do.call(cexHandler, extra.args)
     extra.args$pch <- do.call(pchHandler, listUpdate(extra.args, list(z=NULL)))
@@ -553,7 +557,6 @@ panel.loa <- function(..., loa.settings = FALSE){
         if("group.args" %in% names(extra.args) && length(extra.args$group.args)>0){
             
             #group.ids might not always be there
-            
             temp <- as.numeric(factor(extra.args$groups, levels = extra.args$group.ids))
             for(i in extra.args$group.args){
                 extra.args[[i]] <- extra.args[[i]][temp]
@@ -580,7 +583,6 @@ panel.loa <- function(..., loa.settings = FALSE){
     if(isGood4LOA(extra.args$grid))
         panel.loaGrid(panel.scales = extra.args$panel.scales, grid = extra.args$grid, 
                       xlim = extra.args$xlim, ylim = extra.args$ylim) 
-    
     extra.args$col <- do.call(colHandler, extra.args)
     extra.args$cex <- do.call(cexHandler, extra.args)
     extra.args$pch <- do.call(pchHandler, listUpdate(extra.args, list(z=NULL)))
@@ -588,8 +590,11 @@ panel.loa <- function(..., loa.settings = FALSE){
     extra.args$lwd <- do.call(zHandler, listUpdate(extra.args, list(z=extra.args$lwd)))
     extra.args$lty <- do.call(zHandler, listUpdate(extra.args, list(z=extra.args$lty)))
 
+
+    
 #print(extra.args$x)    
 #print(extra.args$y)
+#print(extra.args$z)
 #print(extra.args$groups)
 #print(extra.args$zcases)    
 #print(extra.args$col)
@@ -597,6 +602,7 @@ panel.loa <- function(..., loa.settings = FALSE){
 #print(extra.args$pch)
 #print(extra.args$lty)
 #print(extra.args$lwd)
+
 
     for(i in 1:length(extra.args$x)){
     #for(i in 1:10){
@@ -622,13 +628,13 @@ panel.loa <- function(..., loa.settings = FALSE){
             test <- FALSE
             if(is.null(extra.args$groups) & is.null(extra.args$zcases)) test <- TRUE
             if(!is.null(extra.args$groups) && is.null(extra.args$zcases) &&
-                   extra.args$groups[i]==extra.args$groups[i-1]) test <- TRUE 
+                   isTRUE(extra.args$groups[i]==extra.args$groups[i-1])) test <- TRUE
             if(is.null(extra.args$groups) && !is.null(extra.args$zcases) &&
-               extra.args$zcases[i]==extra.args$zcases[i-1]) test <- TRUE
+               isTRUE(extra.args$zcases[i]==extra.args$zcases[i-1])) test <- TRUE
             if(!is.null(extra.args$groups) && !is.null(extra.args$zcases) &&
-               extra.args$groups[i]==extra.args$groups[i-1] &&
-               extra.args$zcases[i]==extra.args$zcases[i-1]) test <- TRUE
-            
+               isTRUE(extra.args$groups[i]==extra.args$groups[i-1]) &&
+               isTRUE(extra.args$zcases[i]==extra.args$zcases[i-1])) test <- TRUE
+
             if(test){
                 if(grepl("l", extra.args$type[i]) & 
                     grepl("l", extra.args$type[i-1])){

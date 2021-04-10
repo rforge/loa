@@ -226,7 +226,7 @@ panelPal <- function(ans, panel = NULL, preprocess = FALSE,
 
     temp <- listUpdate(ans$panel.args.common, list(loa.settings = loa.settings, 
                                         ignore = ignore))
-
+    
     temp <- listUpdate(temp, do.call(groupsAndZcasesHandler, temp))
     ignore <- temp$ignore
     ans$panel.args.common <- temp[!names(temp) %in% c("ignore", "loa.settings")]
